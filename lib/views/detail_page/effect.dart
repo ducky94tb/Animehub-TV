@@ -1,14 +1,13 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:movie/actions/api/tmdb_api.dart';
 import 'package:movie/actions/api/base_api.dart';
-import 'package:movie/widgets/gallery_photoview_wrapper.dart';
+import 'package:movie/actions/api/tmdb_api.dart';
 import 'package:movie/globalbasestate/store.dart';
 import 'package:movie/models/enums/imagesize.dart';
-import 'package:movie/models/enums/media_type.dart';
-import 'package:movie/views/peopledetail_page/page.dart';
+import 'package:movie/widgets/gallery_photoview_wrapper.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -48,13 +47,13 @@ Future _onInit(Action action, Context<MovieDetailPageState> ctx) async {
     if (_images.success)
       ctx.dispatch(MovieDetailPageActionCreator.onSetImages(_images.result));
     final _user = GlobalStore.store.getState().user;
-    if (_user != null) {
+    /*if (_user != null) {
       final _accountstate = await _baseApi.getAccountState(
           _user?.firebaseUser?.uid, ctx.state.mediaId, MediaType.movie);
       if (_accountstate.success)
         ctx.dispatch(MovieDetailPageActionCreator.onSetAccountState(
             _accountstate.result));
-    }
+    }*/
   });
 }
 
@@ -104,12 +103,6 @@ Future _castCellTapped(Action action, Context<MovieDetailPageState> ctx) async {
       .push(PageRouteBuilder(pageBuilder: (context, animation, secAnimation) {
     return FadeTransition(
       opacity: animation,
-      child: PeopleDetailPage().buildPage({
-        'peopleid': action.payload[0],
-        'profilePath': action.payload[1],
-        'profileName': action.payload[2],
-        'character': action.payload[3]
-      }),
     );
   }));
 }

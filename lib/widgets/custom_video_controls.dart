@@ -4,9 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:chewie/chewie.dart';
 // ignore: implementation_imports
-import 'package:chewie/src/cupertino_progress_bar.dart';
 // ignore: implementation_imports
-import 'package:chewie/src/utils.dart';
 // ignore: unused_import
 //import 'package:dart_chromecast/casting/cast_device.dart';
 // ignore: unused_import
@@ -43,6 +41,7 @@ class _CupertinoControlsState extends State<CustomCupertinoControls> {
   final marginSize = 10.0;
   Timer _expandCollapseTimer;
   Timer _initTimer;
+
   //ServiceDiscovery _serviceDiscovery;
 
   VideoPlayerController controller;
@@ -398,10 +397,6 @@ class _CupertinoControlsState extends State<CustomCupertinoControls> {
       child: Container(
         height: barHeight,
         color: Colors.transparent,
-        padding: EdgeInsets.only(
-          left: 6.0,
-          right: 6.0,
-        ),
         child: Icon(
           controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
           color: iconColor,
@@ -416,13 +411,6 @@ class _CupertinoControlsState extends State<CustomCupertinoControls> {
 
     return Padding(
       padding: EdgeInsets.only(right: 12.0),
-      child: Text(
-        formatDuration(position),
-        style: TextStyle(
-          color: iconColor,
-          fontSize: 12.0,
-        ),
-      ),
     );
   }
 
@@ -433,10 +421,6 @@ class _CupertinoControlsState extends State<CustomCupertinoControls> {
 
     return Padding(
       padding: EdgeInsets.only(right: 12.0),
-      child: Text(
-        '-${formatDuration(position)}',
-        style: TextStyle(color: iconColor, fontSize: 12.0),
-      ),
     );
   }
 
@@ -569,42 +553,6 @@ class _CupertinoControlsState extends State<CustomCupertinoControls> {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.only(right: 12.0),
-        child: CupertinoVideoProgressBar(
-          controller,
-          onDragStart: () {
-            _hideTimer?.cancel();
-          },
-          onDragEnd: () {
-            _startHideTimer();
-          },
-          colors: chewieController.cupertinoProgressColors ??
-              ChewieProgressColors(
-                playedColor: Color.fromARGB(
-                  120,
-                  255,
-                  255,
-                  255,
-                ),
-                handleColor: Color.fromARGB(
-                  255,
-                  255,
-                  255,
-                  255,
-                ),
-                bufferedColor: Color.fromARGB(
-                  60,
-                  255,
-                  255,
-                  255,
-                ),
-                backgroundColor: Color.fromARGB(
-                  20,
-                  255,
-                  255,
-                  255,
-                ),
-              ),
-        ),
       ),
     );
   }
@@ -620,16 +568,10 @@ class _CupertinoControlsState extends State<CustomCupertinoControls> {
       } else {
         _cancelAndRestartTimer();
 
-        if (!controller.value.initialized) {
-          controller.initialize().then((_) {
-            controller.play();
-          });
-        } else {
-          if (isFinished) {
-            controller.seekTo(Duration(seconds: 0));
-          }
-          controller.play();
+        if (isFinished) {
+          controller.seekTo(Duration(seconds: 0));
         }
+        controller.play();
       }
     });
   }

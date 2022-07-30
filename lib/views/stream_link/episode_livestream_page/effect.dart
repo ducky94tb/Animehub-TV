@@ -1,9 +1,9 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:movie/actions/api/base_api.dart';
-import 'package:movie/globalbasestate/store.dart';
 import 'package:movie/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -74,17 +74,7 @@ Future _getComment(Action action, Context<EpisodeLiveStreamState> ctx) async {
     ctx.dispatch(EpisodeLiveStreamActionCreator.setComment(_comment.result));
 }
 
-Future _getLike(Action action, Context<EpisodeLiveStreamState> ctx) async {
-  final _user = GlobalStore.store.getState().user;
-  final _like = await BaseApi.instance.getTvShowLikes(
-      tvid: ctx.state.tvid,
-      season: ctx.state.selectedEpisode.seasonNumber,
-      episode: ctx.state.selectedEpisode.episodeNumber,
-      uid: _user?.firebaseUser?.uid ?? '');
-  if (_like.success)
-    ctx.dispatch(EpisodeLiveStreamActionCreator.setLike(
-        _like.result['likes'], _like.result['userLike']));
-}
+Future _getLike(Action action, Context<EpisodeLiveStreamState> ctx) async {}
 
 Future<TvShowStreamLinks> _sortStreamLink(TvShowStreamLinks links) async {
   List<TvShowStreamLink> _lists = links.list;

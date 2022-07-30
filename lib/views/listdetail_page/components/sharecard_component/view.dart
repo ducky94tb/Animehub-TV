@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
@@ -37,11 +36,7 @@ Widget buildView(
                   height: Adapt.px(80),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(Adapt.px(40)),
-                      image: state.user.photoUrl != null
-                          ? DecorationImage(
-                              image: CachedNetworkImageProvider(
-                                  state.user.photoUrl))
-                          : null),
+                      image: null),
                 ),
                 SizedBox(
                   height: Adapt.px(10),
@@ -59,7 +54,7 @@ Widget buildView(
                 SizedBox(
                   width: Adapt.px(130),
                   child: Text(
-                    state.user.displayName ?? '',
+                    'dsfdsf',
                     style: TextStyle(color: Colors.white),
                   ),
                 )
@@ -125,11 +120,13 @@ class _InfoCell extends StatelessWidget {
   final Widget valueChild;
   final String value;
   final String title;
+
   _InfoCell({
     this.title,
     this.value,
     this.valueChild,
   });
+
   @override
   Widget build(BuildContext context) {
     final titleStyle = TextStyle(

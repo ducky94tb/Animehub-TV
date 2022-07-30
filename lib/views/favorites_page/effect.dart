@@ -5,6 +5,7 @@ import 'package:movie/actions/api/base_api.dart';
 import 'package:movie/actions/imageurl.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:palette_generator/palette_generator.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -26,7 +27,7 @@ Future _onInit(Action action, Context<FavoritesPageState> ctx) async {
 
   if (ctx.state.user != null) {
     final _baseApi = BaseApi.instance;
-    final movie =
+    /*final movie =
         await _baseApi.getFavorite(ctx.state.user.firebaseUser.uid, 'movie');
     if (movie.success) ctx.state.animationController.forward(from: 0.0);
     if ((movie?.result?.data?.length ?? 0) > 0)
@@ -36,7 +37,7 @@ Future _onInit(Action action, Context<FavoritesPageState> ctx) async {
     final tv =
         await _baseApi.getFavorite(ctx.state.user.firebaseUser.uid, 'tv');
     if (tv.success)
-      ctx.dispatch(FavoritesPageActionCreator.setTVShow(tv.result));
+      ctx.dispatch(FavoritesPageActionCreator.setTVShow(tv.result));*/
   }
 }
 

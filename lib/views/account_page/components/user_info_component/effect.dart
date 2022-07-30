@@ -1,6 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:movie/actions/user_info_operate.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -17,7 +17,7 @@ Effect<UserInfoState> buildEffect() {
 void _onAction(Action action, Context<UserInfoState> ctx) {}
 
 void _onSignOut(Action action, Context<UserInfoState> ctx) async {
-  await UserInfoOperate.whenLogout();
+  /*await UserInfoOperate.whenLogout();*/
 }
 
 void _onSignIn(Action action, Context<UserInfoState> ctx) async {

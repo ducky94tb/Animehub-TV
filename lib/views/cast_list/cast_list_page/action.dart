@@ -1,5 +1,4 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:movie/models/base_api_model/base_cast_list.dart';
 
 enum CastListAction {
@@ -19,7 +18,7 @@ class CastListActionCreator {
     return const Action(CastListAction.addCastList);
   }
 
-  static Action setCastList(Stream<FetchResult> stream) {
+  static Action setCastList(final stream) {
     return Action(CastListAction.setCastList, payload: stream);
   }
 

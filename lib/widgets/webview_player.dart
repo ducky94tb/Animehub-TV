@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -76,7 +77,6 @@ class _WebviewPlayerState extends State<WebViewPlayer> {
         index: _loadFinsh ? 0 : 1,
         children: [
           InAppWebView(
-            initialUrl: _streamlink,
             initialOptions: InAppWebViewGroupOptions(
               android: AndroidInAppWebViewOptions(
                 supportMultipleWindows: false,
@@ -89,7 +89,6 @@ class _WebviewPlayerState extends State<WebViewPlayer> {
                 useShouldOverrideUrlLoading: true,
                 mediaPlaybackRequiresUserGesture: false,
                 preferredContentMode: UserPreferredContentMode.MOBILE,
-                debuggingEnabled: true,
               ),
             ),
             onProgressChanged: (controller, progress) {
@@ -129,11 +128,6 @@ class _WebviewPlayerState extends State<WebViewPlayer> {
             },
             shouldOverrideUrlLoading:
                 (controller, shouldOverrideUrlLoadingRequest) {
-              if (shouldOverrideUrlLoadingRequest.url
-                      .compareTo(widget.filterUrl) ==
-                  0) {
-                controller.stopLoading();
-              }
               return;
             },
           ),

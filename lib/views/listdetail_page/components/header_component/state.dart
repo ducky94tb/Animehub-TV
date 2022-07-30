@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:movie/models/sort_condition.dart';
 import 'package:movie/views/listdetail_page/state.dart';
@@ -9,7 +8,7 @@ class HeaderState implements Cloneable<HeaderState> {
   String description;
   List<SortCondition> sortBy;
   String sortType;
-  FirebaseUser user;
+  //FirebaseUser user;
   @override
   HeaderState clone() {
     return HeaderState();
@@ -25,7 +24,7 @@ class HeaderConnector extends ConnOp<ListDetailPageState, HeaderState> {
     mstate.description = state.listDetailModel?.description ?? '';
     mstate.sortBy = state.sortBy;
     mstate.sortType = state.sortType;
-    mstate.user = state.user.firebaseUser;
+    //mstate.user = state.user.firebaseUser;
     return mstate;
   }
 

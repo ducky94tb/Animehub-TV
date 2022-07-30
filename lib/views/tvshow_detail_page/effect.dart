@@ -1,12 +1,10 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:movie/actions/api/tmdb_api.dart';
-import 'package:movie/actions/api/base_api.dart';
-import 'package:movie/widgets/gallery_photoview_wrapper.dart';
-import 'package:movie/globalbasestate/store.dart';
 import 'package:movie/models/enums/imagesize.dart';
-import 'package:movie/models/enums/media_type.dart';
 import 'package:movie/models/image_model.dart';
+import 'package:movie/widgets/gallery_photoview_wrapper.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -43,16 +41,6 @@ Future _onInit(Action action, Context<TvShowDetailState> ctx) async {
       final _tvImages = await _tmdb.getTVImages(ctx.state.tvid);
       if (_tvImages.success)
         ctx.dispatch(TvShowDetailActionCreator.onSetImages(_tvImages.result));
-
-      final _user = GlobalStore.store.getState().user;
-      if (_user != null) {
-        final _baseApi = BaseApi.instance;
-        final _accountstate = await _baseApi.getAccountState(
-            _user?.firebaseUser?.uid, ctx.state.tvid, MediaType.tv);
-        if (_accountstate.success)
-          ctx.dispatch(TvShowDetailActionCreator.onSetAccountState(
-              _accountstate.result));
-      }
     });
   } on Exception catch (_) {}
 }

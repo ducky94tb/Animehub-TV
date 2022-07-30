@@ -1,13 +1,9 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:movie/actions/api/graphql_client.dart';
 import 'package:movie/globalbasestate/store.dart';
 import 'package:movie/models/base_api_model/base_cast_list.dart';
 import 'package:movie/style/themestyle.dart';
 import 'package:movie/widgets/loading_layout.dart';
-import 'package:path/path.dart' as Path;
 import 'package:toast/toast.dart';
 
 class CastListCreate extends StatefulWidget {
@@ -35,7 +31,7 @@ class _CastListCreateState extends State<CastListCreate> {
       return Toast.show('Please login before add a list', context);
     _setLoading(true);
     final _nowTime = DateTime.now();
-    QueryResult _result;
+    /* QueryResult _result;
     if (!_editMode) {
       final _list = BaseCastList.fromParams(
         uid: _user.firebaseUser.uid,
@@ -57,13 +53,13 @@ class _CastListCreateState extends State<CastListCreate> {
           updateTime: _nowTime,
           castCount: widget.data.castCount);
       _result = await BaseGraphQLClient.instance.updateCastList(_list);
-    }
+    }*/
     _setLoading(false);
-    if (!_result.hasException)
+    /*if (!_result.hasException)
       Navigator.of(context).pop();
     else {
       Toast.show('Something wrong', context);
-    }
+    }*/
   }
 
   @override
@@ -81,12 +77,12 @@ class _CastListCreateState extends State<CastListCreate> {
         source: ImageSource.gallery, maxHeight: 1920, maxWidth: 1080);
     if (_image != null) {
       _setLoading(true);
-      StorageReference storageReference = FirebaseStorage.instance
+      /*StorageReference storageReference = FirebaseStorage.instance
           .ref()
           .child('avatar/${Path.basename(_image.path)}');
       StorageUploadTask uploadTask =
           storageReference.putData(await _image.readAsBytes());
-      await uploadTask.onComplete;
+      await uploadTask.onComplete
       print('File Uploaded');
       storageReference.getDownloadURL().then((fileURL) {
         if (fileURL != null) {
@@ -94,7 +90,7 @@ class _CastListCreateState extends State<CastListCreate> {
             _url = fileURL;
           });
         }
-      });
+      });;*/
       _setLoading(false);
     }
   }
@@ -108,15 +104,15 @@ class _CastListCreateState extends State<CastListCreate> {
 
   void _deleteCastList() async {
     _setLoading(true);
-    final _result =
+    /*final _result =
         await BaseGraphQLClient.instance.deleteCastList(widget.data.id);
-
+*/
     _setLoading(false);
-    if (!_result.hasException)
+    /*if (!_result.hasException)
       Navigator.of(context).pop();
     else {
       Toast.show('Something wrong', context);
-    }
+    }*/
   }
 
   @override

@@ -1,55 +1,99 @@
 {
   "project_info": {
-    "project_number": "472468283055",
-    "firebase_url": "https://flutter-movie-d113d.firebaseio.com",
-    "project_id": "flutter-movie-d113d",
-    "storage_bucket": "flutter-movie-d113d.appspot.com"
+    "project_number": "782719966151",
+    "firebase_url": "https://hhtqtv-3fbd6-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "hhtqtv-3fbd6",
+    "storage_bucket": "hhtqtv-3fbd6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:472468283055:android:eb726e8040fcea6f01fe5a",
+        "mobilesdk_app_id": "1:782719966151:android:c8910a113feffd0e2757e2",
         "android_client_info": {
-          "package_name": "com.o1298098.movie"
+          "package_name": "com.ducky.moviesapp.animehub"
         }
       },
       "oauth_client": [
         {
-          "client_id": "472468283055-qu9kup7qd1e5sgv87edugjb5mo7nj3a0.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.o1298098.movie",
-            "certificate_hash": "d661150a7f674c98b9f5ed3f8cc511e34388dff4"
-          }
-        },
-        {
-          "client_id": "472468283055-qpggv4a9kbv3rpt1g43q0mi14lg7f5so.apps.googleusercontent.com",
+          "client_id": "782719966151-qg0emmjjhd954d4lct8126d8tc20mone.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBNo8wqFIoJ076egRlT-j8d5FNLsgdzqho"
+          "current_key": "AIzaSyCXmqrwoemml7S36NLDH6xSIj_o7DNaUe0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "472468283055-qpggv4a9kbv3rpt1g43q0mi14lg7f5so.apps.googleusercontent.com",
+              "client_id": "782719966151-qg0emmjjhd954d4lct8126d8tc20mone.apps.googleusercontent.com",
               "client_type": 3
-            },
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:782719966151:android:06c7539c97afd53b2757e2",
+        "android_client_info": {
+          "package_name": "com.ducky.moviesapp.hhtqtv"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "782719966151-qg0emmjjhd954d4lct8126d8tc20mone.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXmqrwoemml7S36NLDH6xSIj_o7DNaUe0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
             {
-              "client_id": "472468283055-5vepq9actfcm7p0vgm7it41ed3plkbfn.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.o1298098.movies"
-              }
+              "client_id": "782719966151-qg0emmjjhd954d4lct8126d8tc20mone.apps.googleusercontent.com",
+              "client_type": 3
             }
           ]
         }
       },
-      "admob_app_id": "ca-app-pub-8117211796129035~2073774357"
+      "admob_app_id": "ca-app-pub-2089873880879307~1427514894"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:782719966151:android:9268df27dfe9ba142757e2",
+        "android_client_info": {
+          "package_name": "com.ducky.video.player"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "782719966151-qg0emmjjhd954d4lct8126d8tc20mone.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXmqrwoemml7S36NLDH6xSIj_o7DNaUe0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "782719966151-qg0emmjjhd954d4lct8126d8tc20mone.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-2089873880879307~2472690215"
     }
   ],
   "configuration_version": "1"

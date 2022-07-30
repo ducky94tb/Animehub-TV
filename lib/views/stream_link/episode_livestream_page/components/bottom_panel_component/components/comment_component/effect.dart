@@ -2,9 +2,8 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:movie/actions/api/base_api.dart';
 import 'package:movie/globalbasestate/store.dart';
-import 'package:movie/models/base_api_model/base_user.dart';
-import 'package:movie/models/base_api_model/tvshow_comment.dart';
 import 'package:toast/toast.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -40,28 +39,6 @@ void _addComment(Action action, Context<CommentState> ctx) async {
   if (_user == null) {
     Toast.show('login before comment', ctx.context, duration: 2);
     return;
-  }
-  if (_commentTxt != '' && _commentTxt != null) {
-    final String _date = DateTime.now().toString();
-
-    final _baseApi = BaseApi.instance;
-    final TvShowComment _comment = TvShowComment.fromParams(
-        mediaId: ctx.state.tvId,
-        comment: _commentTxt,
-        uid: _user.firebaseUser.uid,
-        updateTime: _date,
-        createTime: _date,
-        season: ctx.state.season,
-        episode: ctx.state.episode,
-        u: BaseUser.fromParams(
-            uid: _user.firebaseUser.uid,
-            userName: _user.firebaseUser.displayName,
-            photoUrl: _user.firebaseUser.photoUrl),
-        like: 0);
-    ctx.dispatch(CommentActionCreator.insertComment(_comment));
-    _baseApi.createTvShowComment(_comment).then((r) {
-      if (r.success) _comment.id = r.result.id;
-    });
   }
 }
 

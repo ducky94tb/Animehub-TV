@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -57,7 +56,7 @@ Widget buildView(
 
   return _Body(
     isSignIn: state.user?.firebaseUser != null,
-    user: state.user?.firebaseUser,
+    /*user: state.user?.firebaseUser,*/
     openMenu: _showMenu,
     onSignIn: () => dispatch(UserInfoActionCreator.signIn()),
     overlayStateKey: state.overlayStateKey,
@@ -66,7 +65,7 @@ Widget buildView(
 
 class _Body extends StatelessWidget {
   final bool isSignIn;
-  final FirebaseUser user;
+  /*final FirebaseUser user;*/
   final Key overlayStateKey;
   final Function openMenu;
   final Function onSignIn;
@@ -74,7 +73,7 @@ class _Body extends StatelessWidget {
       {this.isSignIn = false,
       this.openMenu,
       this.onSignIn,
-      this.user,
+      /*this.user,*/
       this.overlayStateKey});
   @override
   Widget build(BuildContext context) {
@@ -84,8 +83,8 @@ class _Body extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(0, Adapt.px(30), 0, 25),
           child: isSignIn
               ? _UserInfo(
-                  profileUrl: user?.photoUrl,
-                  userName: user?.displayName,
+                  /*profileUrl: user?.photoUrl,
+                  userName: user?.displayName,*/
                   openMenu: openMenu,
                   overlayStateKey: overlayStateKey)
               : _SignInPanel(

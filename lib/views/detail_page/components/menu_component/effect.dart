@@ -1,12 +1,11 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:movie/actions/api/tmdb_api.dart';
 import 'package:movie/actions/api/base_api.dart';
+import 'package:movie/actions/api/tmdb_api.dart';
 import 'package:movie/globalbasestate/store.dart';
 import 'package:movie/models/base_api_model/stream_link_report.dart';
-import 'package:movie/models/base_api_model/user_media.dart';
 import 'package:movie/models/enums/media_type.dart';
+
 import '../../action.dart';
 import 'action.dart';
 import 'state.dart';
@@ -25,7 +24,7 @@ Effect<MenuState> buildEffect() {
 void _onAction(Action action, Context<MenuState> ctx) {}
 
 void _requestStreamLink(Action action, Context<MenuState> ctx) async {
-  FirebaseMessaging().subscribeToTopic('movie_${ctx.state.id}');
+  //FirebaseMessaging().subscribeToTopic('movie_${ctx.state.id}');
   Navigator.of(ctx.context).pop();
   final _baseApi = BaseApi.instance;
   _baseApi.sendRequestStreamLink(StreamLinkReport()
@@ -43,7 +42,7 @@ void _setFirebaseFavorite(Action action, Context<MenuState> ctx) async {
   final _baseApi = BaseApi.instance;
   if (user != null) {
     ctx.dispatch(MenuActionCreator.updateFavorite(!_isFavorite));
-    if (_isFavorite)
+    /*if (_isFavorite)
       await _baseApi.deleteFavorite(
           user.firebaseUser.uid, MediaType.movie, ctx.state.id);
     else
@@ -58,7 +57,7 @@ void _setFirebaseFavorite(Action action, Context<MenuState> ctx) async {
           genre: ctx.state.detail.genres.map((f) => f.name).toList().join(','),
           releaseDate: ctx.state.detail.releaseDate,
           mediaId: ctx.state.id,
-          mediaType: 'movie'));
+          mediaType: 'movie'));*/
     await _baseApi.updateAccountState(ctx.state.accountState);
     ctx.broadcast(MovieDetailPageActionCreator.showSnackBar(!_isFavorite
         ? 'has been mark as favorite'
@@ -93,7 +92,7 @@ Future _setWatchlist(Action action, Context<MenuState> ctx) async {
   final _baseApi = BaseApi.instance;
   if (user != null) {
     ctx.dispatch(MenuActionCreator.updateWatctlist(!_isWatchlist));
-    if (_isWatchlist)
+    /*if (_isWatchlist)
       await _baseApi.deleteWatchlist(
           user.firebaseUser.uid, MediaType.movie, ctx.state.id);
     else
@@ -108,7 +107,7 @@ Future _setWatchlist(Action action, Context<MenuState> ctx) async {
           releaseDate: ctx.state.detail.releaseDate,
           genre: ctx.state.detail.genres.map((f) => f.name).toList().join(','),
           mediaId: ctx.state.id,
-          mediaType: 'movie'));
+          mediaType: 'movie'));*/
     await _baseApi.updateAccountState(ctx.state.accountState);
     ctx.broadcast(MovieDetailPageActionCreator.showSnackBar(!_isWatchlist
         ? 'has been add to your watchlist'

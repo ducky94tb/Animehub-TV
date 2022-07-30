@@ -1,7 +1,7 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
 
 class VideoPlayerItem extends StatefulWidget {
   final VideoPlayerController vc;
@@ -9,6 +9,7 @@ class VideoPlayerItem extends StatefulWidget {
   final bool showplayer;
   final int playtime;
   final int duration;
+
   VideoPlayerItem(
       {@required this.vc,
       this.coverurl,
@@ -17,6 +18,7 @@ class VideoPlayerItem extends StatefulWidget {
       this.duration,
       Key key})
       : super(key: key);
+
   @override
   VideoPlayerItemState createState() => VideoPlayerItemState();
 }
@@ -25,26 +27,8 @@ class VideoPlayerItemState extends State<VideoPlayerItem> {
   ChewieController chewieController;
   VideoPlayerController vc;
   bool showplayer = true;
-  void playButtonClicked() {
-    if (!vc.value.initialized) {
-      vc.initialize().then((_) {
-        setState(() {
-          showplayer = false;
-        });
-        vc.play();
-      });
-    } else if (!vc.value.isPlaying) {
-      setState(() {
-        showplayer = false;
-      });
-      vc.play();
-    } else {
-      setState(() {
-        showplayer = true;
-      });
-      vc.pause();
-    }
-  }
+
+  void playButtonClicked() {}
 
   @override
   void initState() {

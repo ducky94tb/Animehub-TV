@@ -1,10 +1,9 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:image_picker/image_picker.dart';
 import 'package:movie/actions/api/base_api.dart';
 import 'package:movie/models/base_api_model/user_list.dart';
-import 'package:path/path.dart' as Path;
+
 import 'action.dart';
 import 'state.dart';
 
@@ -44,7 +43,6 @@ void _submit(Action action, Context<CreateListPageState> ctx) {
     else {
       final _date = DateTime.now().toString();
       ctx.state.listData = UserList.fromParams(
-        uid: ctx.state.user.firebaseUser.uid,
         listName: ctx.state.nameTextController.text,
         backGroundUrl: ctx.state.backGroundUrl,
         description: ctx.state.descriptionTextController.text,
@@ -68,7 +66,7 @@ void _uploadBackground(Action action, Context<CreateListPageState> ctx) async {
       source: ImageSource.gallery, maxHeight: 1920, maxWidth: 1080);
   if (_image != null) {
     ctx.dispatch(CreateListPageActionCreator.setLoading(true));
-    StorageReference storageReference = FirebaseStorage.instance
+    /*StorageReference storageReference = FirebaseStorage.instance
         .ref()
         .child('avatar/${Path.basename(_image.path)}');
     StorageUploadTask uploadTask =
@@ -79,7 +77,7 @@ void _uploadBackground(Action action, Context<CreateListPageState> ctx) async {
       if (fileURL != null) {
         ctx.dispatch(CreateListPageActionCreator.setBackground(fileURL));
       }
-    });
+    });*/
     ctx.dispatch(CreateListPageActionCreator.setLoading(false));
   }
 }

@@ -1,9 +1,9 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:movie/actions/api/base_api.dart';
-import 'package:movie/globalbasestate/store.dart';
 import 'package:movie/models/base_api_model/movie_stream_link.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -68,11 +68,4 @@ Future _getComment(Action action, Context<MovieLiveStreamState> ctx) async {
     ctx.dispatch(MovieLiveStreamActionCreator.setComment(_comment.result));
 }
 
-Future _getLike(Action action, Context<MovieLiveStreamState> ctx) async {
-  final _user = GlobalStore.store.getState().user;
-  final _like = await BaseApi.instance.getMovieLikes(
-      movieid: ctx.state.movieId, uid: _user?.firebaseUser?.uid ?? '');
-  if (_like.success)
-    ctx.dispatch(MovieLiveStreamActionCreator.setLike(
-        _like.result['likes'], _like.result['userLike']));
-}
+Future _getLike(Action action, Context<MovieLiveStreamState> ctx) async {}

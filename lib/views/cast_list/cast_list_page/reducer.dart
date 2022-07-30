@@ -1,5 +1,4 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -19,8 +18,8 @@ CastListState _onAction(CastListState state, Action action) {
 }
 
 CastListState _setCastList(CastListState state, Action action) {
-  final Stream<FetchResult> _stream = action.payload;
+  /*final Stream<FetchResult> _stream = action.payload;*/
   final CastListState newState = state.clone();
-  newState.castList = _stream;
+  //newState.castList = _stream;
   return newState;
 }

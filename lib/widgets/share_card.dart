@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/widgets/shimmercell.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:share_extend/share_extend.dart';
 
 class ShareCard extends StatefulWidget {
   final String backgroundImage;
@@ -146,11 +143,11 @@ class ShareCardState extends State<ShareCard> {
   }
 
   void shareTapped() {
-    screenshotController.capture().then((File image) async {
+    /*screenshotController.capture().then((File image) async {
       ShareExtend.share(image.path, "image");
     }).catchError((onError) {
       print(onError);
-    });
+    });*/
   }
 
   @override

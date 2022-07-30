@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:movie/actions/api/base_api.dart';
@@ -7,6 +6,7 @@ import 'package:movie/models/models.dart';
 import 'package:movie/widgets/stream_link_report_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -85,13 +85,6 @@ Future _likeMovie(Action action, Context<BottomPanelState> ctx) async {
   if (user?.firebaseUser == null) return;
   _userLike ? _likeCount-- : _likeCount++;
   ctx.dispatch(BottomPanelActionCreator.setLike(_likeCount, !_userLike));
-  final _likeModel = MovieLikeModel.fromParams(
-      movieId: ctx.state.movieId, id: 0, uid: user.firebaseUser.uid);
-
-  final _result = _userLike
-      ? await BaseApi.instance.unlikeMovie(_likeModel)
-      : await BaseApi.instance.likeMovie(_likeModel);
-  print(_result.result);
 }
 
 void _reportStreamLink(Action action, Context<BottomPanelState> ctx) {
@@ -112,17 +105,11 @@ void _reportStreamLink(Action action, Context<BottomPanelState> ctx) {
 }
 
 void _requestStreamLink(Action action, Context<BottomPanelState> ctx) async {
-  final _topic = 'movie_${ctx.state.movieId}';
-  final _firebaseMessaging = FirebaseMessaging();
-  final _token = await _firebaseMessaging.getToken();
-  //_firebaseMessaging.subscribeToTopic(_topic);
   final _baseApi = BaseApi.instance;
   _baseApi.sendRequestStreamLink(StreamLinkReport()
     ..mediaId = ctx.state.movieId
     ..mediaName = ctx.state.movieName
     ..type = 'movie');
-  _baseApi.subscribeTpoic(TopicSubscription.fromParams(
-      topicId: _topic, cloudMessagingToken: _token));
   Toast.show(
       'You will be notified when the stream link has been added', ctx.context,
       duration: Toast.LENGTH_LONG);

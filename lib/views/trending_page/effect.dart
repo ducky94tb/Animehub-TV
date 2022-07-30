@@ -4,8 +4,8 @@ import 'package:movie/actions/api/tmdb_api.dart';
 import 'package:movie/models/enums/time_window.dart';
 import 'package:movie/models/search_result.dart';
 import 'package:movie/views/detail_page/page.dart';
-import 'package:movie/views/peopledetail_page/page.dart';
 import 'package:movie/views/tvshow_detail_page/page.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -91,7 +91,6 @@ Future _cellTapped(Action action, Context<TrendingPageState> ctx) async {
       };
       break;
     case 'person':
-      _page = PeopleDetailPage();
       _data = {
         'peopleid': _d.id,
         'profilePath': _d.profilePath,

@@ -3,12 +3,10 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
 import 'package:movie/actions/stream_link_convert/stream_link_convert_factory.dart';
-import 'package:movie/actions/ads_config.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/widgets/web_torrent_player.dart';
 import 'package:movie/widgets/webview_player.dart';
@@ -51,7 +49,6 @@ class PlayerPanel extends StatefulWidget {
 class _PlayerPanelState extends State<PlayerPanel>
     with AutomaticKeepAliveClientMixin {
   bool _play = false;
-  final _rewardedVideoAd = RewardedVideoAd.instance;
   bool _isRewarded = false;
   bool _needAd = false;
   bool _loading = false;
@@ -66,13 +63,11 @@ class _PlayerPanelState extends State<PlayerPanel>
     _needAd = widget.needAd;
     _loading = widget.loading;
     _playerType = widget.playerType;
-    _addAdsListener();
     super.initState();
   }
 
   @override
   void dispose() {
-    _rewardedVideoAd.listener = null;
     super.dispose();
   }
 
@@ -93,49 +88,10 @@ class _PlayerPanelState extends State<PlayerPanel>
     super.didUpdateWidget(oldWidget);
   }
 
-  _addAdsListener() {
-    _rewardedVideoAd.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      switch (event) {
-        case RewardedVideoAdEvent.loaded:
-          print('loaded');
-          _setLoading(false);
-          _rewardedVideoAd.show();
-          break;
-        case RewardedVideoAdEvent.failedToLoad:
-          _setLoading(false);
-          _startPlayer();
-          print('failedToLoad');
-          break;
-        case RewardedVideoAdEvent.closed:
-          if (_isRewarded) {
-            _startPlayer();
-          }
-          print('closed');
-          break;
-        case RewardedVideoAdEvent.rewarded:
-          _isRewarded = true;
-          _haveOpenAds = true;
-          _setNeedAd(false);
-          print('rewarded');
-          break;
-        default:
-          break;
-      }
-    };
-  }
-
   _playTapped(BuildContext context) async {
     if (widget.loading) return;
     if (!widget.useVideoSourceApi && widget.playerType == 'VideoSourceApi')
       return Toast.show('no streamlink at this moment', context);
-    if (_needAd) {
-      _setLoading(true);
-      _rewardedVideoAd.load(
-          adUnitId: RewardedVideoAd.testAdUnitId,
-          targetingInfo: AdsConfig.instance.targetingInfo);
-      return;
-    }
     await _startPlayer();
   }
 

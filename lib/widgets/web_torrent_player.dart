@@ -6,13 +6,16 @@ import 'package:movie/actions/adapt.dart';
 
 class WebTorrentPlayer extends StatefulWidget {
   final String url;
+
   WebTorrentPlayer({Key key, @required this.url}) : super(key: key);
+
   @override
   WebTorrentPlayerState createState() => WebTorrentPlayerState();
 }
 
 class WebTorrentPlayerState extends State<WebTorrentPlayer> {
   String _url;
+
   @override
   void initState() {
     _url = widget.url;
@@ -157,7 +160,6 @@ class WebTorrentPlayerState extends State<WebTorrentPlayer> {
     </script>
   </body>
 </html>"""),
-        initialHeaders: {},
       ),
     );
   }

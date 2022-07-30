@@ -1,6 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:movie/globalbasestate/store.dart';
 import 'package:movie/models/base_api_model/account_state.dart';
 import 'package:movie/models/credits_model.dart';
 import 'package:movie/models/image_model.dart';
@@ -44,20 +43,15 @@ TvShowDetailState initState(Map<String, dynamic> args) {
   state.tvid = args['id'];
 
   state.tvDetailModel = new TVDetailModel.fromParams();
-  state.creditsModel = new CreditsModel.fromParams(
-      cast: [], crew: []);
+  state.creditsModel = new CreditsModel.fromParams(cast: [], crew: []);
 
-  state.imagesmodel = new ImageModel.fromParams(
-      posters: [], backdrops:[]);
+  state.imagesmodel = new ImageModel.fromParams(posters: [], backdrops: []);
   state.reviewModel = new ReviewModel.fromParams(results: []);
-  state.recommendations =
-      new VideoListModel.fromParams(results: []);
-  state.keywords = new KeyWordModel.fromParams(
-      keywords: [], results: []);
+  state.recommendations = new VideoListModel.fromParams(results: []);
+  state.keywords = new KeyWordModel.fromParams(keywords: [], results: []);
   state.videomodel = new VideoModel.fromParams(results: []);
   state.accountState = AccountState.fromParams(
       id: 0,
-      uid: GlobalStore.store.getState().user?.firebaseUser?.uid,
       mediaId: state.tvid,
       favorite: false,
       watchlist: false,

@@ -2,20 +2,20 @@ import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action, Page;
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:movie/actions/downloader_callback.dart';
 import 'package:movie/actions/api/github_api.dart';
+import 'package:movie/actions/downloader_callback.dart';
 import 'package:movie/actions/local_notification.dart';
 import 'package:movie/actions/version_comparison.dart';
 import 'package:movie/models/notification_model.dart';
+import 'package:movie/views/detail_page/page.dart';
 import 'package:movie/views/tvshow_detail_page/page.dart';
 import 'package:movie/widgets/update_info_dialog.dart';
-import 'package:movie/views/detail_page/page.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -40,7 +40,7 @@ void _onInit(Action action, Context<MainPageState> ctx) async {
   _localNotification.didReceiveLocalNotification = (id, title, body, payload) =>
       _didReceiveLocalNotification(id, title, body, payload, ctx);
 
-  FirebaseMessaging().configure(onMessage: (message) async {
+  /*FirebaseMessaging().configure(onMessage: (message) async {
     NotificationList _list;
     if (_preferences.containsKey('notifications')) {
       final String _notifications = _preferences.getString('notifications');
@@ -59,7 +59,7 @@ void _onInit(Action action, Context<MainPageState> ctx) async {
     _push(message, ctx);
   }, onLaunch: (message) async {
     _push(message, ctx);
-  });
+  });*/
 
   if (Platform.isAndroid) _bindBackgroundIsolate();
 

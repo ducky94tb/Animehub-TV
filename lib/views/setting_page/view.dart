@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/widgets/customcliper_path.dart';
+
 import 'action.dart';
 import 'components/setting_body.dart';
 import 'state.dart';
@@ -23,12 +23,10 @@ Widget buildView(
           loading: state.loading,
           cachedSize: state.cachedSize,
           version: state.version,
-          user: state.user,
           appLanguage: state.appLanguage,
         ),
         _UserProfilePanel(
           dispatch: dispatch,
-          user: state.user,
           phoneController: state.phoneController,
           photoController: state.photoController,
           userNameController: state.userNameController,
@@ -44,6 +42,7 @@ Widget buildView(
 
 class _AppBar extends StatelessWidget {
   const _AppBar();
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -61,7 +60,9 @@ class _AppBar extends StatelessWidget {
 
 class _BackGround extends StatelessWidget {
   final AnimationController pageAnimation;
+
   const _BackGround({this.pageAnimation});
+
   @override
   Widget build(BuildContext context) {
     final CurvedAnimation _heightAnimation =
@@ -112,7 +113,9 @@ class _BackGround extends StatelessWidget {
 
 class _LoadingPanel extends StatelessWidget {
   final bool uploading;
+
   const _LoadingPanel({@required this.uploading});
+
   @override
   Widget build(BuildContext context) {
     return uploading
@@ -133,7 +136,9 @@ class _LoadingPanel extends StatelessWidget {
 class _ButtonGrounp extends StatelessWidget {
   final AnimationController userEditAnimation;
   final Function submit;
+
   const _ButtonGrounp({this.submit, this.userEditAnimation});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -190,7 +195,9 @@ class _ButtonGrounp extends StatelessWidget {
 class _UserProfileAvatar extends StatelessWidget {
   final Function onTap;
   final String userPanelPhotoUrl;
+
   const _UserProfileAvatar({this.onTap, this.userPanelPhotoUrl});
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -228,7 +235,9 @@ class _UserProfileAvatar extends StatelessWidget {
 class _TextFieldCell extends StatelessWidget {
   final TextEditingController controller;
   final String title;
+
   const _TextFieldCell({this.controller, this.title});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -272,8 +281,10 @@ class _TextFields extends StatelessWidget {
   final TextEditingController userNameController;
   final TextEditingController photoController;
   final TextEditingController phoneController;
+
   const _TextFields(
       {this.phoneController, this.photoController, this.userNameController});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -299,15 +310,15 @@ class _UserProfilePanel extends StatelessWidget {
   final TextEditingController photoController;
   final TextEditingController phoneController;
   final Dispatch dispatch;
-  final FirebaseUser user;
+
   const _UserProfilePanel(
       {this.dispatch,
       this.phoneController,
       this.photoController,
-      this.user,
       this.userEditAnimation,
       this.userNameController,
       this.userPanelPhotoUrl});
+
   @override
   Widget build(BuildContext context) {
     final double _margin = Adapt.px(120) + Adapt.padTopH();
@@ -342,7 +353,7 @@ class _UserProfilePanel extends StatelessWidget {
                   ),
                   SizedBox(height: Adapt.px(30)),
                   Text(
-                    '${user?.email ?? '-'}',
+                    '-',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,

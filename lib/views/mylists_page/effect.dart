@@ -1,6 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:movie/actions/api/base_api.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -20,12 +20,6 @@ Future _onInit(Action action, Context<MyListsPageState> ctx) async {
   ctx.state.cellAnimationController = AnimationController(
       vsync: ticker, duration: Duration(milliseconds: 1000));
   ctx.state.scrollController = ScrollController(keepScrollOffset: false);
-  if (ctx.state.user != null) {
-    final _baseApi = BaseApi.instance;
-    final _data = await _baseApi.getUserList(ctx.state.user.firebaseUser.uid);
-    if (_data.success)
-      ctx.dispatch(MyListsPageActionCreator.setList(_data.result));
-  }
 }
 
 void _onDispose(Action action, Context<MyListsPageState> ctx) {

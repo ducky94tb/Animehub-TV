@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:movie/models/base_api_model/base_cast_list.dart';
 import 'package:movie/style/themestyle.dart';
 
@@ -29,35 +28,6 @@ Widget buildView(
       ],
     ),
     backgroundColor: _theme.backgroundColor,
-    body: StreamBuilder<FetchResult>(
-      stream: state.castList,
-      builder: (_, snapShot) {
-        switch (snapShot.connectionState) {
-          case ConnectionState.waiting:
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(_theme.iconTheme.color),
-              ),
-            );
-          case ConnectionState.active:
-          case ConnectionState.done:
-            final _castList = CastListModel.fromMap(snapShot.data.data);
-            final List<BaseCastList> _list = _castList.list
-              ..sort((a, b) => a.updateTime.isBefore(b.updateTime) ? 1 : 0);
-            return _CastListView(
-              data: _list,
-              onSelected: (d) =>
-                  dispatch(CastListActionCreator.onCastListTap(d)),
-              onEdit: (d) => dispatch(CastListActionCreator.onCastListEdit(d)),
-            );
-          case ConnectionState.none:
-          default:
-            return Center(
-              child: Text('Empty List'),
-            );
-        }
-      },
-    ),
   );
 }
 

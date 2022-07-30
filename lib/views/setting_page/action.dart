@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:movie/models/item.dart';
 
@@ -44,7 +43,7 @@ class SettingPageActionCreator {
     return Action(SettingPageAction.profileEdit);
   }
 
-  static Action userUpadate(FirebaseUser user) {
+  static Action userUpadate(final user) {
     return Action(SettingPageAction.userUpdate, payload: user);
   }
 

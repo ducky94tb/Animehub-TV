@@ -1,7 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:movie/actions/api/graphql_client.dart';
 import 'package:movie/models/base_api_model/base_cast_list.dart';
+
 import 'action.dart';
 import 'components/cast_list_create.dart';
 import 'state.dart';
@@ -20,9 +20,9 @@ void _onAction(Action action, Context<CastListState> ctx) {}
 
 void _onInit(Action action, Context<CastListState> ctx) async {
   if (ctx.state.user.firebaseUser != null) {
-    var _result = BaseGraphQLClient.instance
+    /*var _result = BaseGraphQLClient.instance
         .castListSubscription(ctx.state.user.firebaseUser.uid);
-    ctx.dispatch(CastListActionCreator.setCastList(_result));
+    ctx.dispatch(CastListActionCreator.setCastList(_result));*/
   }
 }
 

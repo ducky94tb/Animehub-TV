@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +9,6 @@ import 'package:movie/views/setting_page/action.dart';
 class SettingBody extends StatelessWidget {
   final AnimationController pageAnimation;
   final AnimationController userEditAnimation;
-  final FirebaseUser user;
   final bool adultSwitchValue;
   final double cachedSize;
   final bool loading;
@@ -24,7 +21,6 @@ class SettingBody extends StatelessWidget {
       this.dispatch,
       this.loading,
       this.pageAnimation,
-      this.user,
       this.userEditAnimation,
       this.version,
       this.appLanguage});
@@ -50,7 +46,6 @@ class SettingBody extends StatelessWidget {
                 _UserCell(
                   pageAnimation: pageAnimation,
                   userEditAnimation: userEditAnimation,
-                  user: user,
                 ),
                 _AdultCell(
                   pageAnimation: pageAnimation,
@@ -83,8 +78,7 @@ class SettingBody extends StatelessWidget {
 class _UserCell extends StatelessWidget {
   final AnimationController pageAnimation;
   final AnimationController userEditAnimation;
-  final FirebaseUser user;
-  const _UserCell({this.pageAnimation, this.user, this.userEditAnimation});
+  const _UserCell({this.pageAnimation, this.userEditAnimation});
   @override
   Widget build(BuildContext context) {
     return _ListCell(
@@ -101,23 +95,18 @@ class _UserCell extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: const Color(0xFF303030),
-              image: user?.photoUrl != null
-                  ? DecorationImage(
-                      fit: BoxFit.cover,
-                      image: CachedNetworkImageProvider(user?.photoUrl),
-                    )
-                  : null,
+              image: null,
             ),
           ),
           title: Text(
-            user?.displayName ?? 'Guest',
+            'Guest',
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: Adapt.px(35)),
           ),
           subtitle: Text(
-            user?.email ?? '-',
+            '-',
             maxLines: 1,
             style: TextStyle(
                 color: Colors.grey,
@@ -125,9 +114,7 @@ class _UserCell extends StatelessWidget {
                 fontSize: Adapt.px(24)),
           ),
           trailing: IconButton(
-            onPressed: () {
-              if (user != null) userEditAnimation.forward();
-            },
+            onPressed: () {},
             icon: Icon(Icons.edit),
             color: Colors.white,
             iconSize: Adapt.px(60),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie/actions/api/base_api.dart';
 import 'package:movie/views/watchlistdetail_page/page.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -25,14 +26,14 @@ Future _onInit(Action action, Context<WatchlistPageState> ctx) async {
       AnimationController(vsync: ticker, duration: Duration(milliseconds: 300));
   ctx.state.swiperController = SwiperController();
   if (ctx.state.user != null) {
-    final movie =
+    /*final movie =
         await _baseApi.getWatchlist(ctx.state.user.firebaseUser.uid, 'movie');
     if (movie.success)
       ctx.dispatch(WatchlistPageActionCreator.setMovie(movie.result));
     final tv =
         await _baseApi.getWatchlist(ctx.state.user.firebaseUser.uid, 'tv');
     if (tv.success)
-      ctx.dispatch(WatchlistPageActionCreator.setTVShow(tv.result));
+      ctx.dispatch(WatchlistPageActionCreator.setTVShow(tv.result));*/
   }
 }
 

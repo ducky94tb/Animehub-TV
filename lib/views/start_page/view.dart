@@ -1,16 +1,15 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:ui' as ui;
+
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/generated/i18n.dart';
-import 'package:movie/models/models.dart';
-import 'package:movie/widgets/keepalive_widget.dart';
 import 'package:movie/models/enums/genres.dart';
 import 'package:movie/models/item.dart';
+import 'package:movie/models/models.dart';
+import 'package:movie/widgets/keepalive_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'dart:ui' as ui;
 
 import 'action.dart';
 import 'state.dart';
@@ -107,7 +106,9 @@ Future<double> _checkContextInit(Stream<double> source) async {
 
 class _FirstPage extends StatelessWidget {
   final Function continueTapped;
+
   const _FirstPage({this.continueTapped});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -161,6 +162,7 @@ class _SubscribeTopicPage extends StatefulWidget {
   final Function backTapped;
   final Function nextTapped;
   final Map<int, bool> genres;
+
   _SubscribeTopicPage(
       {this.backTapped,
       this.nextTapped,
@@ -169,14 +171,15 @@ class _SubscribeTopicPage extends StatefulWidget {
       @required this.title,
       @required this.buttonTitle,
       this.tag});
+
   @override
   _SubscribeTopicPageState createState() => _SubscribeTopicPageState();
 }
 
 class _SubscribeTopicPageState extends State<_SubscribeTopicPage> {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final List<Item> _genres = [];
   final _languageCode = ui.window.locale.languageCode;
+
   @override
   void initState() {
     final _genresMap = widget.isMovie
@@ -219,9 +222,6 @@ class _SubscribeTopicPageState extends State<_SubscribeTopicPage> {
                           widget.genres[d.value] = _selected;
                           final _topic =
                               '${widget.tag}genre_${d.value}_$_languageCode';
-                          _selected
-                              ? _firebaseMessaging.subscribeToTopic(_topic)
-                              : _firebaseMessaging.unsubscribeFromTopic(_topic);
                           setState(() {});
                         },
                         child: Container(

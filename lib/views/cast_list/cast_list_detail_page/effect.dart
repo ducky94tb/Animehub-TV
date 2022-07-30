@@ -1,10 +1,8 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:movie/actions/api/base_api.dart';
-import 'package:movie/actions/api/graphql_client.dart';
 import 'package:movie/models/base_api_model/cast_list_detail.dart';
-import 'package:movie/views/peopledetail_page/page.dart';
-import 'package:toast/toast.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -43,12 +41,6 @@ void _onCastTap(Action action, Context<CastListDetailState> ctx) async {
       .push(PageRouteBuilder(pageBuilder: (context, animation, secAnimation) {
     return FadeTransition(
       opacity: animation,
-      child: PeopleDetailPage().buildPage({
-        'peopleid': _cast.castId,
-        'profilePath': _cast.profileUrl,
-        'profileName': _cast.name,
-        'character': _cast.updateTime.toString()
-      }),
     );
   }));
 }
@@ -74,11 +66,11 @@ void _onDispose(Action action, Context<CastListDetailState> ctx) {
 void _onDeleteTap(Action action, Context<CastListDetailState> ctx) async {
   final BaseCast _cast = action.payload;
   if (_cast == null) return;
-  final _result =
+  /*final _result =
       await BaseGraphQLClient.instance.deleteCast(_cast.id, ctx.state.castList);
   if (!_result.hasException) {
     ctx.dispatch(CastListDetailActionCreator.updateCastList(_cast));
   } else {
     Toast.show('Something wrong', ctx.context);
-  }
+  }*/
 }

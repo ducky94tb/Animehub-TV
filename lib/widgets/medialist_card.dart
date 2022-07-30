@@ -42,10 +42,10 @@ class MediaListCardDialogState extends State<MediaListCardDialog> {
   final _baseApi = BaseApi.instance;
 
   initUserlist() {
-    if (_user != null)
+    /*if (_user != null)
       setState(() {
         _userList = _baseApi.getUserList(_user.firebaseUser.uid);
-      });
+      });*/
   }
 
   void _createList(BuildContext context) async {

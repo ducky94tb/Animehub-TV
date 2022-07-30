@@ -1,12 +1,11 @@
-import 'dart:io';
 import 'dart:convert' show json;
+import 'dart:io';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:movie/actions/app_language.dart';
 import 'package:movie/actions/api/github_api.dart';
 import 'package:movie/actions/api/tmdb_api.dart';
+import 'package:movie/actions/app_language.dart';
 import 'package:movie/actions/notification_topic.dart';
 import 'package:movie/actions/stream_link_convert/stream_link_convert_factory.dart';
 import 'package:movie/actions/version_comparison.dart';
@@ -17,6 +16,7 @@ import 'package:movie/views/account_page/action.dart';
 import 'package:movie/widgets/update_info_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -120,8 +120,8 @@ void _languageTap(Action action, Context<SettingsState> ctx) async {
 
 void _darkModeTap(Action action, Context<SettingsState> ctx) {
   ctx.dispatch(AccountActionCreator.showTip('Unavailable at this moment'));
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  print(_firebaseMessaging.getToken());
+  /*final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  print(_firebaseMessaging.getToken());*/
 }
 
 void _notificationsTap(Action action, Context<SettingsState> ctx) async {
@@ -129,7 +129,7 @@ void _notificationsTap(Action action, Context<SettingsState> ctx) async {
   ctx.dispatch(SettingsActionCreator.notificationsUpdate(!_enable));
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   _prefs.setBool('enableNotifications', !_enable);
-  final List<String> topics =[];
+  final List<String> topics = [];
   final Item _language = await AppLanguage.instance.getApplanguage();
   String _movieTypeUsbcirbed = _prefs.getString('movieTypeSubscribed');
   String _tvTypeUsbcirbed = _prefs.getString('tvTypeSubscribed');

@@ -8,8 +8,7 @@ class ShareCardComponent extends Component<ShareCardState> {
   ShareCardComponent()
       : super(
           shouldUpdate: (oldState, newState) {
-            return oldState.listDetailModel != newState.listDetailModel ||
-                oldState.user != newState.user;
+            return oldState.listDetailModel != newState.listDetailModel;
           },
           effect: buildEffect(),
           view: buildView,

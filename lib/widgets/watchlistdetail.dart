@@ -47,9 +47,6 @@ class WatchlistDetailState extends State<WatchlistDetail>
       GestureDetector(
         child: VideoPlayer(videoPlayerController),
         onTap: () {
-          if (!videoPlayerController.value.initialized) {
-            return;
-          }
           if (videoPlayerController.value.isPlaying) {
             imageFadeAnim =
                 FadeAnimation(child: const Icon(Icons.pause, size: 100.0));

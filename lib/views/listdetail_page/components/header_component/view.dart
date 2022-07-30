@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
@@ -15,7 +14,6 @@ Widget buildView(
     background: state.listid != null
         ? _Header(
             backGroundUrl: state.backGroundUrl,
-            user: state.user,
             description: state.description,
             dispatch: dispatch,
             sortBy: state.sortBy,
@@ -127,7 +125,9 @@ class _ShimmerHeader extends StatelessWidget {
 class _IconButton extends StatelessWidget {
   final Function onPress;
   final IconData icon;
+
   const _IconButton({this.icon, this.onPress});
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -139,16 +139,18 @@ class _IconButton extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   final String backGroundUrl;
-  final FirebaseUser user;
+
+  //final FirebaseUser user;
   final Dispatch dispatch;
   final List<SortCondition<dynamic>> sortBy;
   final String description;
-  const _Header(
-      {this.backGroundUrl,
-      this.description,
-      this.dispatch,
-      this.sortBy,
-      this.user});
+
+  const _Header({
+    this.backGroundUrl,
+    this.description,
+    this.dispatch,
+    this.sortBy,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -175,12 +177,7 @@ class _Header extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius: BorderRadius.circular(Adapt.px(50)),
-                        image: user.photoUrl != null
-                            ? DecorationImage(
-                                fit: BoxFit.cover,
-                                image:
-                                    CachedNetworkImageProvider(user.photoUrl))
-                            : null),
+                        image: null),
                   ),
                   SizedBox(
                     width: Adapt.px(20),
@@ -201,7 +198,7 @@ class _Header extends StatelessWidget {
                       SizedBox(
                         width: Adapt.px(200),
                         child: Text(
-                          user.displayName ?? '',
+                          'Name',
                           style: TextStyle(color: Colors.white),
                         ),
                       )

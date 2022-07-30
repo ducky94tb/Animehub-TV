@@ -1,13 +1,11 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:movie/actions/api/tmdb_api.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:movie/actions/api/github_api.dart';
-import 'package:movie/actions/user_info_operate.dart';
+import 'package:movie/actions/api/tmdb_api.dart';
 import 'package:movie/actions/version_comparison.dart';
 import 'package:movie/globalbasestate/action.dart';
 import 'package:movie/globalbasestate/store.dart';
@@ -15,9 +13,8 @@ import 'package:movie/models/item.dart';
 import 'package:movie/widgets/update_info_dialog.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as Path;
 import 'package:toast/toast.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -100,36 +97,9 @@ void _adultCellTapped(Action action, Context<SettingPageState> ctx) async {
   TMDBApi.instance.setAdultValue(_b);
 }
 
-void _getCachedSize(Context<SettingPageState> ctx) async {
-  final directory = Directory(await DefaultCacheManager().getFilePath());
-  if (directory.existsSync()) {
-    FileStat fileStat = directory.statSync();
-    ctx.dispatch(
-        SettingPageActionCreator.cacheSizeUpdate(fileStat.size / 1024.0));
-  }
-}
+void _getCachedSize(Context<SettingPageState> ctx) async {}
 
-void _profileEdit(Action action, Context<SettingPageState> ctx) {
-  if (ctx.state.user != null) {
-    assert(ctx.state.userName != null && ctx.state.userName != '');
-    assert(ctx.state.photoUrl != null && ctx.state.photoUrl != '');
-
-    ctx.dispatch(SettingPageActionCreator.onUploading(true));
-    final UserUpdateInfo _userInfo = UserUpdateInfo();
-    _userInfo.displayName = ctx.state.userName;
-    _userInfo.photoUrl = ctx.state.photoUrl;
-    ctx.state.user.updateProfile(_userInfo)
-      ..then((d) async {
-        final _user = await FirebaseAuth.instance.currentUser();
-
-        ctx.dispatch(SettingPageActionCreator.userUpadate(_user));
-
-        UserInfoOperate.whenLogin(_user, _user.displayName);
-        ctx.dispatch(SettingPageActionCreator.onUploading(false));
-        ctx.state.userEditAnimation.reverse();
-      });
-  }
-}
+void _profileEdit(Action action, Context<SettingPageState> ctx) {}
 
 Future _openPhotoPicker(Action action, Context<SettingPageState> ctx) async {
   final ImagePicker _imagePicker = ImagePicker();
@@ -137,20 +107,6 @@ Future _openPhotoPicker(Action action, Context<SettingPageState> ctx) async {
       source: ImageSource.gallery, maxHeight: 100, maxWidth: 100);
   if (_image != null) {
     ctx.dispatch(SettingPageActionCreator.onUploading(true));
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('avatar/${Path.basename(_image.path)}');
-    StorageUploadTask uploadTask =
-        storageReference.putData(await _image.readAsBytes());
-    await uploadTask.onComplete;
-    print('File Uploaded');
-    storageReference.getDownloadURL().then((fileURL) {
-      if (fileURL != null) {
-        ctx.state.photoController.text = fileURL;
-        ctx.dispatch(SettingPageActionCreator.userPanelPhotoUrlUpdate(fileURL));
-      }
-      ctx.dispatch(SettingPageActionCreator.onUploading(false));
-    });
   }
 }
 
