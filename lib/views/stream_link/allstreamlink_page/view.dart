@@ -5,6 +5,7 @@ import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/models/enums/media_type.dart';
+import 'package:movie/models/models.dart';
 import 'package:movie/models/sort_condition.dart';
 import 'package:movie/style/themestyle.dart';
 
@@ -57,8 +58,8 @@ Widget buildView(
           _GridView(
             dispatch: dispatch,
             list: state.mediaType == MediaType.movie
-                ? state.movieList?.data
-                : state.tvList?.data,
+                ? state.movieList ?? null
+                : state.tvList ?? null,
           ),
         ],
       ),
@@ -71,11 +72,13 @@ class _Menu extends StatelessWidget {
   final List<SortCondition<dynamic>> sortTypes;
   final Function(String) submit;
   final Function(SortCondition<dynamic>) sortChanged;
+
   const _Menu(
       {this.animationController,
       this.submit,
       this.sortChanged,
       this.sortTypes});
+
   @override
   Widget build(BuildContext context) {
     final ThemeData _theme = ThemeStyle.getTheme(context);
@@ -160,9 +163,11 @@ class _Menu extends StatelessWidget {
 }
 
 class _GridCell extends StatelessWidget {
-  final dynamic data;
-  final Function(dynamic) onTap;
+  final VideoListResult data;
+  final Function(VideoListResult) onTap;
+
   const _GridCell({this.data, this.onTap});
+
   @override
   Widget build(BuildContext context) {
     final ThemeData _theme = ThemeStyle.getTheme(context);
@@ -174,7 +179,7 @@ class _GridCell extends StatelessWidget {
           color: _theme.primaryColorDark,
           image: DecorationImage(
             image: CachedNetworkImageProvider(
-              ImageUrl.getUrl(data.photourl, ImageSize.w300),
+              ImageUrl.getUrl(data.posterPath, ImageSize.w300),
             ),
           ),
         ),
@@ -184,9 +189,11 @@ class _GridCell extends StatelessWidget {
 }
 
 class _GridView extends StatelessWidget {
-  final dynamic list;
+  final VideoListModel list;
   final Dispatch dispatch;
+
   const _GridView({this.dispatch, this.list});
+
   @override
   Widget build(BuildContext context) {
     return list == null
@@ -203,13 +210,13 @@ class _GridView extends StatelessWidget {
         : SliverGrid.count(
             crossAxisCount: 3,
             childAspectRatio: 2 / 3,
-            children: list
+            children: list.results
                 .map<Widget>(
                   (d) => _GridCell(
                     data: d,
                     onTap: (e) => dispatch(
                         AllStreamLinkPageActionCreator.gridCellTapped(
-                            e.id, e.photourl, e.name, e.photourl)),
+                            e.id, e.posterPath, e.title, e.backdropPath)),
                   ),
                 )
                 .toList(),

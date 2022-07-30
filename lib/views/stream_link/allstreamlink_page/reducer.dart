@@ -1,6 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/base_movie.dart';
-import 'package:movie/models/base_api_model/base_tvshow.dart';
+import 'package:movie/models/models.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -24,29 +23,29 @@ AllStreamLinkPageState _onAction(AllStreamLinkPageState state, Action action) {
 
 AllStreamLinkPageState _loadMoreMovies(
     AllStreamLinkPageState state, Action action) {
-  final BaseMovieModel _list = action.payload;
+  final VideoListModel _list = action.payload;
   final AllStreamLinkPageState newState = state.clone();
   if (_list != null) {
     newState.movieList.page = _list.page;
-    newState.movieList.data.addAll(_list?.data ?? []);
+    newState.movieList.results.addAll(_list?.results ?? []);
   }
   return newState;
 }
 
 AllStreamLinkPageState _loadMoreTvShows(
     AllStreamLinkPageState state, Action action) {
-  final BaseTvShowModel _list = action.payload;
+  final VideoListModel _list = action.payload;
   final AllStreamLinkPageState newState = state.clone();
   if (_list != null) {
     newState.tvList.page = _list.page;
-    newState.tvList.data.addAll(_list?.data ?? []);
+    newState.tvList.results.addAll(_list?.results ?? []);
   }
   return newState;
 }
 
 AllStreamLinkPageState _initMovieList(
     AllStreamLinkPageState state, Action action) {
-  final BaseMovieModel _list = action.payload;
+  final VideoListModel _list = action.payload;
   final AllStreamLinkPageState newState = state.clone();
   newState.movieList = _list;
   return newState;
@@ -54,7 +53,7 @@ AllStreamLinkPageState _initMovieList(
 
 AllStreamLinkPageState _initTvShowList(
     AllStreamLinkPageState state, Action action) {
-  final BaseTvShowModel _list = action.payload;
+  final VideoListModel _list = action.payload;
   final AllStreamLinkPageState newState = state.clone();
   newState.tvList = _list;
   return newState;

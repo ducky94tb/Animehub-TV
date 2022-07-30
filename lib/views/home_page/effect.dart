@@ -1,14 +1,14 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action, Page;
 import 'package:movie/actions/api/tmdb_api.dart';
-import 'package:movie/actions/api/base_api.dart';
-import 'package:movie/routes/routes.dart';
-import 'package:movie/widgets/searchbar_delegate.dart';
 import 'package:movie/models/enums/media_type.dart';
 import 'package:movie/models/enums/time_window.dart';
+import 'package:movie/routes/routes.dart';
 import 'package:movie/views/detail_page/page.dart';
 import 'package:movie/views/stream_link/allstreamlink_page/page.dart';
 import 'package:movie/views/tvshow_detail_page/page.dart';
+import 'package:movie/widgets/searchbar_delegate.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -33,21 +33,20 @@ Future _onInit(Action action, Context<HomePageState> ctx) async {
       AnimationController(vsync: ticker, duration: Duration(milliseconds: 600));
   ctx.state.scrollController = new ScrollController();
   final _tmdb = TMDBApi.instance;
-  final _baseApi = BaseApi.instance;
   final _movies = await _tmdb.getNowPlayingMovie();
   if (_movies.success)
     ctx.dispatch(HomePageActionCreator.onInitMovie(_movies.result));
   final _tv = await _tmdb.getTVOnTheAir();
   if (_tv.success) ctx.dispatch(HomePageActionCreator.onInitTV(_tv.result));
-  final _trending = await _tmdb.getTrending(MediaType.all, TimeWindow.day);
+  final _trending = await _tmdb.getTrending(MediaType.tv, TimeWindow.day);
   if (_trending.success)
     ctx.dispatch(HomePageActionCreator.initTrending(_trending.result));
-  final _shareMovie = await _baseApi.getMovies(pageSize: 10);
+  /*final _shareMovie = await _baseApi.getMovies(pageSize: 10);
   if (_shareMovie.success)
     ctx.dispatch(HomePageActionCreator.initShareMovies(_shareMovie.result));
   final _sharetv = await _baseApi.getTvShows(pageSize: 10);
   if (_sharetv.success)
-    ctx.dispatch(HomePageActionCreator.initShareTvShows(_sharetv.result));
+    ctx.dispatch(HomePageActionCreator.initShareTvShows(_sharetv.result));*/
   final _popMovie = await _tmdb.getPopularMovies();
   if (_popMovie.success)
     ctx.dispatch(HomePageActionCreator.onInitPopularMovie(_popMovie.result));
@@ -113,7 +112,7 @@ Future _shareMore(Action action, Context<HomePageState> ctx) async {
     return FadeTransition(
       opacity: animation,
       child: AllStreamLinkPage().buildPage(
-          {'type': ctx.state.showShareMovie ? MediaType.movie : MediaType.tv}),
+          {'type': ctx.state.showPopMovie ? MediaType.movie : MediaType.tv}),
     );
   }));
 }

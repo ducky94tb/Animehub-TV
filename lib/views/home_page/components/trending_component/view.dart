@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +51,10 @@ class _FrontTitle extends StatelessWidget {
             onTap: () => dispatch(HomePageActionCreator.onTrendingMore()),
             child: Text(
               I18n.of(context).more,
-              style: TextStyle(color: Colors.grey[600]),
+              style: TextStyle(
+                fontSize: Adapt.px(24),
+                fontWeight: FontWeight.bold,
+              ),
             ),
           )
         ],
@@ -123,8 +128,8 @@ class _Trending extends StatelessWidget {
                     new StaggeredTile.count(2, index == 0 ? 2 : 1),
                 mainAxisSpacing: Adapt.px(5),
                 crossAxisSpacing: Adapt.px(5),
-                itemCount: 3,
-                itemBuilder: (BuildContext contxt, int index) {
+                itemCount: min(3, data.length),
+                itemBuilder: (BuildContext context, int index) {
                   var d = data[index];
                   return GestureDetector(
                     onTap: () => dispatch(HomePageActionCreator.onCellTapped(
@@ -141,7 +146,8 @@ class _Trending extends StatelessWidget {
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           image: CachedNetworkImageProvider(
-                            ImageUrl.getUrl(d.backdropPath, ImageSize.w400),
+                            ImageUrl.getUrl(
+                                d.backdropPath ?? d.posterPath, ImageSize.w400),
                           ),
                         ),
                       ),

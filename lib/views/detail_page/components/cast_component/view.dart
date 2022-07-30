@@ -100,46 +100,43 @@ class _CastCell extends StatelessWidget {
   Widget build(BuildContext context) {
     final double width = Adapt.px(150);
     final ThemeData _theme = ThemeStyle.getTheme(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        key: ValueKey('Cast${data.id}'),
-        children: <Widget>[
-          Hero(
-              tag: 'people${data.id}',
-              child: Material(
-                color: Colors.transparent,
-                child: Container(
-                  width: width,
-                  height: width,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(Adapt.px(15)),
-                      color: _theme.primaryColorDark,
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: CachedNetworkImageProvider(ImageUrl.getUrl(
-                              data.profilePath, ImageSize.w300)))),
-                ),
-              )),
-          SizedBox(
-            height: Adapt.px(10),
-          ),
-          Container(
-              width: width,
-              child: Text(
-                data.name ?? '',
-                maxLines: 2,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              )),
-          Container(
-              width: width,
-              child: Text(
-                data.character ?? '',
-                maxLines: 2,
-                style: TextStyle(color: Colors.grey, fontSize: Adapt.px(24)),
-              ))
-        ],
-      ),
+    return Column(
+      key: ValueKey('Cast${data.id}'),
+      children: <Widget>[
+        Hero(
+            tag: 'people${data.id}',
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                width: width,
+                height: width,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(Adapt.px(15)),
+                    color: _theme.primaryColorDark,
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: CachedNetworkImageProvider(ImageUrl.getUrl(
+                            data.profilePath, ImageSize.w300)))),
+              ),
+            )),
+        SizedBox(
+          height: Adapt.px(10),
+        ),
+        Container(
+            width: width,
+            child: Text(
+              data.name ?? '',
+              maxLines: 2,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )),
+        Container(
+            width: width,
+            child: Text(
+              data.character ?? '',
+              maxLines: 2,
+              style: TextStyle(color: Colors.grey, fontSize: Adapt.px(24)),
+            ))
+      ],
     );
   }
 }

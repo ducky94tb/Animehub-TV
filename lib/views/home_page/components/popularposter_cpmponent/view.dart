@@ -10,6 +10,7 @@ import 'package:movie/models/video_list.dart';
 import 'package:movie/style/themestyle.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../action.dart';
 import 'action.dart';
 import 'state.dart';
 
@@ -81,6 +82,7 @@ class _ShimmerList extends StatelessWidget {
 class _Cell extends StatelessWidget {
   final VideoListResult data;
   final Function onTap;
+
   const _Cell({@required this.data, this.onTap});
 
   @override
@@ -126,27 +128,34 @@ class _Cell extends StatelessWidget {
 }
 
 class _MoreCell extends StatelessWidget {
+  final Dispatch dispatch;
+
+  const _MoreCell({Key key, this.dispatch}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final ThemeData _theme = ThemeStyle.getTheme(context);
     return Column(
       children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            color: _theme.primaryColorLight,
-            borderRadius: BorderRadius.circular(Adapt.px(15)),
+        InkWell(
+          onTap: () => dispatch(HomePageActionCreator.onShareMore()),
+          child: Container(
+            decoration: BoxDecoration(
+              color: _theme.primaryColorLight,
+              borderRadius: BorderRadius.circular(Adapt.px(15)),
+            ),
+            width: Adapt.px(250),
+            height: Adapt.px(350),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    I18n.of(context).more,
+                    style: TextStyle(fontSize: Adapt.px(35)),
+                  ),
+                  Icon(Icons.arrow_forward, size: Adapt.px(35))
+                ]),
           ),
-          width: Adapt.px(250),
-          height: Adapt.px(350),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  I18n.of(context).more,
-                  style: TextStyle(fontSize: Adapt.px(35)),
-                ),
-                Icon(Icons.arrow_forward, size: Adapt.px(35))
-              ]),
         )
       ],
     );
@@ -156,7 +165,9 @@ class _MoreCell extends StatelessWidget {
 class _FrontTitel extends StatelessWidget {
   final bool showMovie;
   final Dispatch dispatch;
+
   const _FrontTitel({this.showMovie, this.dispatch});
+
   @override
   Widget build(BuildContext context) {
     final TextStyle _selectPopStyle = TextStyle(
@@ -205,7 +216,9 @@ class _FrontTitel extends StatelessWidget {
 class _PopBody extends StatelessWidget {
   final VideoListModel model;
   final Dispatch dispatch;
+
   const _PopBody({this.model, this.dispatch}) : assert(model != null);
+
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
@@ -231,7 +244,10 @@ class _PopBody extends StatelessWidget {
                   separatorBuilder: (_, index) => SizedBox(width: Adapt.px(30)),
                   itemCount: model.results.length + 1,
                   itemBuilder: (_, index) {
-                    if (index == model.results.length) return _MoreCell();
+                    if (index == model.results.length)
+                      return _MoreCell(
+                        dispatch: dispatch,
+                      );
                     final d = model.results[index];
                     return _Cell(
                       data: d,

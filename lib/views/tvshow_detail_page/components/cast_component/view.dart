@@ -33,39 +33,36 @@ class _CastCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);
-    return GestureDetector(
-      onTap: () => onTap(data),
-      child: Column(
-        children: [
-          Container(
-            width: Adapt.px(110),
-            height: Adapt.px(110),
-            decoration: BoxDecoration(
-              color: _theme.primaryColorDark,
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: CachedNetworkImageProvider(
-                  ImageUrl.getUrl(data.profilePath, ImageSize.w300),
-                ),
+    return Column(
+      children: [
+        Container(
+          width: Adapt.px(110),
+          height: Adapt.px(110),
+          decoration: BoxDecoration(
+            color: _theme.primaryColorDark,
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: CachedNetworkImageProvider(
+                ImageUrl.getUrl(data.profilePath, ImageSize.w300),
               ),
             ),
           ),
-          SizedBox(height: Adapt.px(20)),
-          SizedBox(
-            width: Adapt.px(120),
-            child: Text(
-              data.name ?? '',
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              style: TextStyle(
-                fontSize: Adapt.px(22),
-                color: const Color(0xFF717171),
-              ),
+        ),
+        SizedBox(height: Adapt.px(20)),
+        SizedBox(
+          width: Adapt.px(120),
+          child: Text(
+            data.name ?? '',
+            textAlign: TextAlign.center,
+            maxLines: 3,
+            style: TextStyle(
+              fontSize: Adapt.px(22),
+              color: const Color(0xFF717171),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }

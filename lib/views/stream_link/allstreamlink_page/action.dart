@@ -1,6 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/base_movie.dart';
-import 'package:movie/models/base_api_model/base_tvshow.dart';
+import 'package:movie/models/models.dart';
 import 'package:movie/models/sort_condition.dart';
 
 enum AllStreamLinkPageAction {
@@ -30,19 +29,19 @@ class AllStreamLinkPageActionCreator {
         payload: [id, bgpic, title, posterpic]);
   }
 
-  static Action initMovieList(BaseMovieModel d) {
+  static Action initMovieList(VideoListModel d) {
     return Action(AllStreamLinkPageAction.initMovieList, payload: d);
   }
 
-  static Action initTvShowList(BaseTvShowModel d) {
+  static Action initTvShowList(VideoListModel d) {
     return Action(AllStreamLinkPageAction.initTvShowList, payload: d);
   }
 
-  static Action loadMoreMovie(BaseMovieModel d) {
+  static Action loadMoreMovie(VideoListModel d) {
     return Action(AllStreamLinkPageAction.loadMoreMovies, payload: d);
   }
 
-  static Action loadMoreTvShows(BaseTvShowModel d) {
+  static Action loadMoreTvShows(VideoListModel d) {
     return Action(AllStreamLinkPageAction.loadMoreTvShows, payload: d);
   }
 

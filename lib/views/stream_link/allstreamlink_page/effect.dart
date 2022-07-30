@@ -1,10 +1,11 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action, Page;
-import 'package:movie/actions/api/base_api.dart';
+import 'package:movie/actions/api/tmdb_api.dart';
 import 'package:movie/models/enums/media_type.dart';
 import 'package:movie/models/sort_condition.dart';
 import 'package:movie/views/detail_page/page.dart';
 import 'package:movie/views/tvshow_detail_page/page.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -59,17 +60,17 @@ Future _sortChanged(Action action, Context<AllStreamLinkPageState> ctx) async {
 
 void _loadMore(Context<AllStreamLinkPageState> ctx) async {
   final _loading = ctx.state.loading;
-  final _baseApi = BaseApi.instance;
+  final _baseApi = TMDBApi.instance;
   if (!_loading) {
     ctx.state.loading = true;
     if (ctx.state.mediaType == MediaType.movie)
-      _baseApi.getMovies(page: ctx.state.movieList.page + 1).then((d) {
+      _baseApi.getPopularMovies(page: ctx.state.movieList.page + 1).then((d) {
         ctx.state.loading = false;
         if (d.success)
           ctx.dispatch(AllStreamLinkPageActionCreator.loadMoreMovie(d.result));
       });
     else
-      _baseApi.getTvShows(page: ctx.state.tvList.page + 1).then((d) {
+      _baseApi.getPopularTVShows(page: ctx.state.tvList.page + 1).then((d) {
         ctx.state.loading = false;
         if (d.success)
           ctx.dispatch(
@@ -79,14 +80,14 @@ void _loadMore(Context<AllStreamLinkPageState> ctx) async {
 }
 
 void _initlist(Context<AllStreamLinkPageState> ctx) {
-  final _baseApi = BaseApi.instance;
+  final _baseApi = TMDBApi.instance;
   if (ctx.state.mediaType == MediaType.movie)
-    _baseApi.getMovies().then((d) {
+    _baseApi.getPopularMovies().then((d) {
       if (d.success)
         ctx.dispatch(AllStreamLinkPageActionCreator.initMovieList(d.result));
     });
   else
-    _baseApi.getTvShows().then((d) {
+    _baseApi.getPopularTVShows().then((d) {
       if (d.success)
         ctx.dispatch(AllStreamLinkPageActionCreator.initTvShowList(d.result));
     });
@@ -94,14 +95,14 @@ void _initlist(Context<AllStreamLinkPageState> ctx) {
 
 void _onSearch(Action action, Context<AllStreamLinkPageState> ctx) {
   final String query = action.payload ?? '';
-  final _baseApi = BaseApi.instance;
+  final _baseApi = TMDBApi.instance;
   if (query != '') if (ctx.state.mediaType == MediaType.movie)
-    _baseApi.searchMovies(query).then((d) {
+    _baseApi.searchMovie(query).then((d) {
       if (d.success)
         ctx.dispatch(AllStreamLinkPageActionCreator.initMovieList(d.result));
     });
   else
-    _baseApi.searchTvShows(query).then((d) {
+    _baseApi.searchMovie(query).then((d) {
       if (d.success)
         ctx.dispatch(AllStreamLinkPageActionCreator.initTvShowList(d.result));
     });

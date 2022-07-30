@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:movie/actions/adapt.dart';
-import 'package:movie/widgets/backdrop.dart';
 import 'package:movie/generated/i18n.dart';
 import 'package:movie/style/themestyle.dart';
+import 'package:movie/widgets/backdrop.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -33,7 +33,7 @@ Widget buildView(
             const _Line(),
             viewService.buildComponent('swiper'),
             viewService.buildComponent('trending'),
-            viewService.buildComponent('share'),
+            //viewService.buildComponent('share'),
             viewService.buildComponent('popularposter'),
           ],
         ),
@@ -44,7 +44,9 @@ Widget buildView(
 
 class _SearchBar extends StatelessWidget {
   final Function onTap;
+
   const _SearchBar({this.onTap});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -81,6 +83,7 @@ class _SearchBar extends StatelessWidget {
 
 class _Line extends StatelessWidget {
   const _Line({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);
