@@ -51,6 +51,7 @@ Future _pushToMainPage(BuildContext context) async {
           'pages': List<Widget>.unmodifiable([
             Routes.routes.buildPage('homePage', null),
             Routes.routes.buildPage('discoverPage', null),
+            Routes.routes.buildPage('playNowPage', null),
             Routes.routes.buildPage('comingPage', null),
             Routes.routes.buildPage('testAccountPage', null)
           ])

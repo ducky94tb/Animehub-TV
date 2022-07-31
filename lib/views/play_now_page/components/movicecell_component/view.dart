@@ -4,22 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
-import 'package:movie/models/enums/genres.dart';
 import 'package:movie/models/enums/imagesize.dart';
-import 'package:movie/models/video_list.dart';
 import 'package:movie/style/themestyle.dart';
-import 'package:movie/views/discover_page/action.dart';
+import 'package:movie/views/play_now_page/action.dart';
 import 'package:movie/widgets/linear_progress_Indicator.dart';
 
 import 'state.dart';
 
 Widget buildView(
     VideoCellState state, Dispatch dispatch, ViewService viewService) {
-  final VideoListResult d = state.videodata;
+  final d = state.videodata;
+  final isMovie = state.isMovie;
   if (d == null) return SizedBox();
   return _Card(
+    isMovie: isMovie,
     data: d,
-    onTap: (value) => dispatch(DiscoverPageActionCreator.onVideoCellTapped(
+    onTap: (value) => dispatch(PlayNowPageActionCreator.onVideoCellTapped(
         value.id,
         value.posterPath,
         value.posterPath,
@@ -32,16 +32,18 @@ String _changeDatetime(String s1) {
 }
 
 class _Card extends StatelessWidget {
-  final VideoListResult data;
+  final data;
+  final bool isMovie;
 
-  final Function(VideoListResult) onTap;
-  const _Card({this.data, this.onTap});
+  final Function(dynamic d) onTap;
+
+  const _Card({this.data, this.onTap, this.isMovie});
+
   @override
   Widget build(BuildContext context) {
-    final bool _isMovie = data.title != null;
     final _horizontalPadding = Adapt.px(30);
-    final _cardHeight = Adapt.px(400);
-    final _borderRadius = Adapt.px(40);
+    final _cardHeight = Adapt.px(350);
+    final _borderRadius = Adapt.px(20);
     final _imageWidth = Adapt.px(240);
     final _rightPanelPadding = Adapt.px(20);
     final _rightPanelWidth = Adapt.screenW() -
@@ -49,8 +51,10 @@ class _Card extends StatelessWidget {
         _horizontalPadding * 2 -
         _rightPanelPadding * 2;
     final ThemeData _theme = ThemeStyle.getTheme(context);
+    final description =
+        isMovie ? "-" : 'Season ${data.seasonId} · Ep ${data.episodeId ?? '-'}';
     return Container(
-      key: ValueKey('${data.name}${data.id}'),
+      key: ValueKey('${data.id}'),
       margin: EdgeInsets.symmetric(
           horizontal: _horizontalPadding, vertical: Adapt.px(20)),
       height: _cardHeight,
@@ -69,18 +73,16 @@ class _Card extends StatelessWidget {
         onTap: () => onTap(data),
         child: Row(children: [
           ClipRRect(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(_borderRadius),
-                bottomLeft: Radius.circular(_borderRadius),
-                bottomRight: Radius.circular(_imageWidth / 2)),
+            borderRadius: BorderRadius.all(
+              Radius.circular(_borderRadius * 2),
+            ),
             child: Container(
               width: _imageWidth,
               height: _cardHeight,
               color: const Color(0xFFAABBCC),
               child: CachedNetworkImage(
                 fit: BoxFit.cover,
-                imageUrl: ImageUrl.getUrl(
-                    data.posterPath ?? data.backdropPath, ImageSize.w300),
+                imageUrl: ImageUrl.getUrl(data.posterPath, ImageSize.w300),
               ),
             ),
           ),
@@ -92,7 +94,7 @@ class _Card extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    data.title ?? data.name,
+                    isMovie ? data.name ?? "-" : data.tvName ?? "-",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -103,23 +105,14 @@ class _Card extends StatelessWidget {
                   SizedBox(height: Adapt.px(5)),
                   Text(
                     DateFormat.yMMMd().format(
-                      DateTime?.tryParse(
-                        (_isMovie
-                            ? _changeDatetime(data.releaseDate)
-                            : _changeDatetime(data.firstAirDate)),
-                      ),
+                      DateTime?.tryParse(_changeDatetime(data.airDate)),
                     ),
                     style: TextStyle(
                         color: const Color(0xFF9E9E9E), fontSize: Adapt.px(18)),
                   ),
                   SizedBox(height: Adapt.px(5)),
                   Text(
-                    data.genreIds
-                        .take(3)
-                        .map((e) => _isMovie
-                            ? Genres.instance.movieList[e]
-                            : Genres.instance.tvList[e])
-                        .join(' / '),
+                    data.genres,
                     style: TextStyle(
                         fontSize: Adapt.px(18), color: const Color(0xFF9E9E9E)),
                   ),
@@ -138,31 +131,73 @@ class _Card extends StatelessWidget {
                     )
                   ]),
                   SizedBox(height: Adapt.px(20)),
-                  Text(
-                    data.overview,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 12,
-                        height: 1.5,
-                        color: const Color(0xFF717171)),
-                  ),
+                  if (isMovie)
+                    Text(
+                      data.overview,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          fontSize: 12,
+                          height: 1.5,
+                          color: const Color(0xFF717171)),
+                    )
+                  else
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        gradient:
+                            LinearGradient(begin: Alignment.topLeft, stops: [
+                          0.0,
+                          0.9
+                        ], colors: [
+                          Colors.deepPurpleAccent.withOpacity(0.4),
+                          Colors.deepPurpleAccent.withOpacity(0.8)
+                        ]),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 4.0),
+                        child: Text(
+                          description,
+                          style: TextStyle(
+                              fontSize: 12,
+                              height: 1.5,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ),
+                    ),
                   Spacer(),
                   Align(
                     alignment: Alignment.centerRight,
-                    child: Container(
-                      width: Adapt.px(80),
-                      height: Adapt.px(60),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF334455),
-                        borderRadius: BorderRadius.circular(Adapt.px(20)),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.chevron_right,
-                          color: const Color(0xFFFFFFFF),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Watched: ${data.views}',
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontStyle: FontStyle.italic,
+                              height: 1.5,
+                              color: const Color(0xFF9E9E9E)),
                         ),
-                      ),
+                        Spacer(),
+                        Container(
+                          width: Adapt.px(80),
+                          height: Adapt.px(60),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF334455),
+                            borderRadius: BorderRadius.circular(Adapt.px(20)),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.chevron_right,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 ],

@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:movie/globalbasestate/state.dart';
 import 'package:movie/globalbasestate/store.dart';
+import 'package:movie/views/play_now_page/page.dart';
 import 'package:movie/views/views.dart';
 
 class Routes {
@@ -10,6 +11,7 @@ class Routes {
       'mainpage': MainPage(),
       'homePage': HomePage(),
       'discoverPage': DiscoverPage(),
+      'playNowPage': PlayNowPage(),
       'comingPage': ComingPage(),
       'trendingPage': TrendingPage(),
       'seasondetailpage': SeasonDetailPage(),

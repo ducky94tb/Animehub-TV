@@ -15,6 +15,7 @@ export 'main_page/page.dart';
 export 'moremedia_page/page.dart';
 export 'mylists_page/page.dart';
 export 'notification_page/page.dart';
+export 'play_now_page/page.dart';
 export 'premium_page/page.dart';
 export 'seasondetail_page/page.dart';
 export 'seasons_page/page.dart';
