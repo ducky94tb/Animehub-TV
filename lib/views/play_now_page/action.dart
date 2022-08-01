@@ -36,9 +36,9 @@ class PlayNowPageActionCreator {
   }
 
   static Action onVideoCellTapped(
-      int p, String backpic, String name, String poster) {
+      {int p, int seasonId, String backpic, int epId, String tvName}) {
     return Action(PlayNowPageAction.videoCellTapped,
-        payload: [p, backpic, name, poster]);
+        payload: [p, backpic, seasonId, epId, tvName]);
   }
 
   static Action onBusyChanged(bool p) {

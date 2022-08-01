@@ -116,7 +116,7 @@ class _Header extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    season.airDate ?? "-",
+                    season?.airDate ?? "-",
                     style: TextStyle(
                       fontSize: Adapt.px(24),
                       color: const Color(0xFF717171),
@@ -127,7 +127,7 @@ class _Header extends StatelessWidget {
               Spacer(),
               season?.credits?.cast != null
                   ? _CastCell(casts: season.credits.cast)
-                  : null
+                  : Spacer()
             ]),
             SizedBox(height: Adapt.px(40)),
             /*ExpandableText(
@@ -256,8 +256,8 @@ class _EpisodeCell extends StatelessWidget {
                       ),
               ),
               child: _WatchedCell(
-                watched: episode.playState,
-                playing: playing,
+                watched: episode.playState ?? false,
+                playing: playing ?? false,
               ),
             ),
             SizedBox(width: Adapt.px(20)),

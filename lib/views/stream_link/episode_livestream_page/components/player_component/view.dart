@@ -14,16 +14,12 @@ Widget buildView(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(Adapt.px(30)),
         child: PlayerPanel(
-          loading: state.loading,
           background: state.background,
           streamLink: state.streamLink,
-          playerType: state.playerType,
-          linkId: state.streamLinkId,
-          streamInBrowser: state.streamInBrowser,
-          useVideoSourceApi: state.useVideoSourceApi,
-          needAd: state.needAd,
           onPlay: () => dispatch(
               EpisodeLiveStreamActionCreator.markWatched(state.episode)),
+          currentEpisodeNo: state.episode.episodeNumber,
+          item: state.newestItem,
         ),
       ),
     ),

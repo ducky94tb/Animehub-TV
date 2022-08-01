@@ -20,10 +20,11 @@ Widget buildView(
     isMovie: isMovie,
     data: d,
     onTap: (value) => dispatch(PlayNowPageActionCreator.onVideoCellTapped(
-        value.id,
-        value.posterPath,
-        value.posterPath,
-        state.isMovie ? value.name : value.tvName)),
+        p: value.id,
+        backpic: value.posterPath,
+        seasonId: state.isMovie ? -1 : value.seasonId,
+        epId: state.isMovie ? -1 : value.episodeId,
+        tvName: state.isMovie ? value.name : value.tvName)),
   );
 }
 

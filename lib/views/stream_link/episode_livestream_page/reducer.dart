@@ -1,6 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/tvshow_stream_link.dart';
 import 'package:movie/models/episode_model.dart';
+import 'package:movie/models/firebase_api_model/stream_link.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -27,7 +27,7 @@ EpisodeLiveStreamState _onAction(EpisodeLiveStreamState state, Action action) {
 EpisodeLiveStreamState _setSelectedEpisode(
     EpisodeLiveStreamState state, Action action) {
   final Episode _episode = action.payload[0];
-  final TvShowStreamLink _link = action.payload[1];
+  final StreamLink _link = action.payload[1];
   final EpisodeLiveStreamState newState = state.clone();
   newState.selectedEpisode = _episode;
   newState.selectedLink = _link;
@@ -53,18 +53,16 @@ EpisodeLiveStreamState _setLike(EpisodeLiveStreamState state, Action action) {
 
 EpisodeLiveStreamState _setStreamLink(
     EpisodeLiveStreamState state, Action action) {
-  final TvShowStreamLinks _streamLinks = action.payload[0];
-  final TvShowStreamLink _link = action.payload[1];
+  final StreamLink _link = action.payload;
   final EpisodeLiveStreamState newState = state.clone();
   newState.selectedLink = _link;
-  newState.streamLinks = _streamLinks;
   newState.loading = false;
   return newState;
 }
 
 EpisodeLiveStreamState _selectedStreamLink(
     EpisodeLiveStreamState state, Action action) {
-  final TvShowStreamLink _link = action.payload;
+  final StreamLink _link = action.payload;
   final EpisodeLiveStreamState newState = state.clone();
   newState.selectedLink = _link;
   return newState;

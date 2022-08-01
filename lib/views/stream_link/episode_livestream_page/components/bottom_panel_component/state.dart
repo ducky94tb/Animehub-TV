@@ -5,13 +5,11 @@ import 'package:movie/views/stream_link/episode_livestream_page/state.dart';
 import 'package:movie/widgets/overlay_entry_manage.dart';
 
 import 'components/comment_component/state.dart';
-import 'components/streamlink_filter_component/state.dart';
 
 class BottomPanelState implements Cloneable<BottomPanelState> {
   TvShowStreamLinks streamLinks;
   TvShowStreamLink selectedLink;
   CommentState commentState;
-  StreamLinkFilterState streamLinkFilterState;
   bool useVideoSourceApi;
   bool streamInBrowser;
   bool userLiked;
@@ -41,7 +39,6 @@ class BottomPanelState implements Cloneable<BottomPanelState> {
       ..selectEpisode = selectEpisode
       ..commentState = commentState
       ..overlayStateKey = overlayStateKey
-      ..streamLinkFilterState = streamLinkFilterState
       ..preferHost = preferHost
       ..defaultVideoLanguage = defaultVideoLanguage;
   }
@@ -53,8 +50,6 @@ class BottomPanelConnector
   BottomPanelState get(EpisodeLiveStreamState state) {
     BottomPanelState mstate = state.bottomPanelState.clone();
     mstate.selectEpisode = state.selectedEpisode.episodeNumber;
-    mstate.streamLinks = state.streamLinks;
-    mstate.selectedLink = state.selectedLink;
     mstate.tvName = state.tvName;
     mstate.commentCount =
         state.bottomPanelState.commentState.comments?.totalCount ?? 0;
@@ -64,6 +59,5 @@ class BottomPanelConnector
   @override
   void set(EpisodeLiveStreamState state, BottomPanelState subState) {
     state.bottomPanelState = subState;
-    state.selectedLink = subState.selectedLink;
   }
 }

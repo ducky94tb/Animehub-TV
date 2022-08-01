@@ -1,5 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/movie_stream_link.dart';
+import 'package:movie/models/firebase_api_model/stream_link.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -39,18 +39,16 @@ MovieLiveStreamState _setLike(MovieLiveStreamState state, Action action) {
 }
 
 MovieLiveStreamState _setStreamLink(MovieLiveStreamState state, Action action) {
-  final MovieStreamLinks _streamLinks = action.payload[0];
-  final MovieStreamLink _link = action.payload[1];
+  final StreamLink _link = action.payload;
   final MovieLiveStreamState newState = state.clone();
   newState.selectedLink = _link;
-  newState.streamLinks = _streamLinks;
   newState.loading = false;
   return newState;
 }
 
 MovieLiveStreamState _selectedStreamLink(
     MovieLiveStreamState state, Action action) {
-  final MovieStreamLink _link = action.payload;
+  final StreamLink _link = action.payload;
   final MovieLiveStreamState newState = state.clone();
   newState.selectedLink = _link;
   return newState;

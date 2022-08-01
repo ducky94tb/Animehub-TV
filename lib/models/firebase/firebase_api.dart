@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:movie/models/firebase_api_model/movie_model.dart';
 import 'package:movie/models/firebase_api_model/tv_episode_model.dart';
 
+import '../firebase_api_model/stream_link.dart';
+
 class FirebaseApi {
   FirebaseApi._();
 
@@ -13,7 +15,7 @@ class FirebaseApi {
     int movieId,
     String type,
     String streamLink,
-    String language = 'vi',
+    String language = 'en',
   }) async {
     final ref = FirebaseFirestore.instance
         .collection('movie')
@@ -97,7 +99,7 @@ class FirebaseApi {
     int episodeId,
     String type,
     String streamLink,
-    String language = 'vi',
+    String language = 'en',
   }) async {
     final ref = FirebaseFirestore.instance
         .collection('tvshow')
@@ -115,18 +117,17 @@ class FirebaseApi {
     return 1;
   }
 
-  /*Future<StreamLink> getMovieStreamLink(
-      {int movieId, String language = 'vi'}) async {
+  Future<StreamLink> getMovieStreamLink(
+      {int movieId, String language = 'en'}) async {
     final ref = FirebaseFirestore.instance
         .collection('movie')
         .doc('$movieId')
         .collection('link')
         .doc(language);
-
     final DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
     Map<String, dynamic> data = snapshot.data();
     return StreamLink.fromJson(data);
-  }*/
+  }
 
   Future<void> updateViews({int movieId, int value = 1}) async {
     final ref = FirebaseFirestore.instance.collection('newest').doc('$movieId');
@@ -191,8 +192,8 @@ class FirebaseApi {
     await ref.add(comment.toMap());
   }*/
 
-/*Future<StreamLink> getTvShowStreamLink(
-      {int tvId, int seasonId, int episodeId, String language = 'vi'}) async {
+  Future<StreamLink> getTvShowStreamLink(
+      {int tvId, int seasonId, int episodeId, String language = 'en'}) async {
     final ref = FirebaseFirestore.instance
         .collection('tvshow')
         .doc('$tvId')
@@ -206,5 +207,5 @@ class FirebaseApi {
     final DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
     Map<String, dynamic> data = snapshot.data();
     return StreamLink.fromJson(data);
-  }*/
+  }
 }

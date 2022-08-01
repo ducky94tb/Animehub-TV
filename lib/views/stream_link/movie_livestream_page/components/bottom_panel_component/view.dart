@@ -88,8 +88,8 @@ Widget buildView(
                 dispatch(BottomPanelActionCreator.requestStreamLink());
                 _closeMenu(menuOverlayEntry);
               },
-              selectedLinkId: state.selectedLink?.sid ?? 0,
-              links: state.streamLinks?.list ?? [],
+              selectedLinkId: 0,
+              links: [],
             ),
           ],
         );
@@ -113,7 +113,7 @@ Widget buildView(
               ),
             )),
             DownloadMenu(
-              links: state.streamLinks?.list ?? [],
+              links: [],
               movieName: state.movieName,
               playVideo: (d) {
                 dispatch(BottomPanelActionCreator.seletedLink(d));

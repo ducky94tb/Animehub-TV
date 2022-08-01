@@ -1,7 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:movie/models/base_api_model/tvshow_comment.dart';
-import 'package:movie/models/base_api_model/tvshow_stream_link.dart';
 import 'package:movie/models/episode_model.dart';
+import 'package:movie/models/firebase_api_model/stream_link.dart';
 
 enum EpisodeLiveStreamAction {
   action,
@@ -20,7 +20,7 @@ class EpisodeLiveStreamActionCreator {
     return Action(EpisodeLiveStreamAction.episodeTapped, payload: episode);
   }
 
-  static Action setSelectedEpisode(Episode episode, TvShowStreamLink link) {
+  static Action setSelectedEpisode(Episode episode, StreamLink link) {
     return Action(EpisodeLiveStreamAction.setSelectedEpisode,
         payload: [episode, link]);
   }
@@ -34,13 +34,11 @@ class EpisodeLiveStreamActionCreator {
         payload: [likeCount, userLiked]);
   }
 
-  static Action setStreamLink(
-      TvShowStreamLinks streamLinks, TvShowStreamLink selectedLink) {
-    return Action(EpisodeLiveStreamAction.setStreamLink,
-        payload: [streamLinks, selectedLink]);
+  static Action setStreamLink(StreamLink selectedLink) {
+    return Action(EpisodeLiveStreamAction.setStreamLink, payload: selectedLink);
   }
 
-  static Action selectedStreamLink(TvShowStreamLink streamLink) {
+  static Action selectedStreamLink(StreamLink streamLink) {
     return Action(EpisodeLiveStreamAction.selectedStreamLink,
         payload: streamLink);
   }

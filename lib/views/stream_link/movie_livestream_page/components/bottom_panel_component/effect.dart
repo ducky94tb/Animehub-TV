@@ -1,7 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:movie/actions/api/base_api.dart';
-import 'package:movie/globalbasestate/store.dart';
+import 'package:movie/models/firebase/firebase_api.dart';
 import 'package:movie/models/models.dart';
 import 'package:movie/widgets/stream_link_report_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,37 +78,39 @@ void _onInit(Action action, Context<BottomPanelState> ctx) async {
 }
 
 Future _likeMovie(Action action, Context<BottomPanelState> ctx) async {
-  final user = GlobalStore.store.getState().user;
   int _likeCount = ctx.state.likeCount;
   bool _userLike = ctx.state.userLiked;
-  if (user?.firebaseUser == null) return;
   _userLike ? _likeCount-- : _likeCount++;
   ctx.dispatch(BottomPanelActionCreator.setLike(_likeCount, !_userLike));
+  FirebaseApi.instance.updateLikes(
+      isMovie: true, id: ctx.state.movieId, value: _userLike ? -1 : 1);
 }
 
 void _reportStreamLink(Action action, Context<BottomPanelState> ctx) {
-  final _name = ctx.state.selectedLink?.linkName ?? 'video api';
   showDialog(
       context: ctx.context,
       builder: (_) {
         return StreamLinkReportDialog(
             report: StreamLinkReport(
           mediaId: ctx.state.movieId,
-          mediaName: _name,
-          linkName: _name,
-          streamLink: ctx.state.selectedLink?.streamLink ?? '',
+          streamLink: ctx.state.selectedLink.type,
           type: "movie",
-          streamLinkId: ctx.state.selectedLink?.sid ?? 0,
         ));
       });
 }
 
 void _requestStreamLink(Action action, Context<BottomPanelState> ctx) async {
-  final _baseApi = BaseApi.instance;
-  _baseApi.sendRequestStreamLink(StreamLinkReport()
-    ..mediaId = ctx.state.movieId
-    ..mediaName = ctx.state.movieName
-    ..type = 'movie');
+  // final _topic = 'movie_${ctx.state.movieId}';
+  // final _firebaseMessaging = FirebaseMessaging();
+  // final _token = await _firebaseMessaging.getToken();
+  // //_firebaseMessaging.subscribeToTopic(_topic);
+  // final _baseApi = BaseApi.instance;
+  // _baseApi.sendRequestStreamLink(StreamLinkReport()
+  //   ..mediaId = ctx.state.movieId
+  //   ..mediaName = ctx.state.movieName
+  //   ..type = 'movie');
+  // _baseApi.subscribeTpoic(TopicSubscription.fromParams(
+  //     topicId: _topic, cloudMessagingToken: _token));
   Toast.show(
       'You will be notified when the stream link has been added', ctx.context,
       duration: Toast.LENGTH_LONG);

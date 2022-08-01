@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:movie/models/base_api_model/movie_comment.dart';
-import 'package:movie/models/base_api_model/movie_stream_link.dart';
+
+import '../../../models/firebase_api_model/stream_link.dart';
 
 enum MovieLiveStreamAction {
   action,
@@ -35,10 +36,8 @@ class MovieLiveStreamActionCreator {
         payload: [likeCount, userLiked]);
   }
 
-  static Action setStreamLink(
-      MovieStreamLinks streamLinks, MovieStreamLink selectedLink) {
-    return Action(MovieLiveStreamAction.setStreamLink,
-        payload: [streamLinks, selectedLink]);
+  static Action setStreamLink(StreamLink selectedLink) {
+    return Action(MovieLiveStreamAction.setStreamLink, payload: selectedLink);
   }
 
   static Action setLoading(bool loading) {

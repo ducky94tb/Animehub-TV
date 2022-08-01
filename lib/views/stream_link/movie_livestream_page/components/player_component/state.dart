@@ -31,17 +31,12 @@ class PlayerConnector extends ConnOp<MovieLiveStreamState, PlayerState> {
   PlayerState get(MovieLiveStreamState state) {
     PlayerState mstate = state.playerState.clone();
     mstate.useVideoSourceApi = state.bottomPanelState.useVideoSourceApi;
-    mstate.streamInBrowser = state.bottomPanelState.streamInBrowser ||
-        (state.selectedLink?.externalBrowser ?? false);
-    mstate.needAd = state.selectedLink?.needAd ?? false;
+    mstate.streamInBrowser = state.bottomPanelState.streamInBrowser;
     mstate.background = state.background;
-    mstate.streamLinkId = state.selectedLink?.sid ?? 0;
     mstate.loading = state.loading;
     mstate.user = state.user;
-    mstate.playerType =
-        state.selectedLink?.streamLinkType?.name ?? 'VideoSourceApi';
-    mstate.streamLink = state.selectedLink?.streamLink ??
-        'https://moviessources.cf/embed/${state.movieId}';
+    mstate.playerType = state.selectedLink?.type;
+    mstate.streamLink = state.selectedLink?.url;
     return mstate;
   }
 

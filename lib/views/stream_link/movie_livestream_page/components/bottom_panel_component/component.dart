@@ -1,8 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
+
 import 'components/comment_component/component.dart';
 import 'components/comment_component/state.dart';
-import 'components/streamlink_filter_component/component.dart';
-import 'components/streamlink_filter_component/state.dart';
 import 'effect.dart';
 import 'reducer.dart';
 import 'state.dart';
@@ -18,7 +17,6 @@ class BottomPanelComponent extends Component<BottomPanelState> {
           shouldUpdate: (o, n) {
             return o.commentCount != n.commentCount ||
                 o.likeCount != n.likeCount ||
-                o.streamLinks != n.streamLinks ||
                 o.selectedLink != n.selectedLink ||
                 o.useVideoSourceApi != n.useVideoSourceApi ||
                 o.streamInBrowser != n.streamInBrowser ||
@@ -30,8 +28,6 @@ class BottomPanelComponent extends Component<BottomPanelState> {
               adapter: null,
               slots: <String, Dependent<BottomPanelState>>{
                 'comments': CommentConnector() + CommentComponent(),
-                'streamLinkFilter':
-                    StreamLinkFilterConnector() + StreamLinkFilterComponent(),
               }),
         );
 }

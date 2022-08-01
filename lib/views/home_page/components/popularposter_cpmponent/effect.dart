@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart' hide Action;
+
 import 'action.dart';
 import 'state.dart';
 
@@ -22,7 +23,7 @@ Future _onCellTapped(Action action, Context<PopularPosterState> ctx) async {
     });
   else
     await Navigator.of(ctx.context).pushNamed('tvShowDetailPage', arguments: {
-      'tvid': action.payload[0],
+      'id': action.payload[0],
       'bgpic': action.payload[1],
       'name': action.payload[2],
       'posterpic': action.payload[3]

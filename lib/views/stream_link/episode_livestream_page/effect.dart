@@ -1,6 +1,8 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:movie/actions/api/base_api.dart';
+import 'package:movie/models/firebase/firebase_api.dart';
+import 'package:movie/models/firebase_api_model/stream_link.dart';
 import 'package:movie/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,11 +27,10 @@ void _episodeTapped(Action action, Context<EpisodeLiveStreamState> ctx) async {
       _episode.episodeNumber == ctx.state.selectedEpisode.episodeNumber) return;
   ctx.state.scrollController.animateTo(0.0,
       duration: Duration(milliseconds: 300), curve: Curves.ease);
-  TvShowStreamLink _link;
-  if (ctx.state.streamLinks != null)
-    _link = ctx.state.streamLinks.list.firstWhere(
-        (e) => e.episode == _episode.episodeNumber,
-        orElse: () => null);
+  StreamLink _link = await FirebaseApi.instance.getTvShowStreamLink(
+      tvId: ctx.state.tvid,
+      seasonId: ctx.state.season.seasonNumber,
+      episodeId: _episode.episodeNumber);
   ctx.dispatch(
       EpisodeLiveStreamActionCreator.setSelectedEpisode(_episode, _link));
   await _getLike(action, ctx);
@@ -38,27 +39,13 @@ void _episodeTapped(Action action, Context<EpisodeLiveStreamState> ctx) async {
 
 void _onInit(Action action, Context<EpisodeLiveStreamState> ctx) async {
   ctx.state.scrollController = ScrollController();
-
-  BaseApi.instance
-      .getTvSeasonStreamLinks(
-          ctx.state.tvid, ctx.state.selectedEpisode.seasonNumber)
-      .then((value) async {
-    TvShowStreamLink _link;
-    if (value.success) {
-      TvShowStreamLinks _links = value.result;
-      if (value.result.list.length > 0) {
-        _links = await _sortStreamLink(_links);
-        _link = value.result.list.firstWhere(
-            (e) => e.episode == ctx.state.selectedEpisode.episodeNumber,
-            orElse: () => null);
-      }
-
-      ctx.dispatch(EpisodeLiveStreamActionCreator.setStreamLink(_links, _link));
-    } else
-      ctx.dispatch(EpisodeLiveStreamActionCreator.setLoading(false));
-  });
-  await _getLike(action, ctx);
-  await _getComment(action, ctx);
+  StreamLink _link = await FirebaseApi.instance.getTvShowStreamLink(
+    tvId: ctx.state.tvid,
+    seasonId: ctx.state.season.seasonNumber,
+    episodeId: ctx.state.selectedEpisode.episodeNumber,
+  );
+  ctx.dispatch(EpisodeLiveStreamActionCreator.setStreamLink(_link));
+  ctx.dispatch(EpisodeLiveStreamActionCreator.setLoading(false));
 }
 
 void _onDispose(Action action, Context<EpisodeLiveStreamState> ctx) {

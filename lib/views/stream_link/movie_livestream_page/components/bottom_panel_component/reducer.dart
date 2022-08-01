@@ -1,5 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/movie_stream_link.dart';
+import 'package:movie/models/firebase_api_model/stream_link.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -39,7 +39,7 @@ BottomPanelState _setStreamInBrowser(BottomPanelState state, Action action) {
 }
 
 BottomPanelState _selectedLink(BottomPanelState state, Action action) {
-  final MovieStreamLink _link = action.payload;
+  final StreamLink _link = action.payload;
   final BottomPanelState newState = state.clone();
   newState.selectedLink = _link;
   return newState;

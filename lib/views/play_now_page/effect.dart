@@ -1,5 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
+import 'package:movie/actions/api/tmdb_api.dart';
+import 'package:movie/models/episode_model.dart';
 import 'package:movie/models/firebase/firebase_api.dart';
 
 import 'action.dart';
@@ -70,13 +72,29 @@ Future _onVideoCellTapped(Action action, Context<PlayNowPageState> ctx) async {
       'detailpage',
       arguments: {'id': action.payload[0], 'bgpic': action.payload[1]},
     );
-  else
-    await Navigator.of(ctx.context).pushNamed('tvShowDetailPage', arguments: {
-      'id': action.payload[0],
-      'bgpic': action.payload[1],
-      'posterpic': action.payload[2],
-      'name': action.payload[3]
-    });
+  else {
+    final id = action.payload[0];
+    final seasonId = action.payload[2];
+    final episodeId = action.payload[3];
+    final tvName = action.payload[4];
+    final res = await TMDBApi.instance.getTVSeasonDetail(id, seasonId);
+    if (res.success) {
+      if (res.success) {
+        final season = res.result;
+        final Episode episode = season.episodes
+            .firstWhere((element) => element.episodeNumber == episodeId);
+        await Navigator.of(ctx.context).pushNamed(
+          'episodeLiveStreamPage',
+          arguments: {
+            'tvid': id,
+            'tvName': tvName,
+            'selectedEpisode': episode,
+            'season': season
+          },
+        );
+      }
+    }
+  }
 }
 
 Future _onLoadMore(Action action, Context<PlayNowPageState> ctx) async {
