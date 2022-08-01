@@ -116,42 +116,38 @@ class _CastCell extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData _theme = ThemeStyle.getTheme(context);
     final _width = Adapt.px(120);
-    return GestureDetector(
-      key: ValueKey(data.id),
-      onTap: () => onTap(data),
-      child: SizedBox(
-        width: _width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: _width,
-              height: _width,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: _theme.primaryColorLight,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: CachedNetworkImageProvider(
-                    ImageUrl.getUrl(data.profilePath, ImageSize.w200),
-                  ),
+    return SizedBox(
+      width: _width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            width: _width,
+            height: _width,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: _theme.primaryColorLight,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: CachedNetworkImageProvider(
+                  ImageUrl.getUrl(data.profilePath, ImageSize.w200),
                 ),
               ),
             ),
-            SizedBox(height: Adapt.px(8)),
-            Text(
-              data.name,
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              overflow: TextOverflow.fade,
-              style: TextStyle(
-                fontSize: Adapt.px(24),
-                color: const Color(0xFF717171),
-                fontWeight: FontWeight.w600,
-              ),
+          ),
+          SizedBox(height: Adapt.px(8)),
+          Text(
+            data.name,
+            textAlign: TextAlign.center,
+            maxLines: 3,
+            overflow: TextOverflow.fade,
+            style: TextStyle(
+              fontSize: Adapt.px(24),
+              color: const Color(0xFF717171),
+              fontWeight: FontWeight.w600,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

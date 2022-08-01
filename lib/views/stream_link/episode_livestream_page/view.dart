@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
 import 'package:movie/models/credits_model.dart';
@@ -12,7 +11,6 @@ import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/models/episode_model.dart';
 import 'package:movie/models/season_detail.dart';
 import 'package:movie/style/themestyle.dart';
-import 'package:movie/widgets/expandable_text.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -59,7 +57,7 @@ Widget buildView(
                 color: _theme.backgroundColor,
                 height: Adapt.padTopH(),
               ),
-              viewService.buildComponent('bottomPanel'),
+              //viewService.buildComponent('bottomPanel'),
             ],
           ),
         ),
@@ -81,7 +79,7 @@ class _Header extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              episode.name,
+              episode?.name ?? "-",
               style: TextStyle(
                 fontSize: Adapt.px(35),
                 fontWeight: FontWeight.bold,
@@ -95,7 +93,7 @@ class _Header extends StatelessWidget {
                 height: Adapt.px(80),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Adapt.px(20)),
-                  image: season.posterPath != null
+                  image: season?.posterPath != null
                       ? DecorationImage(
                           fit: BoxFit.cover,
                           image: CachedNetworkImageProvider(
@@ -112,13 +110,13 @@ class _Header extends StatelessWidget {
                   SizedBox(
                     width: Adapt.screenW() - Adapt.px(410),
                     child: Text(
-                      season.name,
+                      season?.name ?? "-",
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   Text(
-                    DateFormat.yMMMd().format(DateTime.parse(season.airDate)),
+                    season.airDate ?? "-",
                     style: TextStyle(
                       fontSize: Adapt.px(24),
                       color: const Color(0xFF717171),
@@ -127,14 +125,16 @@ class _Header extends StatelessWidget {
                 ],
               ),
               Spacer(),
-              _CastCell(casts: season.credits.cast)
+              season?.credits?.cast != null
+                  ? _CastCell(casts: season.credits.cast)
+                  : null
             ]),
             SizedBox(height: Adapt.px(40)),
-            ExpandableText(
-              season.overview,
+            /*ExpandableText(
+              season?.overview ?? "-",
               maxLines: 3,
               style: TextStyle(color: const Color(0xFF717171), height: 1.5),
-            )
+            )*/
           ],
         ),
       ),
@@ -215,7 +215,7 @@ class _Episodes extends StatelessWidget {
       delegate: SliverChildBuilderDelegate((_, index) {
         int _episodeIndex = episodeNumber - 1;
         int _d = _episodeIndex + index;
-        final int _index = _d < episodes.length ? _d : _d - episodes.length;
+        final int _index = _d < episodes.length ? _d : _d % episodes.length;
         return _EpisodeCell(
           episode: episodes[_index],
           playing: episodeNumber == episodes[_index].episodeNumber,

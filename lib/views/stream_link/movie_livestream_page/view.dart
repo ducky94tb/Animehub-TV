@@ -41,7 +41,7 @@ Widget buildView(
                 color: _theme.backgroundColor,
                 height: Adapt.padTopH(),
               ),
-              viewService.buildComponent('bottomPanel'),
+              //viewService.buildComponent('bottomPanel'),
             ],
           ),
         ),

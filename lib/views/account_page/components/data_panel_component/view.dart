@@ -42,13 +42,13 @@ class _SecondPanel extends StatelessWidget {
                 value: '${state.downloadTask?.length ?? 0}',
               ),
               _DataItem(
-                onTap: () async =>
-                    Navigator.of(context).pushNamed('premiumPage'),
+                /*onTap: () async =>
+                    Navigator.of(context).pushNamed('premiumPage'),*/
                 title: 'What',
                 value: '80',
               ),
               _DataItem(
-                onTap: () async => Navigator.of(context).pushNamed('testPage'),
+                //onTap: () async => Navigator.of(context).pushNamed('testPage'),
                 title: 'Here?',
                 value: '100',
               ),
