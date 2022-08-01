@@ -27,11 +27,8 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="Animehub TV"
+        android:label="AnimeHub TV"
         tools:replace="android:label">
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-8117211796129035~2073774357" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
