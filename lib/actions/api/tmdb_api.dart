@@ -535,7 +535,6 @@ class TMDBApi {
     String param =
         '/discover/${type.toString().split('.').last}?api_key=$_apikey&language=$_language&page=$page';
     param += '&with_keywords=$_animeKeyWord';
-    print("Ducky $param");
     final r = await _http.request<SearchResultModel>(param,
         cached: true, cacheDuration: Duration(hours: 1));
     return r;

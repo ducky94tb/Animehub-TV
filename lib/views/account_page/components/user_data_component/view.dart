@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/models/base_api_model/account_info.dart';
 import 'package:movie/style/themestyle.dart';
+import 'package:toast/toast.dart';
 
-import 'action.dart';
+import '../../action.dart';
 import 'state.dart';
 
 Widget buildView(
@@ -18,7 +19,9 @@ Widget buildView(
 class _UserDataPanel extends StatelessWidget {
   final Dispatch dispatch;
   final AccountInfo info;
+
   const _UserDataPanel({this.dispatch, this.info});
+
   @override
   Widget build(BuildContext context) {
     return SliverGrid.count(
@@ -28,33 +31,43 @@ class _UserDataPanel extends StatelessWidget {
       childAspectRatio: 1.2,
       children: [
         _FeaturesCell(
-          title: 'Favorites',
-          value: '${info?.favorites ?? 0}',
-          icon: 'images/account_icon.png',
-          onTap: () =>
-              dispatch(UserDataActionCreator.navigatorPush('favoritesPage')),
-        ),
+            title: 'Favorites',
+            value: '${info?.favorites ?? 0}',
+            icon: 'images/account_icon.png',
+            onTap: () => {
+                  dispatch(AccountActionCreator.showTip(
+                      "Not available at this moment")),
+                  Toast.show("Not available at this moment", context)
+                }),
         _FeaturesCell(
-          title: 'My Lists',
-          value: '${info?.myLists ?? 0}',
-          icon: 'images/account_icon2.png',
-          onTap: () =>
-              dispatch(UserDataActionCreator.navigatorPush('myListsPage')),
-        ),
+            title: 'My Lists',
+            value: '${info?.myLists ?? 0}',
+            icon: 'images/account_icon2.png',
+            onTap: () => {
+                  dispatch(AccountActionCreator.showTip(
+                      "Not available at this moment")),
+                  Toast.show("Not available at this moment", context)
+                }),
         _FeaturesCell(
-          title: 'Watch Lists',
-          value: '${info?.watchLists ?? 0}',
-          icon: 'images/account_icon3.png',
-          onTap: () =>
-              dispatch(UserDataActionCreator.navigatorPush('watchlistPage')),
-        ),
+            title: 'Watch Lists',
+            value: '${info?.watchLists ?? 0}',
+            icon: 'images/account_icon3.png',
+            onTap: () => {
+                  dispatch(AccountActionCreator.showTip(
+                      "Not available at this moment")),
+                  Toast.show("Not available at this moment", context)
+                }),
         _FeaturesCell(
-          title: 'Cast Lists',
-          value: '${info?.castLists ?? 0}',
-          icon: 'images/account_icon4.png',
-          onTap: () =>
-              dispatch(UserDataActionCreator.navigatorPush('castListPage')),
-        ),
+            title: 'Cast Lists',
+            value: '${info?.castLists ?? 0}',
+            icon: 'images/account_icon4.png',
+            onTap: () => {
+                  dispatch(AccountActionCreator.showTip(
+                      "Not available at this moment")),
+                  Toast.show("Not available at this moment", context)
+                } /*dispatch(UserDataActionCreator.navigatorPush('castListPage')*/
+
+            ),
       ],
     );
   }
@@ -65,7 +78,9 @@ class _FeaturesCell extends StatelessWidget {
   final String value;
   final Function onTap;
   final String icon;
+
   const _FeaturesCell({this.title, this.value, this.onTap, this.icon});
+
   @override
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);

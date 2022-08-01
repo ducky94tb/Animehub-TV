@@ -12,6 +12,7 @@ enum HomePageAction {
   initPopularMovies,
   initPopularTVShows,
   moreTapped,
+  refresh,
   initTrending,
   searchBarTapped,
   cellTapped,
@@ -24,6 +25,10 @@ enum HomePageAction {
 class HomePageActionCreator {
   static Action onAction() {
     return const Action(HomePageAction.action);
+  }
+
+  static Action onRefresh() {
+    return const Action(HomePageAction.refresh);
   }
 
   static Action onInitMovie(VideoListModel movie) {

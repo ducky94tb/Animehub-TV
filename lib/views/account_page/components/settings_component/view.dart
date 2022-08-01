@@ -7,7 +7,9 @@ import 'package:movie/actions/app_language.dart';
 import 'package:movie/generated/i18n.dart';
 import 'package:movie/models/item.dart';
 import 'package:movie/style/themestyle.dart';
+import 'package:movie/views/account_page/components/settings_component/widget/setting_option_list.dart';
 
+import '../../../../app.dart';
 import 'action.dart';
 import 'state.dart';
 
@@ -56,8 +58,38 @@ Widget buildView(
           title: I18n.of(viewService.context).darkMode,
           icon: Icons.wb_sunny_outlined,
           iconBackgroundColor: const Color(0xFF28A74E),
-          value: 'System',
-          onTap: () => dispatch(SettingsActionCreator.darkModeTap()),
+          value: state.darkMode?.name ?? 'System',
+          onTap: () => showDialog(
+              context: viewService.context,
+              builder: (_) {
+                return OptionList(
+                  title: "Dark mode",
+                  onTap: (d) {
+                    dispatch(SettingsActionCreator.darkModeTap(d));
+                    switch (d.name) {
+                      case "System":
+                        App.of(viewService.context)
+                            .changeTheme(ThemeMode.system);
+                        break;
+                      case "Dark":
+                        App.of(viewService.context).changeTheme(ThemeMode.dark);
+                        break;
+                      case "Light":
+                        App.of(viewService.context)
+                            .changeTheme(ThemeMode.light);
+                        break;
+                      default:
+                        break;
+                    }
+                  },
+                  selected: state.darkMode,
+                  data: [
+                    Item.fromParams(name: "System", value: "System"),
+                    Item.fromParams(name: "Dark", value: "Dark"),
+                    Item.fromParams(name: "Light", value: "Light")
+                  ],
+                );
+              }),
         ),
         SizedBox(height: 15),
         _SettingCell(

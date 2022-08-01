@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:movie/actions/adapt.dart';
-import 'package:movie/widgets/sliverappbar_delegate.dart';
 import 'package:movie/style/themestyle.dart';
+import 'package:movie/widgets/sliverappbar_delegate.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'action.dart';
@@ -25,31 +25,38 @@ Widget buildView(
               ? SystemUiOverlayStyle.dark
               : SystemUiOverlayStyle.light,
           child: SafeArea(
-            child: CustomScrollView(
-              controller: state.scrollController,
-              slivers: <Widget>[
-                SliverPersistentHeader(
-                  floating: true,
-                  delegate: SliverAppBarDelegate(
-                      minHeight: Adapt.px(100),
-                      maxHeight: Adapt.px(100),
-                      child: _FilterBar(
-                        isMovie: state.isMovie,
-                        isBusy: state.isbusy,
-                        onFilterPress: () =>
-                            dispatch(DiscoverPageActionCreator.filterTap()),
-                        switchMedia: (isMovie) => dispatch(
-                            DiscoverPageActionCreator.mediaTypeChange(isMovie)),
-                      )),
-                ),
-                SliverList(
-                  delegate:
-                      SliverChildBuilderDelegate((BuildContext ctx, int index) {
-                    return _adapter.itemBuilder(ctx, index);
-                  }, childCount: _adapter.itemCount),
-                ),
-                _ShimmerList(isbusy: state.isbusy)
-              ],
+            child: RefreshIndicator(
+              onRefresh: () async {
+                dispatch(DiscoverPageActionCreator.onRefreshData());
+                await Future.delayed(const Duration(seconds: 1));
+              },
+              child: CustomScrollView(
+                controller: state.scrollController,
+                slivers: <Widget>[
+                  SliverPersistentHeader(
+                    floating: true,
+                    delegate: SliverAppBarDelegate(
+                        minHeight: Adapt.px(100),
+                        maxHeight: Adapt.px(100),
+                        child: _FilterBar(
+                          isMovie: state.isMovie,
+                          isBusy: state.isbusy,
+                          onFilterPress: () =>
+                              dispatch(DiscoverPageActionCreator.filterTap()),
+                          switchMedia: (isMovie) => dispatch(
+                              DiscoverPageActionCreator.mediaTypeChange(
+                                  isMovie)),
+                        )),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (BuildContext ctx, int index) {
+                      return _adapter.itemBuilder(ctx, index);
+                    }, childCount: _adapter.itemCount),
+                  ),
+                  _ShimmerList(isbusy: state.isbusy)
+                ],
+              ),
             ),
           ),
         ),
@@ -60,6 +67,7 @@ Widget buildView(
 
 class _ShimmerCell extends StatelessWidget {
   const _ShimmerCell({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final _horizontalPadding = Adapt.px(30);
@@ -142,31 +150,35 @@ class _ShimmerCell extends StatelessWidget {
 
 class _ShimmerList extends StatelessWidget {
   final bool isbusy;
+
   const _ShimmerList({this.isbusy});
+
   @override
   Widget build(BuildContext context) {
     final ThemeData _theme = ThemeStyle.getTheme(context);
     return SliverToBoxAdapter(
-      child:  isbusy?Shimmer.fromColors(
-          baseColor: _theme.primaryColorDark,
-          highlightColor: _theme.primaryColorLight,
-          child: Container(
-            margin: EdgeInsets.only(
-                top: Adapt.px(10),
-                bottom: Adapt.px(30),
-                left: Adapt.px(30),
-                right: Adapt.px(30)),
-            child: Column(
-              children: <Widget>[
-                const _ShimmerCell(),
-                SizedBox(height: Adapt.px(30)),
-                const _ShimmerCell(),
-                SizedBox(height: Adapt.px(30)),
-                const _ShimmerCell(),
-              ],
-            ),
-          ),
-      ):SizedBox(),
+      child: isbusy
+          ? Shimmer.fromColors(
+              baseColor: _theme.primaryColorDark,
+              highlightColor: _theme.primaryColorLight,
+              child: Container(
+                margin: EdgeInsets.only(
+                    top: Adapt.px(10),
+                    bottom: Adapt.px(30),
+                    left: Adapt.px(30),
+                    right: Adapt.px(30)),
+                child: Column(
+                  children: <Widget>[
+                    const _ShimmerCell(),
+                    SizedBox(height: Adapt.px(30)),
+                    const _ShimmerCell(),
+                    SizedBox(height: Adapt.px(30)),
+                    const _ShimmerCell(),
+                  ],
+                ),
+              ),
+            )
+          : SizedBox(),
     );
   }
 }
@@ -176,8 +188,10 @@ class _FilterBar extends StatelessWidget {
   final bool isMovie;
   final bool isBusy;
   final Function onFilterPress;
+
   const _FilterBar(
       {this.switchMedia, this.onFilterPress, this.isBusy, this.isMovie});
+
   @override
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);
@@ -234,7 +248,9 @@ class _TapPanel extends StatefulWidget {
   final bool isMovie;
   final bool isBusy;
   final Function(bool) onTap;
+
   const _TapPanel({this.onTap, this.isMovie, this.isBusy});
+
   @override
   _TapPanelState createState() => _TapPanelState();
 }
@@ -248,6 +264,7 @@ class _TapPanelState extends State<_TapPanel> with TickerProviderStateMixin {
       TextStyle(color: const Color(0xFF9E9E9E), fontSize: Adapt.px(24));
 
   Animation<Offset> _position;
+
   @override
   void didUpdateWidget(_TapPanel oldWidget) {
     if (widget.isMovie != _isMovie && !widget.isBusy) {
@@ -321,7 +338,9 @@ class _TapCell extends StatelessWidget {
   final String title;
   final TextStyle textStyle;
   final Function onTap;
+
   const _TapCell({this.title, this.onTap, this.textStyle});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -341,7 +360,9 @@ class _TapCell extends StatelessWidget {
 
 class _Loading extends StatelessWidget {
   final bool isBusy;
+
   const _Loading({this.isBusy});
+
   @override
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);

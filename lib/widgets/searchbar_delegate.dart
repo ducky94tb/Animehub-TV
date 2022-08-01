@@ -213,42 +213,14 @@ class SearchBarDelegate extends SearchDelegate<SearchResult> {
       },
     );
   }
-
-  @override
-  ThemeData appBarTheme(BuildContext context) {
-    assert(context != null);
-    final ThemeData theme = Theme.of(context);
-
-    assert(theme != null);
-    final _lightTheme = theme.copyWith(
-      inputDecorationTheme:
-          InputDecorationTheme(hintStyle: TextStyle(color: Colors.grey)),
-      primaryColor: Colors.white,
-      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-      primaryColorBrightness: Brightness.light,
-      primaryTextTheme: theme.textTheme,
-    );
-    final _darkTheme = theme.copyWith(
-      inputDecorationTheme:
-          InputDecorationTheme(hintStyle: TextStyle(color: Colors.grey)),
-      primaryColor: Color(0xFF303030),
-      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-      primaryColorBrightness: Brightness.dark,
-      primaryTextTheme: theme.textTheme,
-    );
-    final MediaQueryData _mediaQuery = MediaQuery.of(context);
-    final ThemeData _newtheme =
-        _mediaQuery.platformBrightness == Brightness.light
-            ? _lightTheme
-            : _darkTheme;
-    return _newtheme;
-  }
 }
 
 Widget _buildSuggestionCell(SearchResult s, ValueChanged<String> tapped) {
   IconData iconData = s.mediaType == 'movie'
       ? Icons.movie
-      : s.mediaType == 'tv' ? Icons.live_tv : Icons.person;
+      : s.mediaType == 'tv'
+          ? Icons.live_tv
+          : Icons.person;
   String name = s.mediaType == 'movie' ? s.title : s.name;
   return Container(
       height: Adapt.px(100),
@@ -283,7 +255,9 @@ Random _random = Random(DateTime.now().millisecondsSinceEpoch);
 Widget _buildResultCell(SearchResult s, BuildContext ctx) {
   IconData iconData = s.mediaType == 'movie'
       ? Icons.movie
-      : s.mediaType == 'tv' ? Icons.live_tv : Icons.person;
+      : s.mediaType == 'tv'
+          ? Icons.live_tv
+          : Icons.person;
   String imageurl = s.mediaType != 'person' ? s.posterPath : s.profilePath;
   String name = s.mediaType == "movie" ? s.title : s.name;
   return GestureDetector(
@@ -476,7 +450,7 @@ class _ResultListState extends State<_ResultList> {
           children: results
               .map((result) => _buildResultCell(result, context))
               .toList()
-                ..add(_buildFooter())),
+            ..add(_buildFooter())),
     );
   }
 }

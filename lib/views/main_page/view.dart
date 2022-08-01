@@ -23,11 +23,9 @@ Widget buildView(
           backgroundColor: Color(0xFF303030),
           tabBarTheme: TabBarTheme(
               labelColor: Colors.white, unselectedLabelColor: Colors.grey));
-      final MediaQueryData _mediaQuery = MediaQuery.of(context);
-      final ThemeData _theme =
-          _mediaQuery.platformBrightness == Brightness.light
-              ? _lightTheme
-              : _darkTheme;
+      final ThemeData _theme = Theme.of(context).brightness == Brightness.light
+          ? _lightTheme
+          : _darkTheme;
       Widget _buildPage(Widget page) {
         return KeepAliveWidget(page);
       }

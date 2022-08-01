@@ -54,6 +54,7 @@ AccountState initState(Map<String, dynamic> args) {
   state.dataPanelState = DataPanelState();
   state.settingsState = SettingsState()
     ..appLanguage = Item.fromParams(name: "System Default")
+    ..darkMode = Item.fromParams(name: "System")
     ..adultContent = false
     ..enableNotifications = true;
   return state;

@@ -22,6 +22,7 @@ Effect<HomePageState> buildEffect() {
     HomePageAction.shareMore: _shareMore,
     Lifecycle.initState: _onInit,
     Lifecycle.dispose: _onDispose,
+    HomePageAction.refresh: _onInit,
   });
 }
 

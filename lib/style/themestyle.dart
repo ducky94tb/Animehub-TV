@@ -16,13 +16,10 @@ class ThemeStyle {
       cardColor: const Color(0xFF333333),
       primaryColorLight: const Color(0xFF505050),
       primaryColorDark: const Color(0xFF404040));
-  static MediaQueryData _mediaQuery;
   static ThemeData theme;
   static ThemeData getTheme(BuildContext context) {
-    _mediaQuery = MediaQuery.of(context);
-    theme = _mediaQuery.platformBrightness == Brightness.light
-        ? lightTheme
-        : darkTheme;
+    ThemeData themeData = Theme.of(context);
+    theme = themeData.brightness == Brightness.light ? lightTheme : darkTheme;
     return theme;
   }
 }

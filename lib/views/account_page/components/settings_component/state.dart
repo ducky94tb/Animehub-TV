@@ -6,6 +6,7 @@ class SettingsState implements Cloneable<SettingsState> {
   bool adultContent;
   bool enableNotifications;
   Item appLanguage;
+  Item darkMode;
   String version;
   @override
   SettingsState clone() {
@@ -13,6 +14,7 @@ class SettingsState implements Cloneable<SettingsState> {
       ..adultContent = adultContent
       ..enableNotifications = enableNotifications
       ..appLanguage = appLanguage
+      ..darkMode = darkMode
       ..version = version;
   }
 }

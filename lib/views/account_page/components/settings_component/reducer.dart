@@ -10,6 +10,7 @@ Reducer<SettingsState> buildReducer() {
       SettingsAction.action: _onAction,
       SettingsAction.adultContentUpadte: _adultContentUpadte,
       SettingsAction.setLanguage: _setLanguage,
+      SettingsAction.setDarkMode: _setDarkMode,
       SettingsAction.notificationsUpdate: _notificationsUpdate,
     },
   );
@@ -38,5 +39,12 @@ SettingsState _setLanguage(SettingsState state, Action action) {
   Item _language = action.payload;
   final SettingsState newState = state.clone();
   newState.appLanguage = _language;
+  return newState;
+}
+
+SettingsState _setDarkMode(SettingsState state, Action action) {
+  Item _darkMode = action.payload;
+  final SettingsState newState = state.clone();
+  newState.darkMode = _darkMode;
   return newState;
 }

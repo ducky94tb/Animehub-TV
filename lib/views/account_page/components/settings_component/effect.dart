@@ -1,18 +1,20 @@
 import 'dart:convert' show json;
 import 'dart:io';
 
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:fish_redux/fish_redux.dart';
+import 'package:flutter/cupertino.dart' hide Action;
 import 'package:flutter/material.dart' hide Action;
+import 'package:in_app_review/in_app_review.dart';
 import 'package:movie/actions/api/github_api.dart';
 import 'package:movie/actions/api/tmdb_api.dart';
 import 'package:movie/actions/app_language.dart';
 import 'package:movie/actions/notification_topic.dart';
-import 'package:movie/actions/stream_link_convert/stream_link_convert_factory.dart';
 import 'package:movie/actions/version_comparison.dart';
+import 'package:movie/generated/i18n.dart';
 import 'package:movie/globalbasestate/action.dart';
 import 'package:movie/globalbasestate/store.dart';
 import 'package:movie/models/item.dart';
-import 'package:movie/views/account_page/action.dart';
 import 'package:movie/widgets/update_info_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -118,10 +120,13 @@ void _languageTap(Action action, Context<SettingsState> ctx) async {
   }
 }
 
-void _darkModeTap(Action action, Context<SettingsState> ctx) {
-  ctx.dispatch(AccountActionCreator.showTip('Unavailable at this moment'));
-  /*final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  print(_firebaseMessaging.getToken());*/
+void _darkModeTap(Action action, Context<SettingsState> ctx) async {
+  final Item _darkMode = action.payload;
+  print("Ducky $_darkMode");
+  if (_darkMode.name == ctx.state.darkMode.name) return;
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  _prefs.setString('darkMode', _darkMode.toString());
+  ctx.dispatch(SettingsActionCreator.setDarkMode(_darkMode));
 }
 
 void _notificationsTap(Action action, Context<SettingsState> ctx) async {
@@ -150,9 +155,41 @@ void _notificationsTap(Action action, Context<SettingsState> ctx) async {
 }
 
 void _feedbackTap(Action action, Context<SettingsState> ctx) async {
-  final _str = await StreamLinkConvertFactory.instance
-      .getLink('https://streamtape.com/e/ellm7dvAJGFkBB');
-  print(_str);
-  ctx.dispatch(
-      AccountActionCreator.showTip('Feedback unavailable at this moment'));
+  showDialog(
+    context: ctx.context,
+    builder: (BuildContext context) => CupertinoAlertDialog(
+      title: new Text(I18n.of(ctx.context).feedback),
+      content: new Text("Do you want to review via Store or send us Gmail?"),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          isDefaultAction: true,
+          child: Text("Review"),
+          onPressed: () =>
+              {Navigator.of(context).pop(true), _openStoreListing()},
+        ),
+        CupertinoDialogAction(
+            child: Text("Gmail"),
+            isDestructiveAction: true,
+            onPressed: () => {Navigator.of(context).pop(true), _sendEmail()})
+      ],
+    ),
+  );
+}
+
+void _sendEmail() {
+  AndroidIntent intent = AndroidIntent(
+      action: 'android.intent.action.SEND',
+      type: 'text/html',
+      data: 'ducdv.bk94@gmail.com',
+      arguments: {
+        'android.intent.extra.SUBJECT': "Feedback about android app"
+      });
+  intent.launch();
+}
+
+void _openStoreListing() async {
+  final InAppReview inAppReview = InAppReview.instance;
+  if (await inAppReview.isAvailable()) {
+    inAppReview.openStoreListing();
+  }
 }

@@ -25,31 +25,38 @@ Widget buildView(
               ? SystemUiOverlayStyle.dark
               : SystemUiOverlayStyle.light,
           child: SafeArea(
-            child: CustomScrollView(
-              controller: state.scrollController,
-              slivers: <Widget>[
-                SliverPersistentHeader(
-                  floating: true,
-                  delegate: SliverAppBarDelegate(
-                      minHeight: Adapt.px(100),
-                      maxHeight: Adapt.px(100),
-                      child: _FilterBar(
-                        isMovie: state.isMovie,
-                        isBusy: state.isbusy,
-                        onFilterPress: () =>
-                            dispatch(PlayNowPageActionCreator.filterTap()),
-                        switchMedia: (isMovie) => dispatch(
-                            PlayNowPageActionCreator.mediaTypeChange(isMovie)),
-                      )),
-                ),
-                SliverList(
-                  delegate:
-                      SliverChildBuilderDelegate((BuildContext ctx, int index) {
-                    return _adapter.itemBuilder(ctx, index);
-                  }, childCount: _adapter.itemCount),
-                ),
-                _ShimmerList(isbusy: state.isbusy)
-              ],
+            child: RefreshIndicator(
+              onRefresh: () async {
+                dispatch(PlayNowPageActionCreator.onRefreshData());
+                await Future.delayed(const Duration(seconds: 1));
+              },
+              child: CustomScrollView(
+                controller: state.scrollController,
+                slivers: <Widget>[
+                  SliverPersistentHeader(
+                    floating: true,
+                    delegate: SliverAppBarDelegate(
+                        minHeight: Adapt.px(100),
+                        maxHeight: Adapt.px(100),
+                        child: _FilterBar(
+                          isMovie: state.isMovie,
+                          isBusy: state.isbusy,
+                          onFilterPress: () =>
+                              dispatch(PlayNowPageActionCreator.filterTap()),
+                          switchMedia: (isMovie) => dispatch(
+                              PlayNowPageActionCreator.mediaTypeChange(
+                                  isMovie)),
+                        )),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (BuildContext ctx, int index) {
+                      return _adapter.itemBuilder(ctx, index);
+                    }, childCount: _adapter.itemCount),
+                  ),
+                  _ShimmerList(isbusy: state.isbusy)
+                ],
+              ),
             ),
           ),
         ),

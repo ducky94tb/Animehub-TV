@@ -7,12 +7,15 @@ import 'package:movie/generated/i18n.dart';
 import 'package:movie/style/themestyle.dart';
 import 'package:movie/views/account_page/components/user_info_component/component/user_menu.dart';
 import 'package:movie/widgets/overlay_entry_manage.dart';
+import 'package:toast/toast.dart';
 
-import 'action.dart';
+import '../../action.dart';
 import 'state.dart';
 
 Widget buildView(
     UserInfoState state, Dispatch dispatch, ViewService viewService) {
+  final context = viewService.context;
+
   void _closeMenu(OverlayEntry overlayEntry) {
     overlayEntry?.remove();
     state.overlayStateKey.currentState.setOverlayEntry(null);
@@ -35,15 +38,20 @@ Widget buildView(
             UserMenu(
               onNotificationTap: () {
                 _closeMenu(menuOverlayEntry);
-                dispatch(UserInfoActionCreator.openNotifications());
+                dispatch(
+                    AccountActionCreator.showTip('Unavailable at this moment'));
               },
               onPaymentTap: () {
                 _closeMenu(menuOverlayEntry);
-                dispatch(UserInfoActionCreator.paymentTap());
+                /*dispatch(UserInfoActionCreator.paymentTap());*/
+                dispatch(
+                    AccountActionCreator.showTip('Unavailable at this moment'));
               },
               onSignOut: () {
                 _closeMenu(menuOverlayEntry);
-                dispatch(UserInfoActionCreator.signOut());
+                dispatch(
+                    AccountActionCreator.showTip('Unavailable at this moment'));
+                //dispatch(UserInfoActionCreator.signOut());
               },
             )
           ],
@@ -58,23 +66,29 @@ Widget buildView(
     isSignIn: state.user?.firebaseUser != null,
     /*user: state.user?.firebaseUser,*/
     openMenu: _showMenu,
-    onSignIn: () => dispatch(UserInfoActionCreator.signIn()),
+    onSignIn: () => {
+      dispatch(AccountActionCreator.showTip("Not available at this moment")),
+      Toast.show("Not available at this moment", context)
+    },
     overlayStateKey: state.overlayStateKey,
   );
 }
 
 class _Body extends StatelessWidget {
   final bool isSignIn;
+
   /*final FirebaseUser user;*/
   final Key overlayStateKey;
   final Function openMenu;
   final Function onSignIn;
+
   const _Body(
       {this.isSignIn = false,
       this.openMenu,
       this.onSignIn,
       /*this.user,*/
       this.overlayStateKey});
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -101,8 +115,10 @@ class _UserInfo extends StatelessWidget {
   final String profileUrl;
   final Function openMenu;
   final Key overlayStateKey;
+
   const _UserInfo(
       {this.profileUrl, this.userName, this.openMenu, this.overlayStateKey});
+
   @override
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);
@@ -171,7 +187,9 @@ class _UserInfo extends StatelessWidget {
 
 class _SignInPanel extends StatelessWidget {
   final Function onSignIn;
+
   const _SignInPanel({this.onSignIn});
+
   @override
   Widget build(BuildContext context) {
     final _iconColor = const Color(0xFF717171);

@@ -23,7 +23,7 @@ Widget buildView(
         value.id,
         value.posterPath,
         value.posterPath,
-        value.title ?? value.name)),
+        state.isMovie ? value.name : value.tvName)),
   );
 }
 

@@ -215,8 +215,8 @@ class _GridView extends StatelessWidget {
                   (d) => _GridCell(
                     data: d,
                     onTap: (e) => dispatch(
-                        AllStreamLinkPageActionCreator.gridCellTapped(
-                            e.id, e.posterPath, e.title, e.backdropPath)),
+                        AllStreamLinkPageActionCreator.gridCellTapped(e.id,
+                            e.posterPath, e.title ?? e.name, e.backdropPath)),
                   ),
                 )
                 .toList(),

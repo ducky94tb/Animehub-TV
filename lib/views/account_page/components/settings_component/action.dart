@@ -12,11 +12,16 @@ enum SettingsAction {
   setLanguage,
   darkModeTap,
   feedbackTap,
+  setDarkMode,
 }
 
 class SettingsActionCreator {
   static Action onAction() {
     return const Action(SettingsAction.action);
+  }
+
+  static Action setDarkMode(Item item) {
+    return Action(SettingsAction.setDarkMode, payload: item);
   }
 
   static Action notificationsTap() {
@@ -39,8 +44,8 @@ class SettingsActionCreator {
     return const Action(SettingsAction.checkUpdate);
   }
 
-  static Action darkModeTap() {
-    return const Action(SettingsAction.darkModeTap);
+  static Action darkModeTap(Item item) {
+    return Action(SettingsAction.darkModeTap, payload: item);
   }
 
   static Action languageTap(Item language) {

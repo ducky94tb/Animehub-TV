@@ -25,17 +25,25 @@ Widget buildView(
             onTap: () => dispatch(HomePageActionCreator.onSearchBarTapped()),
           ),
         ),
-        body: BackDrop(
-          backLayerHeight: Adapt.px(580) + Adapt.padTopH(),
-          backChild: viewService.buildComponent('header'),
-          frontBackGroundColor: _theme.backgroundColor,
-          frontChildren: <Widget>[
-            const _Line(),
-            viewService.buildComponent('swiper'),
-            viewService.buildComponent('trending'),
-            //viewService.buildComponent('share'),
-            viewService.buildComponent('popularposter'),
-          ],
+        body: RefreshIndicator(
+          onRefresh: () async {
+            dispatch(HomePageActionCreator.onRefresh());
+            await Future.delayed(const Duration(seconds: 2));
+          },
+          child: Container(
+            child: BackDrop(
+              backLayerHeight: Adapt.px(580) + Adapt.padTopH(),
+              backChild: viewService.buildComponent('header'),
+              frontBackGroundColor: _theme.backgroundColor,
+              frontChildren: <Widget>[
+                const _Line(),
+                viewService.buildComponent('swiper'),
+                viewService.buildComponent('trending'),
+                //viewService.buildComponent('share'),
+                viewService.buildComponent('popularposter'),
+              ],
+            ),
+          ),
         ),
       );
     },

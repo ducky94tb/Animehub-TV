@@ -117,7 +117,7 @@ Future _onCellTapped(Action action, Context<AllStreamLinkPageState> ctx) async {
   final String pagename =
       type == MediaType.movie ? 'detailpage' : 'tvShowDetailPage';
   var data = {
-    type == MediaType.movie ? 'id' : 'tvid': id,
+    'id': id,
     'bgpic': type == MediaType.movie ? posterpic : bgpic,
     type == MediaType.tv ? 'name' : 'title': title,
     'posterpic': posterpic
