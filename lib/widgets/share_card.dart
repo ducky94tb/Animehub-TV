@@ -10,6 +10,7 @@ class ShareCard extends StatefulWidget {
   final String qrValue;
   final Widget header;
   final double headerHeight;
+
   ShareCard(
       {Key key,
       @required this.backgroundImage,
@@ -17,6 +18,7 @@ class ShareCard extends StatefulWidget {
       @required this.header,
       this.headerHeight})
       : super(key: key);
+
   @override
   ShareCardState createState() => ShareCardState();
 }
@@ -29,6 +31,7 @@ class ShareCardState extends State<ShareCard> {
   ScreenshotController screenshotController;
   double width = (Adapt.screenW() - Adapt.px(60)).floorToDouble();
   double height = (Adapt.screenH() / 2).floorToDouble();
+
   @override
   void initState() {
     backgroundImage = widget.backgroundImage;
@@ -177,16 +180,7 @@ class ShareCardState extends State<ShareCard> {
                             width: Adapt.px(200),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(Icons.file_download),
-                                Text(
-                                  'DownLoad',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: Adapt.px(28),
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
+                              children: <Widget>[],
                             ),
                           )),
                       SizedBox(

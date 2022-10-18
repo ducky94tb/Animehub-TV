@@ -1,7 +1,7 @@
 import 'dart:convert' show json;
 
 class AccountState {
-  bool favorite;
+  bool favorite = false;
   int id;
   int mediaId;
   bool watchlist;
@@ -10,7 +10,7 @@ class AccountState {
   String uid;
 
   AccountState.fromParams(
-      {this.favorite,
+      {this.favorite = false,
       this.id,
       this.mediaId,
       this.watchlist,

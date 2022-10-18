@@ -11,6 +11,7 @@ import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/models/episode_model.dart';
 import 'package:movie/models/season_detail.dart';
 import 'package:movie/style/themestyle.dart';
+import 'package:movie/utils/dialog_utils.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -69,7 +70,9 @@ Widget buildView(
 class _Header extends StatelessWidget {
   final Episode episode;
   final Season season;
+
   const _Header({this.episode, this.season});
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -78,13 +81,18 @@ class _Header extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              episode?.name ?? "-",
-              style: TextStyle(
-                fontSize: Adapt.px(35),
-                fontWeight: FontWeight.bold,
-                height: 1.5,
-              ),
+            Row(
+              children: [
+                Text(
+                  episode?.name ?? "-",
+                  style: TextStyle(
+                    fontSize: Adapt.px(35),
+                    fontWeight: FontWeight.bold,
+                    height: 1.5,
+                  ),
+                ),
+                SizedBox(),
+              ],
             ),
             SizedBox(height: Adapt.px(40)),
             Row(children: [
@@ -125,9 +133,35 @@ class _Header extends StatelessWidget {
                 ],
               ),
               Spacer(),
-              season?.credits?.cast != null
-                  ? _CastCell(casts: season.credits.cast)
-                  : Spacer()
+              GestureDetector(
+                onTap: () {
+                  DialogUtils.showCustomDialog(
+                      context: context,
+                      title: "Have problem with this episode?",
+                      content:
+                          "The stream link for this episode is not found or expired?\nPlease help us report it. Thanks!",
+                      ok: "Yes",
+                      cancel: "No",
+                      onAgree: () => {
+                            Navigator.of(context).pop(true),
+                          },
+                      onCancel: () {
+                        Navigator.of(context).pop(true);
+                      });
+                },
+                child: Row(
+                  children: [
+                    Icon(Icons.flag),
+                    Text(
+                      'Report',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: Adapt.px(28),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              )
             ]),
             SizedBox(height: Adapt.px(40)),
             /*ExpandableText(
@@ -144,7 +178,9 @@ class _Header extends StatelessWidget {
 
 class _CastCell extends StatelessWidget {
   final List<CastData> casts;
+
   const _CastCell({this.casts});
+
   @override
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);
@@ -185,6 +221,7 @@ class _CastCell extends StatelessWidget {
 
 class _EpisodeTitle extends StatelessWidget {
   const _EpisodeTitle();
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -209,6 +246,7 @@ class _Episodes extends StatelessWidget {
   final Function(Episode) onTap;
 
   const _Episodes({this.episodes, this.episodeNumber, this.onTap});
+
   @override
   Widget build(BuildContext context) {
     return SliverList(
@@ -230,7 +268,9 @@ class _EpisodeCell extends StatelessWidget {
   final Episode episode;
   final bool playing;
   final Function(Episode) onTap;
+
   const _EpisodeCell({this.episode, this.onTap, this.playing = false});
+
   @override
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);
@@ -285,7 +325,9 @@ class _EpisodeCell extends StatelessWidget {
 class _WatchedCell extends StatelessWidget {
   final bool playing;
   final bool watched;
+
   const _WatchedCell({this.watched = false, this.playing = false});
+
   @override
   Widget build(BuildContext context) {
     final _brightness = MediaQuery.of(context).platformBrightness;

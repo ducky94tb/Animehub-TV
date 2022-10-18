@@ -6,13 +6,15 @@ import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/style/themestyle.dart';
+import 'package:movie/utils/dialog_utils.dart';
 import 'package:movie/widgets/expandable_text.dart';
 
 import 'state.dart';
 
 Widget buildView(
     HeaderState state, Dispatch dispatch, ViewService viewService) {
-  final _theme = ThemeStyle.getTheme(viewService.context);
+  final context = viewService.context;
+  final _theme = ThemeStyle.getTheme(context);
   return SliverToBoxAdapter(
     child: Padding(
       padding: EdgeInsets.only(top: Adapt.px(40)),
@@ -64,7 +66,35 @@ Widget buildView(
               ],
             ),
             Spacer(),
-            viewService.buildComponent('cast')
+            GestureDetector(
+              onTap: () {
+                DialogUtils.showCustomDialog(
+                    context: context,
+                    title: "Have problem with this episode?",
+                    content:
+                        "The stream link for this episode is not found or expired? Please help us report it. Thanks so much!",
+                    ok: "Yes",
+                    cancel: "No",
+                    onAgree: () => {
+                          Navigator.of(context).pop(true),
+                        },
+                    onCancel: () {
+                      Navigator.of(context).pop(true);
+                    });
+              },
+              child: Row(
+                children: [
+                  Icon(Icons.flag),
+                  Text(
+                    'Report',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: Adapt.px(28),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            )
           ]),
           SizedBox(height: Adapt.px(40)),
           ExpandableText(
