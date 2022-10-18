@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -7,7 +5,9 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 class WebViewPlayer extends StatefulWidget {
   final String streamLink;
   final String filterUrl;
+
   const WebViewPlayer({@required this.streamLink, @required this.filterUrl});
+
   @override
   _WebviewPlayerState createState() => _WebviewPlayerState();
 }
@@ -20,26 +20,7 @@ class _WebviewPlayerState extends State<WebViewPlayer> {
   void init() {
     _loadFinsh = false;
     _fullScreen = false;
-    _streamlink = Uri.dataFromString(
-      '''
-            <html>
-            <header>
-            <meta name="viewport" 
-            content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-            </header>
-            <body style="margin:0;background-color:#000;">
-            <iframe 
-            frameborder="0"
-            width="100%" 
-            height="100%" 
-            src="${widget.streamLink}" 
-            allowfullscreen>
-            </iframe>
-            </body>
-            </html>
-      ''',
-      mimeType: 'text/html',
-    ).toString();
+    _streamlink = widget.streamLink;
   }
 
   @override
@@ -71,12 +52,14 @@ class _WebviewPlayerState extends State<WebViewPlayer> {
 
   @override
   Widget build(BuildContext context) {
+    final preferredContentMode = UserPreferredContentMode.RECOMMENDED;
     return Container(
       color: const Color(0xFF000000),
       child: IndexedStack(
         index: _loadFinsh ? 0 : 1,
         children: [
           InAppWebView(
+            initialUrlRequest: URLRequest(url: Uri.parse(_streamlink)),
             initialOptions: InAppWebViewGroupOptions(
               android: AndroidInAppWebViewOptions(
                 supportMultipleWindows: false,
@@ -88,7 +71,7 @@ class _WebviewPlayerState extends State<WebViewPlayer> {
                 disableVerticalScroll: true,
                 useShouldOverrideUrlLoading: true,
                 mediaPlaybackRequiresUserGesture: false,
-                preferredContentMode: UserPreferredContentMode.MOBILE,
+                preferredContentMode: preferredContentMode,
               ),
             ),
             onProgressChanged: (controller, progress) {
@@ -128,6 +111,11 @@ class _WebviewPlayerState extends State<WebViewPlayer> {
             },
             shouldOverrideUrlLoading:
                 (controller, shouldOverrideUrlLoadingRequest) {
+              // if (shouldOverrideUrlLoadingRequest.
+              //         .compareTo(widget.filterUrl) ==
+              //     0) {
+              //   controller.stopLoading();
+              // }
               return;
             },
           ),

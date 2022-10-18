@@ -18,8 +18,6 @@ Widget buildView(
           streamLink: state.streamLink,
           onPlay: () => dispatch(
               EpisodeLiveStreamActionCreator.markWatched(state.episode)),
-          currentEpisodeNo: state.episode.episodeNumber,
-          item: state.newestItem,
         ),
       ),
     ),

@@ -1,32 +1,28 @@
 import 'dart:ui';
 
-import 'package:android_intent_plus/android_intent.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:common_utils/common_utils.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:installed_apps/installed_apps.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
 import 'package:movie/models/enums/imagesize.dart';
-import 'package:movie/models/firebase_api_model/tv_episode_model.dart';
-import 'package:movie/utils/dialog_utils.dart';
-import 'package:movie/utils/player_utils.dart';
+import 'package:movie/widgets/webview_player.dart';
 import 'package:toast/toast.dart';
+import 'package:video_player/video_player.dart';
+
+import 'custom_video_controls.dart';
 
 class PlayerPanel extends StatefulWidget {
   final String streamLink;
   final String background;
   final String playerType;
+  final bool streamInBrowser;
+  final bool useVideoSourceApi;
   final bool needAd;
   final bool loading;
   final bool autoPlay;
   final int linkId;
   final Function onPlay;
-  final TVEpisodeModel item;
-  final int currentEpisodeNo;
 
   const PlayerPanel({
     Key key,
@@ -35,11 +31,11 @@ class PlayerPanel extends StatefulWidget {
     this.background,
     this.linkId,
     this.loading = false,
+    this.useVideoSourceApi = true,
+    this.streamInBrowser = false,
     this.needAd = false,
     this.autoPlay = false,
     this.onPlay,
-    this.item,
-    this.currentEpisodeNo,
   });
 
   @override
@@ -48,120 +44,167 @@ class PlayerPanel extends StatefulWidget {
 
 class _PlayerPanelState extends State<PlayerPanel>
     with AutomaticKeepAliveClientMixin {
+  bool _play = false;
+  bool _needAd = false;
   bool _loading = false;
+  bool _haveOpenAds = false;
+  String _playerType;
+  String _directUrl;
 
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
+    _needAd = widget.needAd;
     _loading = widget.loading;
+    _playerType = widget.playerType;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   void didUpdateWidget(PlayerPanel oldWidget) {
     if (oldWidget.streamLink != widget.streamLink ||
+        oldWidget.playerType != widget.playerType ||
         oldWidget.linkId != widget.linkId ||
-        oldWidget.background != widget.background) {}
+        oldWidget.background != widget.background) {
+      setState(() {
+        _play = false;
+      });
+    }
+    if (_needAd != widget.needAd && !_haveOpenAds) _setNeedAd(widget.needAd);
+    if (_loading != widget.loading) _setLoading(widget.loading);
+    if (_playerType != widget.playerType) _setPlayerType(widget.playerType);
+    //if (widget.autoPlay) _playTapped(context);
     super.didUpdateWidget(oldWidget);
   }
 
   _playTapped(BuildContext context) async {
-    if (widget.loading | _loading) return;
-    if (TextUtil.isEmpty(widget.streamLink))
-      return Toast.show('Oop Sorry!, Link is not found!', context);
-
-    if (MyPlayerUtils.isSupportedInVideoPlayer(widget.streamLink)) {
-      _startPlayMovieViaDkPlayer();
-      return;
-    }
-    if (widget.streamLink.contains("drive.google.com")) {
-      _startPlayMovie();
-      return;
-    }
-    return Toast.show('Oop Sorry!, Link is not found!', context);
+    if (widget.loading) return;
+    if (!widget.useVideoSourceApi && widget.playerType == 'VideoSourceApi')
+      return Toast.show('no streamlink at this moment', context);
+    await _startPlayer();
   }
 
-  void _startPlayMovie() async {
-    AndroidIntent intent = AndroidIntent(
-      action: 'android.intent.action.VIEW',
-      data: Uri.encodeFull(widget.streamLink),
-    );
-    try {
-      await intent.launch();
-      await _startPlayer();
-    } catch (_) {}
-  }
-
-  void _startPlayMovieViaDkPlayer() async {
-    const dkPlayerPackage = "com.ducky.video.player";
-    try {
-      await InstalledApps.getAppInfo(dkPlayerPackage);
-    } catch (_) {
-      DialogUtils.showCustomDialog(
-          context: context,
-          title: "Install player plugin?",
-          content:
-              "Download Dk Player, video player plugin support for playing. Thanks!",
-          ok: "Yes",
-          cancel: "No",
-          onAgree: () => {
-                Navigator.of(context).pop(true),
-                _openBrowserInStore(dkPlayerPackage)
-              },
-          onCancel: () {
-            Navigator.of(context).pop(true);
-          });
-      return;
-    }
-    String imageUrl = widget.item != null
-        ? ImageUrl.getUrl(widget.item.posterPath, ImageSize.w200)
-        : '';
-    print(widget.item.toString());
-    AndroidIntent intent = AndroidIntent(
-      action: 'android.intent.action.VIEW',
-      package: dkPlayerPackage,
-      data: Uri.encodeFull(widget.streamLink),
-      arguments: widget.item != null
-          ? {
-              'tvshowId': widget.item.id,
-              'title': widget.item.tvName ?? '',
-              'imageUrl': imageUrl,
-              'seasonNo': widget.item.seasonId ?? 0,
-              'episodeNo': widget.item.episodeId ?? 0,
-              'selectedEpisode': widget.currentEpisodeNo ?? 0,
-            }
-          : {},
-    );
-    try {
-      await intent.launch();
-      await _startPlayer();
-    } catch (_) {}
-  }
-
-  _openBrowserInStore(String packageName) {
-    AndroidIntent intent = AndroidIntent(
-      action: 'android.intent.action.VIEW',
-      data: Uri.encodeFull(
-          "https://play.google.com/store/apps/details?id=$packageName"),
-    );
-    intent.launch();
-  }
-
-  Future<void> _startPlayer() async {
+  _startPlayer() async {
+    // await launch(
+    //   widget.streamLink,
+    //   enableJavaScript: true,
+    // );
+    setState(() {
+      _play = true;
+    });
     if (widget.onPlay != null) widget.onPlay();
+  }
+
+  _setLoading(bool loading) {
+    setState(() {
+      _loading = loading;
+    });
+  }
+
+  _setPlayerType(String type) {
+    setState(() {
+      _playerType = type;
+    });
+  }
+
+  _setNeedAd(bool needAd) {
+    _needAd = needAd;
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return GestureDetector(
-      onTap: () => _playTapped(context),
-      child: _Background(
-        url: widget.background,
-        loading: _loading,
-      ),
+    return _play
+        ? _Player(
+            streamLink: widget.streamLink,
+            playerType: _playerType,
+          )
+        : GestureDetector(
+            onTap: () => _playTapped(context),
+            child: _Background(
+              url: widget.background,
+              loading: _loading,
+            ),
+          );
+  }
+}
+
+class _Player extends StatelessWidget {
+  final String playerType;
+  final String streamLink;
+
+  const _Player({this.playerType, this.streamLink});
+
+  @override
+  Widget build(BuildContext context) {
+    return WebViewPlayer(
+        streamLink: this.streamLink, filterUrl: this.streamLink);
+  }
+}
+
+class VideoPlayer extends StatefulWidget {
+  final VideoPlayerController controller;
+
+  const VideoPlayer({this.controller});
+
+  @override
+  _VideoPlayerState createState() => _VideoPlayerState();
+}
+
+class _VideoPlayerState extends State<VideoPlayer> {
+  ChewieController _chewieController;
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
+
+  _init() {
+    widget.controller.initialize().then((value) {
+      _chewieController = ChewieController(
+        videoPlayerController: widget.controller,
+        customControls: CustomCupertinoControls(
+          backgroundColor: Colors.black,
+          iconColor: Colors.white,
+        ),
+        allowedScreenSleep: false,
+        autoPlay: true,
+        aspectRatio: widget.controller.value.aspectRatio,
+      );
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    widget.controller?.dispose();
+    _chewieController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black,
+      child: _chewieController == null
+          ? Center(
+              child: Container(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(
+                    const Color(0xFFFFFFFF),
+                  ),
+                ),
+              ),
+            )
+          : Chewie(controller: _chewieController),
     );
   }
 }

@@ -220,7 +220,7 @@ class _FilterBar extends StatelessWidget {
                 onTap: switchMedia,
               ),
               Expanded(child: SizedBox()),
-              GestureDetector(
+              /*GestureDetector(
                 onTap: onFilterPress,
                 child: Container(
                   padding: EdgeInsets.all(Adapt.px(10)),
@@ -234,7 +234,7 @@ class _FilterBar extends StatelessWidget {
                     color: const Color(0xFFFFFFFF),
                   ),
                 ),
-              )
+              )*/
             ],
           ),
         ),

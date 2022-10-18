@@ -12,7 +12,13 @@ import 'state.dart';
 Widget buildView(
     EpisodeState state, Dispatch dispatch, ViewService viewService) {
   final ThemeData _theme = ThemeStyle.getTheme(viewService.context);
-
+  DateTime _airDate;
+  try {
+    _airDate = DateTime.parse(state.episode.airDate ?? "-");
+  } on FormatException catch (_) {
+    _airDate = DateTime.parse('1990-01-01');
+  }
+  final bool _canPlay = DateTime.now().isAfter(_airDate);
   return InkWell(
       key: ValueKey('Episode${state.episode.id}'),
       onTap: () => dispatch(
@@ -22,38 +28,19 @@ Widget buildView(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Stack(
-              clipBehavior: Clip.antiAlias,
-              children: <Widget>[
-                Container(
-                  width: Adapt.px(220),
-                  height: Adapt.px(130),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(Adapt.px(10)),
-                      color: _theme.primaryColorDark,
-                      image: DecorationImage(
-                          colorFilter: state.episode.streamLink == null
-                              ? ColorFilter.mode(Colors.grey, BlendMode.color)
-                              : null,
-                          fit: BoxFit.cover,
-                          image: CachedNetworkImageProvider(ImageUrl.getUrl(
-                              state.episode.stillPath, ImageSize.w300)))),
-                ),
-                state.episode.streamLink != null && !state.episode.playState
-                    ? Positioned(
-                        top: -5,
-                        right: -5,
-                        child: Container(
-                          width: Adapt.px(25),
-                          height: Adapt.px(25),
-                          //transform: Matrix4.translationValues(Adapt.px(204), -Adapt.px(8), 0),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
-                              color: Colors.orangeAccent),
-                        ))
-                    : const SizedBox()
-              ],
+            Container(
+              width: Adapt.px(220),
+              height: Adapt.px(130),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(Adapt.px(10)),
+                  color: _theme.primaryColorDark,
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
+                      colorFilter: _canPlay
+                          ? null
+                          : ColorFilter.mode(Colors.black, BlendMode.color),
+                      image: CachedNetworkImageProvider(ImageUrl.getUrl(
+                          state.episode.stillPath, ImageSize.w300)))),
             ),
             SizedBox(width: Adapt.px(20)),
             Container(

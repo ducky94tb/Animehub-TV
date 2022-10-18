@@ -42,14 +42,11 @@ class _HeaderInfo extends StatelessWidget {
   const _HeaderInfo({this.overview, this.posterPath});
   @override
   Widget build(BuildContext context) {
-    final MediaQueryData _mediaQuery = MediaQuery.of(context);
     final ThemeData _theme = ThemeStyle.getTheme(context);
     return Container(
       height: Adapt.px(160),
       decoration: BoxDecoration(
-        color: _mediaQuery.platformBrightness == Brightness.light
-            ? Color(0xFFF6F5FA)
-            : _theme.primaryColorDark,
+        color: _theme.primaryColorDark,
         borderRadius: BorderRadius.circular(Adapt.px(15)),
       ),
       padding: EdgeInsets.all(Adapt.px(25)),
