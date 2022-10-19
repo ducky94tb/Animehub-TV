@@ -67,10 +67,10 @@ TrendingPageState initState(Map<String, dynamic> args) {
   state.isToday = true;
   state.selectMediaType = MediaType.all;
   state.mediaTypes = [
-    SortCondition(isSelected: true, name: 'All', value: MediaType.all),
+    // SortCondition(isSelected: true, name: 'All', value: MediaType.all),
     SortCondition(isSelected: false, name: 'Movie', value: MediaType.movie),
     SortCondition(isSelected: false, name: 'TV Shows', value: MediaType.tv),
-    SortCondition(isSelected: false, name: 'Person', value: MediaType.person),
+    // SortCondition(isSelected: false, name: 'Person', value: MediaType.person),
   ];
   return state;
 }

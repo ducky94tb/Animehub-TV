@@ -66,9 +66,9 @@ class TMDBApi {
     if (r.success) {
       if (r.result['success']) {
         session = r.result['guest_session_id'];
-        _sessionExpiresTime = DateTime.parse(r.result['expires_at']
+        _sessionExpiresTime = DateTime.tryParse(r.result['expires_at']
             .toString()
-            .replaceFirst(new RegExp(' UTC'), ''));
+            ?.replaceFirst(new RegExp(' UTC'), ''));
         var date = DateTime.utc(
             _sessionExpiresTime.year,
             _sessionExpiresTime.month,
@@ -137,7 +137,7 @@ class TMDBApi {
     if (r != null) {
       if (r['success']) {
         session = r['session_id'];
-        _sessionExpiresTime = DateTime.parse(
+        _sessionExpiresTime = DateTime.tryParse(
             r['expires_at'].toString().replaceFirst(new RegExp(' UTC'), ''));
         prefs.setString('loginsession', session);
         prefs.setString(
@@ -537,6 +537,13 @@ class TMDBApi {
     param += '&with_keywords=$_animeKeyWord';
     final r = await _http.request<SearchResultModel>(param,
         cached: true, cacheDuration: Duration(hours: 1));
+    if (r.success) {
+      String mediaType = type.toString().split('.').last;
+      SearchResultModel result = r.result;
+      for (var sr in result.results) {
+        sr.setMediaType(mediaType);
+      }
+    }
     return r;
   }
 

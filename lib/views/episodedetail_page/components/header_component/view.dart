@@ -44,7 +44,7 @@ Widget buildView(
                 padding: EdgeInsets.fromLTRB(
                     Adapt.px(20), Adapt.px(10), Adapt.px(20), Adapt.px(10)),
                 child: Text(
-                  DateFormat.yMMMd().format(DateTime.parse(d.airDate)),
+                  DateFormat.yMMMd().format(DateTime.tryParse(d.airDate)),
                   style: TextStyle(fontSize: Adapt.px(24)),
                 )),
           ),

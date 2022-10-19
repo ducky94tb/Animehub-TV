@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:movie/models/firebase_api_model/movie_model.dart';
 import 'package:movie/models/firebase_api_model/tv_episode_model.dart';
 
@@ -10,6 +11,33 @@ class FirebaseApi {
   static final FirebaseApi _instance = FirebaseApi._();
 
   static FirebaseApi get instance => _instance;
+
+  //Report movie or tvShow error (streamlink not found or expired)
+  Future<int> report(
+      {String mediaType,
+      int id,
+      int tvSeasonId = 0,
+      int tvEpisodeId = 0}) async {
+    final db = FirebaseDatabase.instance;
+    final animeHubRef = db.ref("AnimeHub/Report");
+    switch (mediaType) {
+      case "movie":
+        final movieRef = animeHubRef.child("movie/$id");
+        movieRef.set({
+          'id': id,
+        }).catchError((onError) => 0);
+        break;
+      default:
+        final tvRef = animeHubRef.child("tv/${id}_${tvSeasonId}_$tvEpisodeId");
+        tvRef.set({
+          'id': id,
+          'seasonId': tvSeasonId,
+          'episode': tvEpisodeId,
+        }).catchError((onError) => 0);
+        break;
+    }
+    return 1;
+  }
 
   Future<int> setMovieStreamLink({
     int movieId,

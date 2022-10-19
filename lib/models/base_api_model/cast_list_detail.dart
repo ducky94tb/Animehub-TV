@@ -50,7 +50,7 @@ class BaseCast {
     name = jsonRes['name'];
     profileUrl = jsonRes['profileUrl'];
     updateTime =
-        DateTime.parse(jsonRes['updateTime']?.toString() ?? '2020-01-01');
+        DateTime.tryParse(jsonRes['updateTime']?.toString() ?? '2020-01-01');
   }
 
   @override

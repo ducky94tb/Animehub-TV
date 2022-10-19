@@ -5,12 +5,12 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
-import 'package:movie/models/genre.dart';
-import 'package:movie/widgets/scrollview_background.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/models/external_ids_model.dart';
+import 'package:movie/models/genre.dart';
 import 'package:movie/style/themestyle.dart';
 import 'package:movie/views/detail_page/action.dart';
+import 'package:movie/widgets/scrollview_background.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'state.dart';
@@ -139,7 +139,7 @@ class _HeaderTitle extends StatelessWidget {
                 SizedBox(
                   height: Adapt.px(10),
                 ),
-                Text(DateFormat.yMMMd().format(DateTime.parse(
+                Text(DateFormat.yMMMd().format(DateTime.tryParse(
                     releaseDate?.isEmpty == true
                         ? '1990-01-01'
                         : releaseDate))),
@@ -212,12 +212,12 @@ class _PlayButton extends StatelessWidget {
       width: Adapt.px(100),
       height: Adapt.px(100),
       child: TextButton(
-        style: TextButton.styleFrom( padding: EdgeInsets.zero,
-        backgroundColor: hasStreamLink == true ? Colors.red : Colors.grey,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(Adapt.px(50))),
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+          backgroundColor: hasStreamLink == true ? Colors.red : Colors.grey,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Adapt.px(50))),
         ),
-       
         child: Icon(
           Icons.play_arrow,
           color: const Color(0xFFFFFFFF),

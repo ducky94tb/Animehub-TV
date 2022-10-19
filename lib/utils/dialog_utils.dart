@@ -5,18 +5,26 @@ class DialogUtils {
   static void showCustomDialog({
     BuildContext context,
     String title,
-    String content = null,
+    String content,
     String ok,
     String cancel,
     Function onAgree,
     Function onCancel,
-    Widget child = null,
+    Widget child,
   }) {
     showDialog(
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
-        title: new Text(title),
-        content: child ?? new Text(content),
+        title: Text(title),
+        content: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: child ??
+              Text(
+                content,
+                style: TextStyle(fontSize: 14),
+                textAlign: TextAlign.left,
+              ),
+        ),
         actions: <Widget>[
           CupertinoDialogAction(
             isDefaultAction: true,
@@ -25,7 +33,6 @@ class DialogUtils {
           ),
           CupertinoDialogAction(
             child: Text(cancel),
-            isDestructiveAction: true,
             onPressed: onCancel,
           )
         ],

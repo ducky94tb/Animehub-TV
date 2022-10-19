@@ -36,7 +36,7 @@ Widget buildView(
               children: <Widget>[
                 Text(
                   DateFormat.yMMMd()
-                      .format(DateTime.parse(datetime ?? '1990-01-01')),
+                      .format(DateTime.tryParse(datetime ?? '1990-01-01')),
                   style: TextStyle(fontSize: Adapt.px(26)),
                 ),
                 SizedBox(

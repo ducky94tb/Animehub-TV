@@ -27,7 +27,7 @@ Widget buildView(
               : state.castList.backgroundUrl,
           count: state.castList?.castCount ?? 0,
           updateTime: TimeLineConvert.instance.getTimeLine(
-              state.castList?.updateTime ?? DateTime.parse('2020-01-01')),
+              state.castList?.updateTime ?? DateTime.tryParse('2020-01-01')),
         ),
         const _CastListTitle(),
         _CastList(
@@ -361,7 +361,7 @@ class _CastCell extends StatelessWidget {
               ),
               SizedBox(height: 5),
               Text(
-                'updated ${TimeLineConvert.instance.getTimeLine(data?.updateTime ?? DateTime.parse('2020-01-01'))}',
+                'updated ${TimeLineConvert.instance.getTimeLine(data?.updateTime ?? DateTime.tryParse('2020-01-01'))}',
                 style: TextStyle(color: const Color(0xFF717171)),
               )
             ],

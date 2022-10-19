@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:fish_redux/fish_redux.dart';
@@ -7,7 +9,6 @@ import 'package:movie/actions/local_notification.dart';
 import 'package:movie/models/notification_model.dart';
 import 'package:movie/style/themestyle.dart';
 
-import 'dart:ui' as ui;
 import 'action.dart';
 import 'state.dart';
 
@@ -102,7 +103,7 @@ class _ItemCellState extends State<_ItemCell> {
   @override
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);
-    final DateTime _date = DateTime.parse(widget.data.date);
+    final DateTime _date = DateTime.tryParse(widget.data.date);
     final String timeline = TimelineUtil.format(
       _date.millisecondsSinceEpoch,
       locTimeMs: DateTime.now().millisecondsSinceEpoch,

@@ -1,10 +1,11 @@
+import 'dart:ui' as ui;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
 
-import 'dart:ui' as ui;
 import 'action.dart';
 import 'state.dart';
 
@@ -27,7 +28,7 @@ Widget buildView(
   ]);
 
   Widget _buildListCell() {
-    var date = DateTime.parse(d.updateTime);
+    var date = DateTime.tryParse(d.updateTime);
     return RotationTransition(
       turns: animate.animate(CurvedAnimation(
           parent: state.cellAnimationController, curve: Curves.ease)),

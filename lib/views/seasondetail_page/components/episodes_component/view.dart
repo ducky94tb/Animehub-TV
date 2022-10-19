@@ -141,7 +141,7 @@ class _EpisodeCell extends StatelessWidget {
     final _shadowColor = _theme.brightness == Brightness.light
         ? const Color(0xFFE0E0E0)
         : const Color(0x00000000);
-    final DateTime _airDate = DateTime.parse(data.airDate ?? '1990-01-01');
+    final DateTime _airDate = DateTime.tryParse(data.airDate ?? '1990-01-01');
     final bool _canPlay = DateTime.now().isAfter(_airDate);
     return Container(
       margin: EdgeInsets.only(
@@ -217,7 +217,7 @@ class _EpisodeCell extends StatelessWidget {
                     data.airDate == null
                         ? '-'
                         : DateFormat.yMMMd()
-                            .format(DateTime.parse(data.airDate)),
+                            .format(DateTime.tryParse(data.airDate)),
                     style: TextStyle(
                       fontSize: Adapt.px(20),
                       color: const Color(0xFF717171),

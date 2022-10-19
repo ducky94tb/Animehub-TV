@@ -94,7 +94,7 @@ class _HeaderInfo extends StatelessWidget {
                   TextSpan(
                       text: user.premium.subscription
                           ? DateFormat.yMMMd().format(
-                              DateTime.parse(user.premium.expireDate)
+                              DateTime.tryParse(user.premium.expireDate)
                                   .add(Duration(days: 1)))
                           : '-',
                       style: TextStyle(fontWeight: FontWeight.bold))
@@ -113,7 +113,7 @@ class _HeaderInfo extends StatelessWidget {
                 children: [
                   Text(
                     DateFormat.MMMd()
-                        .format(DateTime.parse(user.premium.startDate)),
+                        .format(DateTime.tryParse(user.premium.startDate)),
                     style: TextStyle(
                       color: const Color(0xFFA0A0A0),
                       fontSize: Adapt.px(20),
@@ -121,7 +121,7 @@ class _HeaderInfo extends StatelessWidget {
                   ),
                   Text(
                     DateFormat.MMMd()
-                        .format(DateTime.parse(user.premium.expireDate)),
+                        .format(DateTime.tryParse(user.premium.expireDate)),
                     style: TextStyle(
                         color: const Color(0xFFA0A0A0), fontSize: Adapt.px(20)),
                   ),
@@ -142,11 +142,11 @@ class _LinearProgressIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);
     final _total =
-        DateTime.parse(premiumData.expireDate).millisecondsSinceEpoch -
-            DateTime.parse(premiumData.startDate).millisecondsSinceEpoch;
+        DateTime.tryParse(premiumData.expireDate).millisecondsSinceEpoch -
+            DateTime.tryParse(premiumData.startDate).millisecondsSinceEpoch;
     final _value =
         DateTime.now().add(Duration(hours: 2)).millisecondsSinceEpoch -
-            DateTime.parse(premiumData.startDate).millisecondsSinceEpoch;
+            DateTime.tryParse(premiumData.startDate).millisecondsSinceEpoch;
     return Container(
       width: Adapt.px(400),
       height: Adapt.px(22),

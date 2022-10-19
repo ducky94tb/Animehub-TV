@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
-import 'package:movie/widgets/keepalive_widget.dart';
 import 'package:movie/models/enums/genres.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/models/video_list.dart';
 import 'package:movie/style/themestyle.dart';
+import 'package:movie/widgets/keepalive_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'action.dart';
@@ -185,7 +185,7 @@ class _ItemCell extends StatelessWidget {
                           style: TextStyle(color: const Color(0xFF9E9E9E))),
                       TextSpan(
                           text: DateFormat.yMMMd()
-                              .format(DateTime.parse(data.releaseDate)))
+                              .format(DateTime.tryParse(data.releaseDate)))
                     ]),
                     style: TextStyle(fontSize: Adapt.px(20)),
                   ),

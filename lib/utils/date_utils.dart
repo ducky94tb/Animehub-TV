@@ -5,7 +5,7 @@ class MyDateUtils {
   static formatDate(final datetime) {
     if (TextUtil.isEmpty(datetime)) return "-";
     try {
-      return DateFormat.yMMMd().format(DateTime.parse(datetime));
+      return DateFormat.yMMMd().format(DateTime.tryParse(datetime));
     } on FormatException catch (_) {
       return datetime;
     }

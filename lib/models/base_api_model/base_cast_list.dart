@@ -60,12 +60,12 @@ class BaseCastList {
     id = int.parse(jsonRes['id']);
     selected = jsonRes['selected'] == '1';
     createTime =
-        DateTime.parse(jsonRes['createTime']?.toString() ?? '1990-01-01');
+        DateTime.tryParse(jsonRes['createTime']?.toString() ?? '1990-01-01');
     description = jsonRes['description'];
     name = jsonRes['name'];
     uid = jsonRes['uid'];
     updateTime =
-        DateTime.parse(jsonRes['updateTime']?.toString() ?? '1990-01-01');
+        DateTime.tryParse(jsonRes['updateTime']?.toString() ?? '1990-01-01');
     castCount = int.parse(jsonRes['castCount']?.toString() ?? '0');
   }
 

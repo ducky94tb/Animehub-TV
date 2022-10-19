@@ -81,21 +81,21 @@ Future _cellTapped(Action action, Context<TrendingPageState> ctx) async {
         'posterpic': _d.posterPath
       };
       break;
-    case 'tv':
-      _page = TvShowDetailPage();
-      _data = {
-        'id': _d.id,
-        'bgpic': _d.backdropPath,
-        'name': _d.name,
-        'posterpic': _d.posterPath
-      };
-      break;
     case 'person':
       _data = {
         'peopleid': _d.id,
         'profilePath': _d.profilePath,
         'profileName': _d.name,
         'character': ''
+      };
+      break;
+    default:
+      _page = TvShowDetailPage();
+      _data = {
+        'id': _d.id,
+        'bgpic': _d.backdropPath,
+        'name': _d.name,
+        'posterpic': _d.posterPath
       };
       break;
   }

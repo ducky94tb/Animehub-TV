@@ -137,7 +137,7 @@ class _RecommendationCell extends StatelessWidget {
             height: Adapt.px(8),
           ),
           Text(
-              '${DateTime.parse(data.releaseDate == null || data.releaseDate == '' ? '2020-01-01' : data.releaseDate).year}',
+              '${DateTime.tryParse(data.releaseDate == null || data.releaseDate == '' ? '2020-01-01' : data.releaseDate).year}',
               style: TextStyle(fontSize: Adapt.px(24))),
           SizedBox(
             height: Adapt.px(8),

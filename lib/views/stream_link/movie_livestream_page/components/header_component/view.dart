@@ -5,9 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
 import 'package:movie/models/enums/imagesize.dart';
+import 'package:movie/models/firebase/firebase_api.dart';
 import 'package:movie/style/themestyle.dart';
 import 'package:movie/utils/dialog_utils.dart';
 import 'package:movie/widgets/expandable_text.dart';
+import 'package:toast/toast.dart';
 
 import 'state.dart';
 
@@ -15,6 +17,18 @@ Widget buildView(
     HeaderState state, Dispatch dispatch, ViewService viewService) {
   final context = viewService.context;
   final _theme = ThemeStyle.getTheme(context);
+  void report() async {
+    final res = await FirebaseApi.instance.report(
+      mediaType: "movie",
+      id: state.detail.id,
+    );
+    if (res == 1) {
+      Toast.show("Thanks for your report!", context);
+    } else {
+      Toast.show("Thanks", context);
+    }
+  }
+
   return SliverToBoxAdapter(
     child: Padding(
       padding: EdgeInsets.only(top: Adapt.px(40)),
@@ -54,7 +68,7 @@ Widget buildView(
               children: [
                 Text(
                   DateFormat.yMMMd()
-                      .format(DateTime.parse(state.detail.releaseDate)),
+                      .format(DateTime.tryParse(state.detail.releaseDate)),
                 ),
                 Text(
                   state.detail.genres.take(2).map((e) => e.name).join(' · '),
@@ -70,14 +84,12 @@ Widget buildView(
               onTap: () {
                 DialogUtils.showCustomDialog(
                     context: context,
-                    title: "Have problem with this episode?",
+                    title: "Have problem with this movie?",
                     content:
-                        "The stream link for this episode is not found or expired? Please help us report it. Thanks so much!",
+                        "The stream link for this movie is not found or expired? Please help us report it.\nThanks so much!",
                     ok: "Yes",
                     cancel: "No",
-                    onAgree: () => {
-                          Navigator.of(context).pop(true),
-                        },
+                    onAgree: () => {Navigator.of(context).pop(true), report()},
                     onCancel: () {
                       Navigator.of(context).pop(true);
                     });

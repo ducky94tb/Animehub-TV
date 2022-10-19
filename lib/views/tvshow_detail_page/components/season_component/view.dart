@@ -72,7 +72,7 @@ class _SeasonCell extends StatelessWidget {
             Text(
               data.airDate == null
                   ? '-'
-                  : DateFormat.yMMMd().format(DateTime.parse(data?.airDate)),
+                  : DateFormat.yMMMd().format(DateTime.tryParse(data?.airDate)),
               style: _subStyle,
             ),
             Text(

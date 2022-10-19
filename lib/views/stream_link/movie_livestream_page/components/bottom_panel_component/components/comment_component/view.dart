@@ -52,7 +52,7 @@ class _CommentCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);
-    var date = DateTime.parse(comment.updateTime ?? '1970-07-10');
+    var date = DateTime.tryParse(comment.updateTime ?? '1970-07-10');
     final String _timeline = TimelineUtil.format(
       date.millisecondsSinceEpoch,
       locTimeMs: DateTime.now().millisecondsSinceEpoch,

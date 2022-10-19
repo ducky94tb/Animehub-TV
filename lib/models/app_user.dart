@@ -6,6 +6,6 @@ class AppUser {
   UserPremiumData premium;
   bool get isPremium => premium?.expireDate == null
       ? false
-      : DateTime.parse(premium.expireDate).compareTo(DateTime.now()) > 0;
+      : DateTime.tryParse(premium.expireDate).compareTo(DateTime.now()) > 0;
   AppUser({this.firebaseUser, this.premium});
 }

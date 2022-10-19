@@ -14,9 +14,9 @@ Widget buildView(
   final ThemeData _theme = ThemeStyle.getTheme(viewService.context);
   DateTime _airDate;
   try {
-    _airDate = DateTime.parse(state.episode.airDate ?? "-");
+    _airDate = DateTime.tryParse(state.episode.airDate ?? "-");
   } on FormatException catch (_) {
-    _airDate = DateTime.parse('1990-01-01');
+    _airDate = DateTime.tryParse('1990-01-01');
   }
   final bool _canPlay = DateTime.now().isAfter(_airDate);
   return InkWell(

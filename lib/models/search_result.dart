@@ -125,6 +125,10 @@ class SearchResult {
   String toString() {
     return '{"id": $id,"vote_average": $voteAverage,"vote_count": $voteCount,"popularity": $popularity,"adult": $adult,"video": $video,"backdrop_path": ${backdropPath != null ? '${json.encode(backdropPath)}' : 'null'},"first_air_date": ${firstAirDate != null ? '${json.encode(firstAirDate)}' : 'null'},"media_type": ${mediaType != null ? '${json.encode(mediaType)}' : 'null'},"name": ${name != null ? '${json.encode(name)}' : 'null'},"original_language": ${originalLanguage != null ? '${json.encode(originalLanguage)}' : 'null'},"original_name": ${originalName != null ? '${json.encode(originalName)}' : 'null'},"original_title": ${originalTitle != null ? '${json.encode(originalTitle)}' : 'null'},"overview": ${overview != null ? '${json.encode(overview)}' : 'null'},"poster_path": ${posterPath != null ? '${json.encode(posterPath)}' : 'null'},"profile_path": ${profilePath != null ? '${json.encode(profilePath)}' : 'null'},"release_date": ${releaseDate != null ? '${json.encode(releaseDate)}' : 'null'},"title": ${title != null ? '${json.encode(title)}' : 'null'},"genre_ids": $genreIds,"known_for": $knownFor,"origin_country": $originCountry}';
   }
+
+  void setMediaType(String mediaType) {
+    this.mediaType = mediaType;
+  }
 }
 
 class KnownFor {

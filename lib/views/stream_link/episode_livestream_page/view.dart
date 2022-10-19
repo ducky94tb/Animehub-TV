@@ -9,9 +9,11 @@ import 'package:movie/actions/imageurl.dart';
 import 'package:movie/models/credits_model.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/models/episode_model.dart';
+import 'package:movie/models/firebase/firebase_api.dart';
 import 'package:movie/models/season_detail.dart';
 import 'package:movie/style/themestyle.dart';
 import 'package:movie/utils/dialog_utils.dart';
+import 'package:toast/toast.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -42,6 +44,8 @@ Widget buildView(
                     _Header(
                       episode: state.selectedEpisode,
                       season: state.season,
+                      tvId: state.tvid,
+                      context: context,
                     ),
                     const _EpisodeTitle(),
                     _Episodes(
@@ -70,8 +74,31 @@ Widget buildView(
 class _Header extends StatelessWidget {
   final Episode episode;
   final Season season;
+  final int tvId;
+  final BuildContext context;
 
-  const _Header({this.episode, this.season});
+  const _Header({this.episode, this.season, this.tvId, this.context});
+
+  void report() async {
+    final DateTime _airDate =
+        DateTime.tryParse(episode.airDate ?? '1990-01-01');
+    final bool aired = DateTime.now().isAfter(_airDate);
+    if (aired) {
+      final res = await FirebaseApi.instance.report(
+        mediaType: 'tv',
+        id: tvId,
+        tvSeasonId: season.seasonNumber,
+        tvEpisodeId: episode.episodeNumber,
+      );
+      if (res == 1) {
+        Toast.show("Thanks for your report!", context);
+      } else {
+        Toast.show("Thanks", context);
+      }
+    } else {
+      Toast.show("This episode is not aired, it will be coming soon.", context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,12 +166,11 @@ class _Header extends StatelessWidget {
                       context: context,
                       title: "Have problem with this episode?",
                       content:
-                          "The stream link for this episode is not found or expired?\nPlease help us report it. Thanks!",
+                          "The stream link for this episode is not found or expired? Please help us report it. Thanks!",
                       ok: "Yes",
                       cancel: "No",
-                      onAgree: () => {
-                            Navigator.of(context).pop(true),
-                          },
+                      onAgree: () =>
+                          {Navigator.of(context).pop(true), report()},
                       onCancel: () {
                         Navigator.of(context).pop(true);
                       });
@@ -273,9 +299,17 @@ class _EpisodeCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DateTime _airDate =
+        DateTime.tryParse(episode.airDate ?? '1990-01-01');
+    final bool _canPlay = DateTime.now().isAfter(_airDate);
     final _theme = ThemeStyle.getTheme(context);
     return GestureDetector(
-      onTap: () => onTap(episode),
+      onTap: () => {
+        if (_canPlay)
+          onTap(episode)
+        else
+          Toast.show("This episode is not on air", context)
+      },
       child: Padding(
         padding: EdgeInsets.only(bottom: Adapt.px(30)),
         child: Row(
@@ -311,7 +345,7 @@ class _EpisodeCell extends StatelessWidget {
                     style: TextStyle(
                         fontSize: Adapt.px(28), fontWeight: FontWeight.bold),
                   ),
-                  Text(episode.name),
+                  Text(_canPlay ? episode.name : episode.airDate),
                 ],
               ),
             )
