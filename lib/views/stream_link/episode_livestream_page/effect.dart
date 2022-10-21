@@ -43,6 +43,7 @@ void _onInit(Action action, Context<EpisodeLiveStreamState> ctx) async {
     tvId: ctx.state.tvid,
     seasonId: ctx.state.season.seasonNumber,
     episodeId: ctx.state.selectedEpisode.episodeNumber,
+    movieInfo: ctx.state.movieInfo,
   );
   ctx.dispatch(EpisodeLiveStreamActionCreator.setStreamLink(_link));
   ctx.dispatch(EpisodeLiveStreamActionCreator.setLoading(false));

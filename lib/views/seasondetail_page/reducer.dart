@@ -1,4 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
+import 'package:movie/models/firebase_api_model/movie_info_model.dart';
 import 'package:movie/models/image_model.dart';
 import 'package:movie/models/season_detail.dart';
 import 'package:movie/models/video_model.dart';
@@ -14,6 +15,7 @@ Reducer<SeasonDetailPageState> buildReducer() {
       SeasonDetailPageAction.seasonDetailChanged: _onSeasonDetailChanged,
       SeasonDetailPageAction.setImages: _setImages,
       SeasonDetailPageAction.setVideos: _setVideos,
+      SeasonDetailPageAction.setMovieInfo: _setMovieInfo,
     },
   );
 }
@@ -25,8 +27,7 @@ SeasonDetailPageState _onAction(SeasonDetailPageState state, Action action) {
 
 SeasonDetailPageState _onSeasonDetailChanged(
     SeasonDetailPageState state, Action action) {
-  final Season model =
-      action.payload ?? Season.fromParams(episodes: []);
+  final Season model = action.payload ?? Season.fromParams(episodes: []);
   final SeasonDetailPageState newState = state.clone();
   newState.seasonDetailModel = model;
   newState.seasonCastState = new SeasonCastState(castData: model.credits.cast);
@@ -44,5 +45,13 @@ SeasonDetailPageState _setImages(SeasonDetailPageState state, Action action) {
   final ImageModel _images = action.payload;
   final SeasonDetailPageState newState = state.clone();
   newState.images = _images;
+  return newState;
+}
+
+SeasonDetailPageState _setMovieInfo(
+    SeasonDetailPageState state, Action action) {
+  final MovieInfoModel movieInfoModel = action.payload;
+  final SeasonDetailPageState newState = state.clone();
+  newState.movieInfo = movieInfoModel;
   return newState;
 }

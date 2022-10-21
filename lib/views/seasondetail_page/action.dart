@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:movie/models/base_api_model/tvshow_stream_link.dart';
 import 'package:movie/models/episode_model.dart';
+import 'package:movie/models/firebase_api_model/movie_info_model.dart';
 import 'package:movie/models/image_model.dart';
 import 'package:movie/models/season_detail.dart';
 import 'package:movie/models/video_model.dart';
@@ -12,6 +13,7 @@ enum SeasonDetailPageAction {
   setImages,
   setStreamLinks,
   episodeCellTapped,
+  setMovieInfo,
 }
 
 class SeasonDetailPageActionCreator {
@@ -33,6 +35,10 @@ class SeasonDetailPageActionCreator {
 
   static Action setStreamLinks(TvShowStreamLinks streamLinks) {
     return Action(SeasonDetailPageAction.setStreamLinks, payload: streamLinks);
+  }
+
+  static Action setMovieInfo(MovieInfoModel movieInfoModel) {
+    return Action(SeasonDetailPageAction.setMovieInfo, payload: movieInfoModel);
   }
 
   static Action episodeCellTapped(Episode p) {

@@ -34,7 +34,6 @@ Future _onInit(Action action, Context<TvShowDetailState> ctx) async {
       if (_tvDetail.success) {
         ctx.dispatch(TvShowDetailActionCreator.onInit(_tvDetail.result));
       }
-
       final _tvVideo = await _tmdb.getTVVideo(ctx.state.tvid);
       if (_tvVideo.success)
         ctx.dispatch(TvShowDetailActionCreator.onSetVideos(_tvVideo.result));

@@ -23,6 +23,8 @@ class SeasonDetailPageState
   int tvid;
   int seasonNumber;
 
+  var movieInfo;
+
   @override
   SeasonDetailPageState clone() {
     return SeasonDetailPageState()
@@ -34,6 +36,7 @@ class SeasonDetailPageState
       ..images = images
       ..videos = videos
       ..tvShowName = tvShowName
+      ..movieInfo = movieInfo
       ..seasonpic = seasonpic
       ..scrollController = scrollController;
   }

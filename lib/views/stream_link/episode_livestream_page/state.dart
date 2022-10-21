@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/models/episode_model.dart';
+import 'package:movie/models/firebase_api_model/movie_info_model.dart';
 import 'package:movie/models/firebase_api_model/stream_link.dart';
 import 'package:movie/models/firebase_api_model/tv_episode_model.dart';
 import 'package:movie/models/season_detail.dart';
@@ -20,6 +21,7 @@ class EpisodeLiveStreamState implements Cloneable<EpisodeLiveStreamState> {
   ScrollController scrollController;
   PlayerState playerState;
   BottomPanelState bottomPanelState;
+  MovieInfoModel movieInfo;
 
   TVEpisodeModel newestItem;
 
@@ -33,6 +35,7 @@ class EpisodeLiveStreamState implements Cloneable<EpisodeLiveStreamState> {
       ..selectedEpisode = selectedEpisode
       ..scrollController = scrollController
       ..playerState = playerState
+      ..movieInfo = movieInfo
       ..newestItem = newestItem
       ..bottomPanelState = bottomPanelState
       ..selectedLink = selectedLink;
@@ -44,6 +47,7 @@ EpisodeLiveStreamState initState(Map<String, dynamic> args) {
   state.tvid = args['tvid'];
   state.tvName = args['tvName'];
   state.season = args['season'];
+  state.movieInfo = args['movieInfo'];
   state.selectedEpisode = args['selectedEpisode'];
   state.newestItem = TVEpisodeModel.fromParams(
     id: state.tvid,

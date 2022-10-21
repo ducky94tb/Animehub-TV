@@ -122,7 +122,6 @@ void _languageTap(Action action, Context<SettingsState> ctx) async {
 
 void _darkModeTap(Action action, Context<SettingsState> ctx) async {
   final Item _darkMode = action.payload;
-  print("Ducky $_darkMode");
   if (_darkMode.name == ctx.state.darkMode.name) return;
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   _prefs.setString('darkMode', _darkMode.toString());

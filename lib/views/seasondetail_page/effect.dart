@@ -1,8 +1,10 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:movie/actions/api/tmdb_api.dart';
+import 'package:movie/models/firebase/firebase_api.dart';
 import 'package:movie/views/stream_link/episode_livestream_page/page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -44,6 +46,11 @@ Future _onInit(Action action, Context<SeasonDetailPageState> ctx) async {
         ctx.state.tvid, ctx.state.seasonNumber);
     if (_images.success)
       ctx.dispatch(SeasonDetailPageActionCreator.setImages(_images.result));
+    final movieInfo = await FirebaseApi.instance
+        .getMovieInfo(id: ctx.state.tvid, seasonId: ctx.state.seasonNumber);
+    if (movieInfo != null) {
+      ctx.dispatch(SeasonDetailPageActionCreator.setMovieInfo(movieInfo));
+    }
     /*final _baseApi = BaseApi.instance;
     final _streamLinks = await _baseApi.getTvSeasonStreamLinks(
         ctx.state.tvid, ctx.state.seasonNumber);
@@ -81,7 +88,8 @@ Future _episodeCellTapped(
                 'tvid': ctx.state.tvid,
                 'tvName': ctx.state.tvShowName,
                 'selectedEpisode': action.payload,
-                'season': ctx.state.seasonDetailModel
+                'season': ctx.state.seasonDetailModel,
+                'movieInfo': ctx.state.movieInfo,
               },
             ),
           ),

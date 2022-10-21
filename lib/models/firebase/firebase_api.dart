@@ -146,8 +146,12 @@ class FirebaseApi {
     return 1;
   }
 
-  Future<StreamLink> getMovieStreamLink({int movieId}) async {
-    var movieInfo = await getMovieInfo(movie: true, id: movieId);
+  Future<StreamLink> getMovieStreamLink({
+    int movieId,
+    MovieInfoModel movieInfo,
+  }) async {
+    if (movieInfo == null)
+      movieInfo = await getMovieInfo(movie: true, id: movieId);
     if (movieInfo == null || movieInfo.title == null) {
       //report this movie that it needs added title
       report(
@@ -157,7 +161,7 @@ class FirebaseApi {
       return StreamLink.fromJson({});
     }
     final db = FirebaseDatabase.instance;
-    final animeHubRef = db.ref("Episode");
+    final animeHubRef = db.ref("AnimeHub/Episode");
     final ref = animeHubRef.child("${movieInfo.title}/1");
     final snapshot = await ref.get();
     String streamLink = "";
@@ -234,9 +238,14 @@ class FirebaseApi {
     await ref.add(comment.toMap());
   }*/
 
-  Future<StreamLink> getTvShowStreamLink(
-      {int tvId, int seasonId, int episodeId}) async {
-    var movieInfo = await getMovieInfo(id: tvId, seasonId: seasonId);
+  Future<StreamLink> getTvShowStreamLink({
+    int tvId,
+    int seasonId,
+    int episodeId,
+    MovieInfoModel movieInfo,
+  }) async {
+    if (movieInfo == null)
+      movieInfo = await getMovieInfo(id: tvId, seasonId: seasonId);
     if (movieInfo == null || movieInfo.title == null) {
       //report this tvShow that it needs added title
       report(
@@ -246,10 +255,12 @@ class FirebaseApi {
           tvEpisodeId: episodeId);
       return StreamLink.fromJson({});
     }
+    int adjustNo = movieInfo.adjust;
+    episodeId += adjustNo;
+    if (episodeId < 1) episodeId = 1;
     final db = FirebaseDatabase.instance;
-    final animeHubRef = db.ref("Episode");
-    final episodeNo = movieInfo.adjust ?? 0 + episodeId;
-    final ref = animeHubRef.child("${movieInfo.title}/$episodeNo");
+    final animeHubRef = db.ref("AnimeHub/Episode");
+    final ref = animeHubRef.child("${movieInfo.title}/$episodeId");
     final snapshot = await ref.get();
     String streamLink = "";
     if (snapshot.value != null) {
