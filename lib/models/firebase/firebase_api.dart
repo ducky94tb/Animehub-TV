@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:movie/models/firebase_api_model/movie_model.dart';
 import 'package:movie/models/firebase_api_model/tv_episode_model.dart';
 
+import '../firebase_api_model/movie_info_model.dart';
 import '../firebase_api_model/stream_link.dart';
 
 class FirebaseApi {
@@ -145,16 +146,29 @@ class FirebaseApi {
     return 1;
   }
 
-  Future<StreamLink> getMovieStreamLink(
-      {int movieId, String language = 'en'}) async {
-    final ref = FirebaseFirestore.instance
-        .collection('movie')
-        .doc('$movieId')
-        .collection('link')
-        .doc(language);
-    final DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
-    Map<String, dynamic> data = snapshot.data();
-    return StreamLink.fromJson(data);
+  Future<StreamLink> getMovieStreamLink({int movieId}) async {
+    var movieInfo = await getMovieInfo(movie: true, id: movieId);
+    if (movieInfo == null || movieInfo.title == null) {
+      //report this movie that it needs added title
+      report(
+        mediaType: 'movie',
+        id: movieId,
+      );
+      return StreamLink.fromJson({});
+    }
+    final db = FirebaseDatabase.instance;
+    final animeHubRef = db.ref("Episode");
+    final ref = animeHubRef.child("${movieInfo.title}/1");
+    final snapshot = await ref.get();
+    String streamLink = "";
+    if (snapshot.value != null) {
+      Map<Object, Object> data = snapshot.value;
+      streamLink = data["streamLink"] ?? "";
+      if (!streamLink.contains("https://")) {
+        streamLink = "https://animixplay.to$streamLink";
+      }
+    }
+    return StreamLink.fromParams(url: streamLink);
   }
 
   Future<void> updateViews({int movieId, int value = 1}) async {
@@ -221,19 +235,53 @@ class FirebaseApi {
   }*/
 
   Future<StreamLink> getTvShowStreamLink(
-      {int tvId, int seasonId, int episodeId, String language = 'en'}) async {
-    final ref = FirebaseFirestore.instance
-        .collection('tvshow')
-        .doc('$tvId')
-        .collection('season')
-        .doc('$seasonId')
-        .collection('episode')
-        .doc('$episodeId')
-        .collection('link')
-        .doc(language);
+      {int tvId, int seasonId, int episodeId}) async {
+    var movieInfo = await getMovieInfo(id: tvId, seasonId: seasonId);
+    if (movieInfo == null || movieInfo.title == null) {
+      //report this tvShow that it needs added title
+      report(
+          mediaType: 'tv',
+          id: tvId,
+          tvSeasonId: seasonId,
+          tvEpisodeId: episodeId);
+      return StreamLink.fromJson({});
+    }
+    final db = FirebaseDatabase.instance;
+    final animeHubRef = db.ref("Episode");
+    final episodeNo = movieInfo.adjust ?? 0 + episodeId;
+    final ref = animeHubRef.child("${movieInfo.title}/$episodeNo");
+    final snapshot = await ref.get();
+    String streamLink = "";
+    if (snapshot.value != null) {
+      Map<Object, Object> data = snapshot.value;
+      streamLink = data["streamLink"] ?? "";
+      if (!streamLink.contains("https://")) {
+        streamLink = "https://animixplay.to$streamLink";
+      }
+    }
+    return StreamLink.fromParams(url: streamLink);
+  }
 
+  Future<MovieInfoModel> getMovieInfo(
+      {bool movie = false, int id, int seasonId}) async {
+    var ref;
+    if (movie) {
+      ref = FirebaseFirestore.instance
+          .collection('movie')
+          .doc('$id')
+          .collection('movie_info')
+          .doc('1');
+    } else {
+      ref = FirebaseFirestore.instance
+          .collection('tvshow')
+          .doc('$id')
+          .collection('season')
+          .doc('$seasonId')
+          .collection('movie_info')
+          .doc('$seasonId');
+    }
     final DocumentSnapshot<Map<String, dynamic>> snapshot = await ref.get();
     Map<String, dynamic> data = snapshot.data();
-    return StreamLink.fromJson(data);
+    return MovieInfoModel.fromJson(data);
   }
 }
