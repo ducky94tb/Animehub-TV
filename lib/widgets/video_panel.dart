@@ -5,9 +5,11 @@ import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
+import 'package:movie/models/base_api_model/ads_config.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/widgets/webview_player.dart';
 import 'package:toast/toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 
 import 'custom_video_controls.dart';
@@ -80,7 +82,7 @@ class _PlayerPanelState extends State<PlayerPanel>
     if (_needAd != widget.needAd && !_haveOpenAds) _setNeedAd(widget.needAd);
     if (_loading != widget.loading) _setLoading(widget.loading);
     if (_playerType != widget.playerType) _setPlayerType(widget.playerType);
-    //if (widget.autoPlay) _playTapped(context);
+    // if (widget.autoPlay) _playTapped(context);
     super.didUpdateWidget(oldWidget);
   }
 
@@ -93,14 +95,20 @@ class _PlayerPanelState extends State<PlayerPanel>
   }
 
   _startPlayer() async {
-    // await launch(
-    //   widget.streamLink,
-    //   enableJavaScript: true,
-    // );
-    setState(() {
-      _play = true;
-    });
-    if (widget.onPlay != null) widget.onPlay();
+    if (widget.streamInBrowser) {
+      await launch(
+        widget.streamLink,
+        enableJavaScript: true,
+      );
+    } else {
+      setState(() {
+        _play = true;
+      });
+      if (widget.onPlay != null) {
+        widget.onPlay();
+        AdsConfig.instance.showInterstitialAd(() {});
+      }
+    }
   }
 
   _setLoading(bool loading) {

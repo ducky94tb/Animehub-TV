@@ -5,6 +5,7 @@ import 'package:movie/models/firebase/firebase_api.dart';
 import 'package:movie/views/stream_link/episode_livestream_page/page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/base_api_model/ads_config.dart';
 import 'action.dart';
 import 'state.dart';
 
@@ -13,6 +14,7 @@ Effect<SeasonDetailPageState> buildEffect() {
     SeasonDetailPageAction.action: _onAction,
     SeasonDetailPageAction.episodeCellTapped: _episodeCellTapped,
     Lifecycle.initState: _onInit,
+    Lifecycle.deactivate: _onDispose,
   });
 }
 
@@ -97,4 +99,8 @@ Future _episodeCellTapped(
       },
     ),
   );
+}
+
+void _onDispose(Action action, Context<SeasonDetailPageState> ctx) {
+  AdsConfig.instance.showInterstitialAd(() {});
 }

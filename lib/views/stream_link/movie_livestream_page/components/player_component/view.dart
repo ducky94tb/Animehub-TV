@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
+import 'package:movie/actions/app_config.dart';
 import 'package:movie/widgets/video_panel.dart';
 
 import 'state.dart';
@@ -15,6 +16,8 @@ Widget buildView(
         child: PlayerPanel(
           background: state.background,
           streamLink: state.streamLink,
+          autoPlay: true,
+          streamInBrowser: AppConfig.instance.reviewing,
         ),
       ),
     ),

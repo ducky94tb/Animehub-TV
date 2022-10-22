@@ -1,5 +1,10 @@
-import 'package:flutter/material.dart';
 import 'dart:convert' show json;
+
+import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/firebase/firebase_api.dart';
 
 class AppConfig {
   AppConfig._();
@@ -26,6 +31,9 @@ class AppConfig {
 
   String get urlresolverApiKey => _config['urlresolverApiKey'];
 
+  bool _reviewing = false;
+  bool get reviewing => _reviewing;
+
   Future init(BuildContext context) async {
     final _jsonStr = await _getConfigJson(context);
     if (_jsonStr == null) {
@@ -33,15 +41,28 @@ class AppConfig {
       return;
     }
     _config = json.decode(_jsonStr);
+    await getReviewStatus();
   }
 
-  Future<String> _getConfigJson(BuildContext context) async {
-    try {
-      final _jsonStr =
-          await DefaultAssetBundle.of(context).loadString("appconfig.json");
-      return _jsonStr;
-    } on Exception catch (_) {
-      return null;
+  Future getReviewStatus() async {
+    final _packageInfo = await PackageInfo.fromPlatform();
+    final version = _packageInfo?.version ?? '-';
+    final prefs = await SharedPreferences.getInstance();
+    final key = "${version}_reviewing";
+    if (!prefs.containsKey(key) || prefs.getBool(key)) {
+      _reviewing = await FirebaseApi.instance.getStatusReviewing(version);
+      await prefs.setBool(key, _reviewing);
+      print("Ducky on reviewing $_reviewing");
     }
+  }
+}
+
+Future<String> _getConfigJson(BuildContext context) async {
+  try {
+    final _jsonStr =
+        await DefaultAssetBundle.of(context).loadString("appconfig.json");
+    return _jsonStr;
+  } on Exception catch (_) {
+    return null;
   }
 }
