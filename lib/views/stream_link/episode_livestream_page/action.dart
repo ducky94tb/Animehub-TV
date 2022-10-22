@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:movie/models/base_api_model/tvshow_comment.dart';
 import 'package:movie/models/episode_model.dart';
+import 'package:movie/models/firebase_api_model/movie_info_model.dart';
 import 'package:movie/models/firebase_api_model/stream_link.dart';
 
 enum EpisodeLiveStreamAction {
@@ -13,6 +14,7 @@ enum EpisodeLiveStreamAction {
   setLike,
   setLoading,
   markWatched,
+  setMovieInfo,
 }
 
 class EpisodeLiveStreamActionCreator {
@@ -45,6 +47,13 @@ class EpisodeLiveStreamActionCreator {
 
   static Action setLoading(bool loading) {
     return Action(EpisodeLiveStreamAction.setLoading, payload: loading);
+  }
+
+  static Action setMovieInfo(MovieInfoModel movieInfoModel) {
+    return Action(
+      EpisodeLiveStreamAction.setMovieInfo,
+      payload: movieInfoModel,
+    );
   }
 
   static Action markWatched(Episode episode) {

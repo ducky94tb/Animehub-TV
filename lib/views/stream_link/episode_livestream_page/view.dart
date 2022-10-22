@@ -181,9 +181,7 @@ class _Header extends StatelessWidget {
                     Text(
                       'Report',
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: Adapt.px(28),
-                          fontWeight: FontWeight.bold),
+                          fontSize: Adapt.px(28), fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),

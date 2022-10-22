@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:movie/models/firebase_api_model/movie_model.dart';
 import 'package:movie/models/firebase_api_model/tv_episode_model.dart';
@@ -148,14 +149,16 @@ class FirebaseApi {
 
   Future<StreamLink> getMovieStreamLink({
     int movieId,
+    String name,
     MovieInfoModel movieInfo,
   }) async {
     if (movieInfo == null)
       movieInfo = await getMovieInfo(movie: true, id: movieId);
     if (movieInfo == null || movieInfo.title == null) {
       //report this movie that it needs added title
-      report(
+      reportAddMovieInfo(
         mediaType: 'movie',
+        name: name,
         id: movieId,
       );
       return StreamLink.fromJson({});
@@ -242,35 +245,67 @@ class FirebaseApi {
     int tvId,
     int seasonId,
     int episodeId,
+    String name,
     MovieInfoModel movieInfo,
   }) async {
     if (movieInfo == null)
       movieInfo = await getMovieInfo(id: tvId, seasonId: seasonId);
     if (movieInfo == null || movieInfo.title == null) {
       //report this tvShow that it needs added title
-      report(
+      reportAddMovieInfo(
           mediaType: 'tv',
           id: tvId,
+          name: name,
           tvSeasonId: seasonId,
           tvEpisodeId: episodeId);
       return StreamLink.fromJson({});
     }
     int adjustNo = movieInfo.adjust;
     episodeId += adjustNo;
-    if (episodeId < 1) episodeId = 1;
     final db = FirebaseDatabase.instance;
     final animeHubRef = db.ref("AnimeHub/Episode");
     final ref = animeHubRef.child("${movieInfo.title}/$episodeId");
+    print("Ducky ${movieInfo.title}/$episodeId");
     final snapshot = await ref.get();
     String streamLink = "";
     if (snapshot.value != null) {
       Map<Object, Object> data = snapshot.value;
       streamLink = data["streamLink"] ?? "";
-      if (!streamLink.contains("https://")) {
+      if (!TextUtil.isEmpty(streamLink) && !streamLink.contains("https://")) {
         streamLink = "https://animixplay.to$streamLink";
       }
     }
     return StreamLink.fromParams(url: streamLink);
+  }
+
+  //Report movie or tvShow error (streamlink not found or expired)
+  Future<int> reportAddMovieInfo(
+      {String mediaType,
+      int id,
+      String name,
+      int tvSeasonId = 0,
+      int tvEpisodeId = 0}) async {
+    final db = FirebaseDatabase.instance;
+    final animeHubRef = db.ref("AnimeHub/AddInfo");
+    switch (mediaType) {
+      case "movie":
+        final movieRef = animeHubRef.child("movie/$id");
+        movieRef.set({
+          'id': id,
+          'name': name,
+        }).catchError((onError) => 0);
+        break;
+      default:
+        final tvRef = animeHubRef.child("tv/${id}_${tvSeasonId}_$tvEpisodeId");
+        tvRef.set({
+          'id': id,
+          'name': name,
+          'seasonId': tvSeasonId,
+          'episode': tvEpisodeId,
+        }).catchError((onError) => 0);
+        break;
+    }
+    return 1;
   }
 
   Future<MovieInfoModel> getMovieInfo(

@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:movie/models/episode_model.dart';
+import 'package:movie/models/firebase_api_model/movie_info_model.dart';
 import 'package:movie/models/firebase_api_model/stream_link.dart';
 
 import 'action.dart';
@@ -15,6 +16,7 @@ Reducer<EpisodeLiveStreamState> buildReducer() {
       EpisodeLiveStreamAction.setLike: _setLike,
       EpisodeLiveStreamAction.setStreamLink: _setStreamLink,
       EpisodeLiveStreamAction.setLoading: _setLoading,
+      EpisodeLiveStreamAction.setMovieInfo: _setMovieInfo,
     },
   );
 }
@@ -65,6 +67,14 @@ EpisodeLiveStreamState _selectedStreamLink(
   final StreamLink _link = action.payload;
   final EpisodeLiveStreamState newState = state.clone();
   newState.selectedLink = _link;
+  return newState;
+}
+
+EpisodeLiveStreamState _setMovieInfo(
+    EpisodeLiveStreamState state, Action action) {
+  final MovieInfoModel model = action.payload;
+  final EpisodeLiveStreamState newState = state.clone();
+  newState.movieInfo = model;
   return newState;
 }
 

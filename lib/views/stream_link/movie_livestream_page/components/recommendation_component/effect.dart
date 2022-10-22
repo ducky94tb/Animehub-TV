@@ -23,8 +23,10 @@ void _cellTap(Action action, Context<RecommendationState> ctx) async {
   ctx.state.controller.animateTo(0.0,
       duration: Duration(milliseconds: 300), curve: Curves.ease);
   ctx.dispatch(RecommendationActionCreator.setInfo(_movie));
-  StreamLink _link =
-      await FirebaseApi.instance.getMovieStreamLink(movieId: _movie.id);
+  StreamLink _link = await FirebaseApi.instance.getMovieStreamLink(
+    movieId: _movie.id,
+    name: ctx.state.name,
+  );
   ctx.dispatch(MovieLiveStreamActionCreator.setStreamLink(_link));
   ctx.dispatch(MovieLiveStreamActionCreator.setLoading(false));
 

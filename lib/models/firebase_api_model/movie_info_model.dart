@@ -7,12 +7,12 @@ class MovieInfoModel {
   MovieInfoModel.fromJson(jsonRes) {
     if (jsonRes != null) {
       title = jsonRes['title'];
-      adjust = jsonRes['adjust'] ?? 0;
+      adjust = jsonRes['adjustNo'] ?? 0;
     }
   }
 
   @override
   String toString() {
-    return '{"type": $title,"url": $adjust}';
+    return '{"title": $title,"adjustNo": $adjust}';
   }
 }

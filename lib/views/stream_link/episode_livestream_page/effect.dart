@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:movie/actions/api/base_api.dart';
@@ -28,9 +29,11 @@ void _episodeTapped(Action action, Context<EpisodeLiveStreamState> ctx) async {
   ctx.state.scrollController.animateTo(0.0,
       duration: Duration(milliseconds: 300), curve: Curves.ease);
   StreamLink _link = await FirebaseApi.instance.getTvShowStreamLink(
-      tvId: ctx.state.tvid,
-      seasonId: ctx.state.season.seasonNumber,
-      episodeId: _episode.episodeNumber);
+    tvId: ctx.state.tvid,
+    seasonId: ctx.state.season.seasonNumber,
+    episodeId: _episode.episodeNumber,
+    name: ctx.state.tvName,
+  );
   ctx.dispatch(
       EpisodeLiveStreamActionCreator.setSelectedEpisode(_episode, _link));
   await _getLike(action, ctx);
@@ -39,11 +42,19 @@ void _episodeTapped(Action action, Context<EpisodeLiveStreamState> ctx) async {
 
 void _onInit(Action action, Context<EpisodeLiveStreamState> ctx) async {
   ctx.state.scrollController = ScrollController();
+  if (ctx.state.movieInfo == null ||
+      TextUtil.isEmpty(ctx.state.movieInfo.title)) {
+    ctx.state.movieInfo = await FirebaseApi.instance.getMovieInfo(
+      id: ctx.state.tvid,
+      seasonId: ctx.state.season.seasonNumber,
+    );
+  }
   StreamLink _link = await FirebaseApi.instance.getTvShowStreamLink(
     tvId: ctx.state.tvid,
     seasonId: ctx.state.season.seasonNumber,
     episodeId: ctx.state.selectedEpisode.episodeNumber,
     movieInfo: ctx.state.movieInfo,
+    name: ctx.state.tvName,
   );
   ctx.dispatch(EpisodeLiveStreamActionCreator.setStreamLink(_link));
   ctx.dispatch(EpisodeLiveStreamActionCreator.setLoading(false));

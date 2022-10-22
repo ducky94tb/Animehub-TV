@@ -22,8 +22,10 @@ void _onAction(Action action, Context<MovieLiveStreamState> ctx) {}
 void _onInit(Action action, Context<MovieLiveStreamState> ctx) async {
   ctx.state.scrollController = ScrollController();
   //ctx.dispatch(MovieLiveStreamActionCreator.setLoading(true));
-  StreamLink _link =
-      await FirebaseApi.instance.getMovieStreamLink(movieId: ctx.state.movieId);
+  StreamLink _link = await FirebaseApi.instance.getMovieStreamLink(
+    name: ctx.state.name,
+    movieId: ctx.state.movieId,
+  );
   ctx.dispatch(MovieLiveStreamActionCreator.setStreamLink(_link));
   ctx.dispatch(MovieLiveStreamActionCreator.setLoading(false));
 }
