@@ -1,22 +1,22 @@
+import 'dart:math' as math;
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
-import 'package:movie/models/base_api_model/user_media.dart';
+import 'package:movie/models/database/history.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/style/themestyle.dart';
 import 'package:movie/views/watchlist_page/action.dart';
 import 'package:shimmer/shimmer.dart';
 
-import 'dart:math' as math;
 import 'state.dart';
 
 Widget buildView(
     SwiperState state, Dispatch dispatch, ViewService viewService) {
-  final List<UserMedia> _list = state.isMovie
-      ? (state?.movies?.data ?? [])
-      : (state?.tvshows?.data ?? []);
+  final List<History> _list =
+      state.isMovie ? (state?.movies ?? []) : (state?.tvshows ?? []);
 
   return Container(
       height: Adapt.screenH() / 2 + Adapt.px(150),
@@ -49,6 +49,7 @@ class _SwiperView extends StatefulWidget {
   final double viewportFraction;
   final double scale;
   final ScrollPhysics physics;
+
   _SwiperView(
       {this.key,
       this.itemBuilder,
@@ -58,6 +59,7 @@ class _SwiperView extends StatefulWidget {
       this.physics = const BouncingScrollPhysics(),
       this.itemTapped,
       this.onPageChanged});
+
   @override
   _SwiperViewState createState() => _SwiperViewState();
 }
@@ -68,6 +70,7 @@ class _SwiperViewState extends State<_SwiperView> {
   double pxOffset = 0;
 
   double _itemswidht;
+
   @override
   void initState() {
     _itemswidht = Adapt.screenW() * widget.viewportFraction;
@@ -98,7 +101,9 @@ class _SwiperViewState extends State<_SwiperView> {
           child: Transform.scale(
             scale: _now.abs() == 0
                 ? 1.0
-                : _scale < widget.scale ? widget.scale : _scale,
+                : _scale < widget.scale
+                    ? widget.scale
+                    : _scale,
             child: GestureDetector(
               onTap: () => widget.itemTapped(index),
               child: widget.itemBuilder(context, index),
@@ -113,16 +118,18 @@ class _SwiperViewState extends State<_SwiperView> {
 }
 
 class _SwiperCell extends StatelessWidget {
-  final UserMedia data;
+  final History data;
   final int index;
+
   const _SwiperCell({this.data, this.index});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       key: ValueKey(data),
       margin: EdgeInsets.only(right: Adapt.px(20)),
       child: Hero(
-        tag: 'Background${data.mediaId}',
+        tag: 'Background${data.imageUrl}',
         child: Stack(
           alignment: Alignment.bottomRight,
           children: <Widget>[
@@ -137,7 +144,7 @@ class _SwiperCell extends StatelessWidget {
                   fit: BoxFit.cover,
                   alignment: Alignment.bottomCenter,
                   image: CachedNetworkImageProvider(
-                    ImageUrl.getUrl(data.photoUrl, ImageSize.w500),
+                    ImageUrl.getUrl(data.imageUrl, ImageSize.w500),
                   ),
                 ),
                 boxShadow: <BoxShadow>[
@@ -168,7 +175,7 @@ class _SwiperCell extends StatelessWidget {
               child: Material(
                 color: Colors.transparent,
                 child: Text(
-                  data.rated.toString(),
+                  data.episodeId.toString(),
                   style: TextStyle(
                       color: Colors.tealAccent[700].withAlpha(200),
                       fontSize: Adapt.px(50),

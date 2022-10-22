@@ -1,5 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/user_media.dart';
+import 'package:movie/models/database/favorite.dart';
 
 enum SwiperAction {
   action,
@@ -17,11 +17,11 @@ class SwiperActionCreator {
     return Action(SwiperAction.mediaTpyeChanged, payload: ismovie);
   }
 
-  static Action setBackground(UserMedia result) {
+  static Action setBackground(Favorite result) {
     return Action(SwiperAction.setBackground, payload: result);
   }
 
-  static Action cellTapped(UserMedia media) {
+  static Action cellTapped(Favorite media) {
     return Action(SwiperAction.cellTapped, payload: media);
   }
 }

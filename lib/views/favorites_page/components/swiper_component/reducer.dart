@@ -1,5 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/user_media.dart';
+import 'package:movie/models/database/favorite.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -23,17 +23,16 @@ SwiperState _mediaTpyeChanged(SwiperState state, Action action) {
   final bool r = action.payload;
   final SwiperState newState = state.clone();
   newState.isMovie = r;
-  final _length =
-      r ? state.movies?.data?.length ?? 0 : state.tvshows?.data?.length ?? 0;
+  final _length = r ? state.movies?.length ?? 0 : state.tvshows?.length ?? 0;
   if (_length > 0)
-    newState.selectedMedia = r ? state.movies?.data[0] : state.tvshows?.data[0];
+    newState.selectedMedia = r ? state.movies[0] : state.tvshows[0];
   else
     newState.selectedMedia = null;
   return newState;
 }
 
 SwiperState _setBackground(SwiperState state, Action action) {
-  final UserMedia result = action.payload;
+  final Favorite result = action.payload;
   final SwiperState newState = state.clone();
   if (state.selectedMedia != null) newState.selectedMedia = result;
   return newState;

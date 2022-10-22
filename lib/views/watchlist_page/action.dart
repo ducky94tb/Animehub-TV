@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:movie/models/base_api_model/user_media.dart';
+import 'package:movie/models/database/history.dart';
 
 enum WatchlistPageAction {
   action,
@@ -14,11 +15,11 @@ class WatchlistPageActionCreator {
     return const Action(WatchlistPageAction.action);
   }
 
-  static Action setTVShow(UserMediaModel d) {
+  static Action setTVShow(List<History> d) {
     return Action(WatchlistPageAction.setTVShow, payload: d);
   }
 
-  static Action swiperChanged(UserMedia d) {
+  static Action swiperChanged(History d) {
     return Action(WatchlistPageAction.swiperChanged, payload: d);
   }
 

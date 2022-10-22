@@ -1,7 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:intl/intl.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/style/themestyle.dart';
 import 'package:shimmer/shimmer.dart';
@@ -12,8 +11,8 @@ Widget buildView(
     HeaderState state, Dispatch dispatch, ViewService viewService) {
   final d = state.selectedMedia;
   if (d != null) {
-    String name = d.name;
-    String datetime = d.releaseDate;
+    String name = d.tvName;
+    // String datetime = d.releaseDate;
     return FadeTransition(
       opacity: Tween(begin: 0.0, end: 1.0).animate(state.animationController),
       child: Container(
@@ -34,11 +33,11 @@ Widget buildView(
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  DateFormat.yMMMd()
-                      .format(DateTime.tryParse(datetime ?? '1990-01-01')),
-                  style: TextStyle(fontSize: Adapt.px(26)),
-                ),
+                // Text(
+                //   DateFormat.yMMMd()
+                //       .format(DateTime.tryParse(datetime ?? '1990-01-01')),
+                //   style: TextStyle(fontSize: Adapt.px(26)),
+                // ),
                 SizedBox(
                   width: Adapt.px(20),
                 ),
@@ -51,20 +50,20 @@ Widget buildView(
                     color: Colors.amber,
                   ),
                   unratedColor: Colors.grey,
-                  rating: (d.rated ?? 0) / 2,
+                  rating: 8,
                 ),
                 SizedBox(
                   width: Adapt.px(10),
                 ),
-                Text(d.rated?.toStringAsFixed(1) ?? '0.0',
-                    style: TextStyle(fontSize: Adapt.px(26)))
+                // Text(d.rated?.toStringAsFixed(1) ?? '0.0',
+                //     style: TextStyle(fontSize: Adapt.px(26)))
               ],
             ),
             SizedBox(
               height: Adapt.px(10),
             ),
             Text(
-              d.overwatch ?? '',
+              d.mediaType ?? '',
               maxLines: 9,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(

@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
-import 'package:movie/widgets/shimmercell.dart';
 import 'package:movie/generated/i18n.dart';
-import 'package:movie/models/base_api_model/user_media.dart';
+import 'package:movie/models/database/favorite.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/style/themestyle.dart';
+import 'package:movie/widgets/shimmercell.dart';
 
 import 'action.dart';
 import 'state.dart';
 
 Widget buildView(
     SwiperState state, Dispatch dispatch, ViewService viewService) {
-  final UserMediaModel _d = state.isMovie ? state.movies : state.tvshows;
+  final List<Favorite> _d = state.isMovie ? state.movies : state.tvshows;
 
   return Column(
     children: <Widget>[
@@ -26,7 +26,7 @@ Widget buildView(
       ),
       SizedBox(height: Adapt.px(40)),
       _Swiper(
-        data: _d?.data,
+        data: _d,
         controller: state.animationController,
         dispatch: dispatch,
       )
@@ -80,8 +80,8 @@ class _SwitchTitle extends StatelessWidget {
 }
 
 class _ListCell extends StatelessWidget {
-  final UserMedia data;
-  final Function(UserMedia) onTap;
+  final Favorite data;
+  final Function(Favorite) onTap;
   const _ListCell({this.data, this.onTap});
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,7 @@ class _ListCell extends StatelessWidget {
           image: DecorationImage(
             fit: BoxFit.cover,
             image: CachedNetworkImageProvider(
-              ImageUrl.getUrl(data.photoUrl, ImageSize.w500),
+              ImageUrl.getUrl(data.imageUrl, ImageSize.w500),
             ),
           ),
         ),
@@ -107,7 +107,7 @@ class _ListCell extends StatelessWidget {
 }
 
 class _Swiper extends StatelessWidget {
-  final List<UserMedia> data;
+  final List<Favorite> data;
   final AnimationController controller;
   final Dispatch dispatch;
   const _Swiper({this.data, this.controller, this.dispatch});

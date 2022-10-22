@@ -1,9 +1,10 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/user_media.dart';
+import 'package:movie/models/database/history.dart';
 import 'package:movie/views/watchlist_page/state.dart';
 
 class InfoState implements Cloneable<InfoState> {
-  UserMedia selectMdeia;
+  History selectMdeia;
+
   @override
   InfoState clone() {
     return InfoState()..selectMdeia = selectMdeia;

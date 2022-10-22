@@ -1,5 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/user_media.dart';
+import 'package:movie/models/database/favorite.dart';
 import 'package:movie/models/video_list.dart';
 import 'package:palette_generator/palette_generator.dart';
 
@@ -19,7 +19,7 @@ class FavoritesPageActionCreator {
     return const Action(FavoritesPageAction.action);
   }
 
-  static Action setFavoriteMovies(VideoListModel d) {
+  static Action setFavoriteMovies(List<Favorite> d) {
     return Action(FavoritesPageAction.setFavoriteMovies, payload: d);
   }
 
@@ -27,7 +27,7 @@ class FavoritesPageActionCreator {
     return Action(FavoritesPageAction.setFavoriteTV, payload: d);
   }
 
-  static Action setBackground(UserMedia result) {
+  static Action setBackground(Favorite result) {
     return Action(FavoritesPageAction.setBackground, payload: result);
   }
 
@@ -39,11 +39,11 @@ class FavoritesPageActionCreator {
     return Action(FavoritesPageAction.updateColor, payload: palette);
   }
 
-  static Action setMovie(UserMediaModel d) {
+  static Action setMovie(List<Favorite> d) {
     return Action(FavoritesPageAction.setMovie, payload: d);
   }
 
-  static Action setTVShow(UserMediaModel d) {
+  static Action setTVShow(List<Favorite> d) {
     return Action(FavoritesPageAction.setTVShow, payload: d);
   }
 }

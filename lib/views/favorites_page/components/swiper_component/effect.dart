@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:movie/models/models.dart';
+import 'package:movie/models/database/favorite.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -14,11 +15,11 @@ Effect<SwiperState> buildEffect() {
 void _onAction(Action action, Context<SwiperState> ctx) {}
 
 void _cellTapped(Action action, Context<SwiperState> ctx) async {
-  final UserMedia _media = action.payload;
+  final Favorite _media = action.payload;
   if (_media == null) return;
-  final int _id = _media.mediaId;
-  final String title = _media.name;
-  final String posterpic = _media.photoUrl;
+  final int _id = _media.animeId;
+  final String title = _media.tvName;
+  final String posterpic = _media.imageUrl;
   final String _pageName =
       _media.mediaType == 'movie' ? 'detailpage' : 'tvShowDetailPage';
   var _data = {

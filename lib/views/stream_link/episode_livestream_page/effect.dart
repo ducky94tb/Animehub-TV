@@ -2,11 +2,13 @@ import 'package:common_utils/common_utils.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:movie/actions/api/base_api.dart';
+import 'package:movie/models/database/history.dart';
 import 'package:movie/models/firebase/firebase_api.dart';
 import 'package:movie/models/firebase_api_model/stream_link.dart';
 import 'package:movie/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../models/database/database.dart';
 import 'action.dart';
 import 'state.dart';
 
@@ -101,6 +103,8 @@ Future<TvShowStreamLinks> _sortStreamLink(TvShowStreamLinks links) async {
 
 void _markWatched(Action action, Context<EpisodeLiveStreamState> ctx) async {
   final _pre = await SharedPreferences.getInstance();
+  final db = await AppDatabase.getInstance();
+  final historyDao = db.historyDao;
   final _episode = action.payload as Episode;
   final index = ctx.state.season.episodes.indexOf(_episode);
   if (ctx.state.season.playStates[index] != '1') {
@@ -109,4 +113,15 @@ void _markWatched(Action action, Context<EpisodeLiveStreamState> ctx) async {
     _pre.setStringList(
         'TvSeason${ctx.state.season.id}', ctx.state.season.playStates);
   }
+  final timeStamp =
+      DateUtil.formatDate(DateTime.now(), format: DateFormats.full);
+  final item = History(
+      null,
+      ctx.state.tvid,
+      ctx.state.tvName,
+      timeStamp,
+      _episode.seasonNumber,
+      _episode.episodeNumber,
+      _episode.stillPath ?? ctx.state.season.posterPath ?? '');
+  historyDao.addHistory(item);
 }

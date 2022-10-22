@@ -1,7 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/user_media.dart';
 import 'package:palette_generator/palette_generator.dart';
 
+import '../../models/database/favorite.dart';
 import 'action.dart';
 import 'state.dart';
 
@@ -23,7 +23,7 @@ FavoritesPageState _onAction(FavoritesPageState state, Action action) {
 }
 
 FavoritesPageState _setBackground(FavoritesPageState state, Action action) {
-  final UserMedia result = action.payload;
+  final Favorite result = action.payload;
   final FavoritesPageState newState = state.clone();
   if (state.selectedMedia != null) newState.selectedMedia = result;
   return newState;
@@ -37,25 +37,23 @@ FavoritesPageState _updateColor(FavoritesPageState state, Action action) {
 }
 
 FavoritesPageState _setMovie(FavoritesPageState state, Action action) {
-  final UserMediaModel movie = action.payload;
+  final List<Favorite> movies = action.payload;
   final FavoritesPageState newState = state.clone();
-  newState.movies = movie;
-  if (movie.data.length > 0 &&
-      newState.selectedMedia == null &&
-      newState.isMovie) {
-    newState.selectedMedia = movie.data[0];
+  newState.movies = movies;
+  if (movies.length > 0 && newState.selectedMedia == null && newState.isMovie) {
+    newState.selectedMedia = movies[0];
   }
   return newState;
 }
 
 FavoritesPageState _setTVShow(FavoritesPageState state, Action action) {
-  final UserMediaModel tv = action.payload;
+  final List<Favorite> tvList = action.payload;
   final FavoritesPageState newState = state.clone();
-  newState.tvshows = tv;
-  if (tv.data.length > 0 &&
+  newState.tvshows = tvList;
+  if (tvList.length > 0 &&
       newState.selectedMedia == null &&
       !newState.isMovie) {
-    newState.selectedMedia = tv.data[0];
+    newState.selectedMedia = tvList[0];
   }
   return newState;
 }

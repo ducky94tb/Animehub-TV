@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:movie/models/base_api_model/user_media.dart';
+import 'package:movie/models/database/history.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -21,14 +22,15 @@ WatchlistPageState _onAction(WatchlistPageState state, Action action) {
 }
 
 WatchlistPageState _setTVShow(WatchlistPageState state, Action action) {
-  final UserMediaModel model = action.payload;
+  final List<History> model = action.payload;
   final WatchlistPageState newState = state.clone();
   newState.tvshows = model;
+  if (model != null && model.isNotEmpty) newState.selectMdeia = model[0];
   return newState;
 }
 
 WatchlistPageState _swiperChanged(WatchlistPageState state, Action action) {
-  final UserMedia model = action.payload;
+  final History model = action.payload;
   final WatchlistPageState newState = state.clone();
   newState.selectMdeia = model;
   return newState;
@@ -37,7 +39,7 @@ WatchlistPageState _swiperChanged(WatchlistPageState state, Action action) {
 WatchlistPageState _setMovie(WatchlistPageState state, Action action) {
   final UserMediaModel movie = action.payload;
   final WatchlistPageState newState = state.clone();
-  newState.movies = movie;
-  if (movie.data.length > 0) newState.selectMdeia = movie.data[0];
+  /*newState.movies = movie;
+  if (movie.data.length > 0) newState.selectMdeia = movie.data[0];*/
   return newState;
 }

@@ -2,18 +2,20 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:movie/globalbasestate/state.dart';
-import 'package:movie/models/base_api_model/user_media.dart';
 import 'package:movie/models/app_user.dart';
+import 'package:movie/models/base_api_model/user_media.dart';
+import 'package:movie/models/database/history.dart';
 
 class WatchlistPageState
     implements GlobalBaseState, Cloneable<WatchlistPageState> {
   int accountId;
   AnimationController animationController;
-  UserMedia selectMdeia;
+  History selectMdeia;
   bool isMovie;
   SwiperController swiperController;
   UserMediaModel movies;
-  UserMediaModel tvshows;
+  List<History> tvshows;
+
   @override
   WatchlistPageState clone() {
     return WatchlistPageState()
@@ -39,6 +41,6 @@ class WatchlistPageState
 
 WatchlistPageState initState(Map<String, dynamic> args) {
   WatchlistPageState state = WatchlistPageState();
-  state.isMovie = true;
+  state.isMovie = false;
   return state;
 }

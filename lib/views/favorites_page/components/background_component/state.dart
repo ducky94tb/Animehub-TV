@@ -13,7 +13,7 @@ class BackGroundConnector extends ConnOp<FavoritesPageState, BackGroundState> {
   @override
   BackGroundState get(FavoritesPageState state) {
     final BackGroundState mstate = BackGroundState();
-    mstate.photoUrl = state.selectedMedia?.photoUrl ?? '';
+    mstate.photoUrl = state.selectedMedia?.imageUrl ?? '';
     return mstate;
   }
 }

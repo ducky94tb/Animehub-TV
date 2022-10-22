@@ -1,4 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
+
 import 'components/header_component/component.dart';
 import 'components/header_component/state.dart';
 import 'components/info_component/component.dart';

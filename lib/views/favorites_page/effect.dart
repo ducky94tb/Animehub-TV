@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:movie/actions/api/base_api.dart';
 import 'package:movie/actions/imageurl.dart';
+import 'package:movie/models/database/database.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:palette_generator/palette_generator.dart';
 
@@ -24,21 +24,15 @@ Future _onInit(Action action, Context<FavoritesPageState> ctx) async {
   final Object ticker = ctx.stfState;
   ctx.state.animationController =
       AnimationController(vsync: ticker, duration: Duration(milliseconds: 600));
-
-  if (ctx.state.user != null) {
-    final _baseApi = BaseApi.instance;
-    /*final movie =
-        await _baseApi.getFavorite(ctx.state.user.firebaseUser.uid, 'movie');
-    if (movie.success) ctx.state.animationController.forward(from: 0.0);
-    if ((movie?.result?.data?.length ?? 0) > 0)
-      ctx.dispatch(
-          FavoritesPageActionCreator.setBackground(movie.result.data[0]));
-    ctx.dispatch(FavoritesPageActionCreator.setMovie(movie.result));
-    final tv =
-        await _baseApi.getFavorite(ctx.state.user.firebaseUser.uid, 'tv');
-    if (tv.success)
-      ctx.dispatch(FavoritesPageActionCreator.setTVShow(tv.result));*/
+  final db = await AppDatabase.getInstance();
+  final favDao = db.favoriteDao;
+  final movies = await favDao.findAllFavoriteListByMediaType('movie');
+  ctx.dispatch(FavoritesPageActionCreator.setMovie(movies));
+  if (movies.length > 0) {
+    ctx.dispatch(FavoritesPageActionCreator.setBackground(movies[0]));
   }
+  final tvShows = await favDao.findAllFavoriteListByMediaType('tv');
+  ctx.dispatch(FavoritesPageActionCreator.setTVShow(tvShows));
 }
 
 void _onDispose(Action action, Context<FavoritesPageState> ctx) {

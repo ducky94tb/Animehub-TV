@@ -1,15 +1,17 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/models/base_api_model/user_media.dart';
+import 'package:movie/models/database/history.dart';
 import 'package:movie/views/watchlist_page/state.dart';
 
 class HeaderState implements Cloneable<HeaderState> {
   AnimationController animationController;
   bool isMovie;
 
-  UserMedia selectMdeia;
+  History selectMdeia;
   UserMediaModel movies;
-  UserMediaModel tvshows;
+  List<History> tvshows;
+
   @override
   HeaderState clone() {
     return HeaderState()

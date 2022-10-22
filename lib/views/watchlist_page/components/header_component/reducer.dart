@@ -21,10 +21,11 @@ HeaderState _widthChanged(HeaderState state, Action action) {
   final bool isMovie = action.payload ?? false;
   final HeaderState newState = state.clone();
   newState.isMovie = isMovie;
-  if (isMovie && newState.movies?.data != null)
+  /*if (isMovie && newState.movies?.data != null)
     newState.selectMdeia = newState.movies.data[0];
-  else if (!isMovie && newState.tvshows?.data != null)
-    newState.selectMdeia = newState.tvshows.data[0];
+  else */
+  if (!isMovie && newState.tvshows != null)
+    newState.selectMdeia = newState.tvshows[0];
   else
     newState.selectMdeia = null;
   return newState;

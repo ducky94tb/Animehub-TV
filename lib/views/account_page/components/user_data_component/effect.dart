@@ -1,6 +1,8 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
+import 'package:movie/models/base_api_model/account_info.dart';
 
+import '../../../../models/database/database.dart';
 import 'action.dart';
 import 'state.dart';
 
@@ -15,12 +17,11 @@ Effect<UserDataState> buildEffect() {
 void _onAction(Action action, Context<UserDataState> ctx) {}
 
 void _onInit(Action action, Context<UserDataState> ctx) async {
-  if (ctx.state.user?.firebaseUser == null || ctx.state.info != null) return;
-  /*final _result = await BaseApi.instance
-      .getUserAccountInfo(ctx.state.user.firebaseUser.uid);
-  if (_result.success) {
-    ctx.dispatch(UserDataActionCreator.setInfo(_result.result));
-  }*/
+  final db = await AppDatabase.getInstance();
+  final historyDao = db.historyDao;
+  final histories = await historyDao.findAllWatchedList();
+  final info = AccountInfo.fromParams(watchLists: histories.length);
+  ctx.dispatch(UserDataActionCreator.setInfo(info));
 }
 
 void _navigatorPush(Action action, Context<UserDataState> ctx) async {

@@ -19,7 +19,7 @@ Widget buildView(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          InkWell(
+          /*InkWell(
             onTap: () {
               if (!state.isMovie) {
                 dispatch(HeaderActionCreator.widthChanged(true));
@@ -35,7 +35,7 @@ Widget buildView(
                 style: state.isMovie ? _selectTextStyle : _unselectTextStyle,
               ),
             ),
-          ),
+          ),*/
           InkWell(
             onTap: () {
               if (state.isMovie) {
