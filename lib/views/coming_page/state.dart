@@ -26,9 +26,8 @@ class ComingPageState implements Cloneable<ComingPageState> {
 
 ComingPageState initState(Map<String, dynamic> args) {
   var state = ComingPageState();
-  state.showmovie = true;
-  state.moviecoming =
-      VideoListModel.fromParams(results: []);
+  state.showmovie = false;
+  state.moviecoming = VideoListModel.fromParams(results: []);
   state.tvcoming = VideoListModel.fromParams(results: []);
   return state;
 }

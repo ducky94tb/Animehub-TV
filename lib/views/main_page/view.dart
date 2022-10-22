@@ -56,30 +56,30 @@ Widget buildView(
                   size: Adapt.px(44)),
               label: I18n.of(context).discover,
             ),
-            BottomNavigationBarItem(
-              icon: Container(
-                width: Adapt.px(80),
-                height: Adapt.px(80),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    backgroundColor:
-                        state.selectedIndex == 2 ? Colors.red : Colors.grey,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(Adapt.px(40))),
-                  ),
-                  child: Icon(
-                    Icons.play_arrow,
-                    color: const Color(0xFFFFFFFF),
-                    size: Adapt.px(45),
-                  ),
-                ),
-              ),
-              label: '',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Container(
+            //     width: Adapt.px(80),
+            //     height: Adapt.px(80),
+            //     child: TextButton(
+            //       style: TextButton.styleFrom(
+            //         padding: EdgeInsets.zero,
+            //         backgroundColor:
+            //             state.selectedIndex == 2 ? Colors.red : Colors.grey,
+            //         shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(Adapt.px(40))),
+            //       ),
+            //       child: Icon(
+            //         Icons.play_arrow,
+            //         color: const Color(0xFFFFFFFF),
+            //         size: Adapt.px(45),
+            //       ),
+            //     ),
+            //   ),
+            //   label: '',
+            // ),
             BottomNavigationBarItem(
               icon: Icon(
-                  state.selectedIndex == 3
+                  state.selectedIndex == 2
                       ? Icons.calendar_today
                       : Icons.calendar_today_outlined,
                   size: Adapt.px(44)),
@@ -87,7 +87,7 @@ Widget buildView(
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                state.selectedIndex == 4
+                state.selectedIndex == 3
                     ? Icons.account_circle
                     : Icons.account_circle_outlined,
                 size: Adapt.px(44),

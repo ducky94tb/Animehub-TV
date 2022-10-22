@@ -73,10 +73,10 @@ DiscoverPageState initState(Map<String, dynamic> args) {
   state.scaffoldKey = GlobalKey();
   state.stackKey = GlobalKey();
   state.sortDesc = true;
-  state.isMovie = true;
+  state.isMovie = false;
   state.isbusy = false;
   state.lVote = 0.0;
   state.rVote = 10.0;
-  state.videoListModel =VideoListModel.fromParams(results: []);
+  state.videoListModel = VideoListModel.fromParams(results: []);
   return state;
 }

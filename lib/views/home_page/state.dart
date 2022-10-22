@@ -41,13 +41,11 @@ HomePageState initState(Map<String, dynamic> args) {
   var state = HomePageState();
   state.movie = new VideoListModel.fromParams(results: []);
   state.tv = new VideoListModel.fromParams(results: []);
-  state.popularMovies =
-      new VideoListModel.fromParams(results: []);
-  state.popularTVShows =
-      new VideoListModel.fromParams(results: []);
+  state.popularMovies = new VideoListModel.fromParams(results: []);
+  state.popularTVShows = new VideoListModel.fromParams(results: []);
   state.trending = SearchResultModel.fromParams(results: []);
-  state.showPopMovie = true;
-  state.showHeaderMovie = true;
-  state.showShareMovie = true;
+  state.showPopMovie = false;
+  state.showHeaderMovie = false;
+  state.showShareMovie = false;
   return state;
 }

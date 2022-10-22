@@ -2,7 +2,6 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:movie/actions/api/tmdb_api.dart';
 import 'package:movie/models/episode_model.dart';
-import 'package:movie/models/firebase/firebase_api.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -51,19 +50,19 @@ Future _onLoadData(Action action, Context<PlayNowPageState> ctx) async {
       ? null
       : '${ctx.state.selectedSort.value}${ctx.state.sortDesc ? '.desc' : '.asc'}';
   final _tmdb = TMDBApi.instance;*/
-  final _firebase = FirebaseApi.instance;
-  dynamic resultList;
-  if (ctx.state.isMovie)
-    resultList = await _firebase.getNewestMovies();
-  else
-    resultList = await _firebase.getNewestEpisodes();
-
-  if (resultList.length != 0)
-    ctx.dispatch(
-        PlayNowPageActionCreator.onLoadData(resultList, ctx.state.isMovie));
-
-  ctx.dispatch(PlayNowPageActionCreator.onBusyChanged(false));
-  ctx.state.scrollController?.jumpTo(0);
+  // final _firebase = FirebaseApi.instance;
+  // dynamic resultList;
+  // if (ctx.state.isMovie)
+  //   resultList = await _firebase.getNewestMovies();
+  // else
+  //   resultList = await _firebase.getNewestEpisodes();
+  //
+  // if (resultList.length != 0)
+  //   ctx.dispatch(
+  //       PlayNowPageActionCreator.onLoadData(resultList, ctx.state.isMovie));
+  //
+  // ctx.dispatch(PlayNowPageActionCreator.onBusyChanged(false));
+  // ctx.state.scrollController?.jumpTo(0);
 }
 
 Future _onVideoCellTapped(Action action, Context<PlayNowPageState> ctx) async {
