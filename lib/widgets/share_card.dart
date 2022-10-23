@@ -146,11 +146,11 @@ class ShareCardState extends State<ShareCard> {
   }
 
   void shareTapped() {
-    /*screenshotController.capture().then((File image) async {
-      ShareExtend.share(image.path, "image");
-    }).catchError((onError) {
-      print(onError);
-    });*/
+    // screenshotController.capture().then((File image) async {
+    //   ShareExtend.share(image.path, "image");
+    // }).catchError((onError) {
+    //   print(onError);
+    // });
   }
 
   @override
@@ -187,13 +187,16 @@ class ShareCardState extends State<ShareCard> {
                         width: Adapt.px(30),
                       ),
                       GestureDetector(
-                          onTap: shareTapped,
+                          onTap: () {},
                           child: SizedBox(
                             width: Adapt.px(200),
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  Icon(Icons.share),
+                                  Icon(
+                                    Icons.share,
+                                    color: Colors.black,
+                                  ),
                                   Text('Share',
                                       style: TextStyle(
                                           color: Colors.black,

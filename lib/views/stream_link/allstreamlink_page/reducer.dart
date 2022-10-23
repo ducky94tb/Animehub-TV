@@ -27,7 +27,9 @@ AllStreamLinkPageState _loadMoreMovies(
   final AllStreamLinkPageState newState = state.clone();
   if (_list != null) {
     newState.movieList.page = _list.page;
-    newState.movieList.results.addAll(_list?.results ?? []);
+    newState.movieList.results.addAll(
+        _list?.results?.where((element) => element?.genreIds?.contains(16)) ??
+            []);
   }
   return newState;
 }
@@ -38,7 +40,9 @@ AllStreamLinkPageState _loadMoreTvShows(
   final AllStreamLinkPageState newState = state.clone();
   if (_list != null) {
     newState.tvList.page = _list.page;
-    newState.tvList.results.addAll(_list?.results ?? []);
+    newState.tvList.results.addAll(
+        _list?.results?.where((element) => element?.genreIds?.contains(16)) ??
+            []);
   }
   return newState;
 }
@@ -46,6 +50,9 @@ AllStreamLinkPageState _loadMoreTvShows(
 AllStreamLinkPageState _initMovieList(
     AllStreamLinkPageState state, Action action) {
   final VideoListModel _list = action.payload;
+  _list.results = _list.results
+      .where((element) => element?.genreIds?.contains(16))
+      .toList();
   final AllStreamLinkPageState newState = state.clone();
   newState.movieList = _list;
   return newState;
@@ -53,7 +60,10 @@ AllStreamLinkPageState _initMovieList(
 
 AllStreamLinkPageState _initTvShowList(
     AllStreamLinkPageState state, Action action) {
-  final VideoListModel _list = action.payload;
+  VideoListModel _list = action.payload;
+  _list.results = _list.results
+      .where((element) => element?.genreIds?.contains(16))
+      .toList();
   final AllStreamLinkPageState newState = state.clone();
   newState.tvList = _list;
   return newState;

@@ -5,10 +5,8 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/cupertino.dart' hide Action;
 import 'package:flutter/material.dart' hide Action;
-import 'package:in_app_review/in_app_review.dart';
 import 'package:movie/actions/api/github_api.dart';
 import 'package:movie/actions/api/tmdb_api.dart';
-import 'package:movie/actions/app_language.dart';
 import 'package:movie/actions/notification_topic.dart';
 import 'package:movie/actions/version_comparison.dart';
 import 'package:movie/generated/i18n.dart';
@@ -133,24 +131,24 @@ void _notificationsTap(Action action, Context<SettingsState> ctx) async {
   ctx.dispatch(SettingsActionCreator.notificationsUpdate(!_enable));
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   _prefs.setBool('enableNotifications', !_enable);
-  final List<String> topics = [];
-  final Item _language = await AppLanguage.instance.getApplanguage();
-  String _movieTypeUsbcirbed = _prefs.getString('movieTypeSubscribed');
-  String _tvTypeUsbcirbed = _prefs.getString('tvTypeSubscribed');
-  final _movieGenres = (json.decode(_movieTypeUsbcirbed) as List)
-      .where((e) => e['value'])
-      .toList();
-  final _tvGenres =
-      (json.decode(_tvTypeUsbcirbed) as List).where((e) => e['value']).toList();
-  topics.addAll(
-      _movieGenres.map((e) => 'movie_genre_${e['name']}_${_language.value}'));
-  topics.addAll(
-      _tvGenres.map((e) => 'tvshow_genre_${e['name']}_${_language.value}'));
-  NotificationTopic _topic = NotificationTopic();
-  if (_enable)
-    _topic.subscribeToTopic(topics);
-  else
-    _topic.unsubscribeFromTopic(topics);
+  // final List<String> topics = [];
+  // final Item _language = await AppLanguage.instance.getApplanguage();
+  // String _movieTypeUsbcirbed = _prefs.getString('movieTypeSubscribed');
+  // String _tvTypeUsbcirbed = _prefs.getString('tvTypeSubscribed');
+  // final _movieGenres = (json.decode(_movieTypeUsbcirbed) as List)
+  //     .where((e) => e['value'])
+  //     .toList();
+  // final _tvGenres =
+  //     (json.decode(_tvTypeUsbcirbed) as List).where((e) => e['value']).toList();
+  // topics.addAll(
+  //     _movieGenres.map((e) => 'movie_genre_${e['name']}_${_language.value}'));
+  // topics.addAll(
+  //     _tvGenres.map((e) => 'tvshow_genre_${e['name']}_${_language.value}'));
+  // NotificationTopic _topic = NotificationTopic();
+  // if (_enable)
+  //   _topic.subscribeToTopic(topics);
+  // else
+  //   _topic.unsubscribeFromTopic(topics);
 }
 
 void _feedbackTap(Action action, Context<SettingsState> ctx) async {
@@ -187,8 +185,12 @@ void _sendEmail() {
 }
 
 void _openStoreListing() async {
-  final InAppReview inAppReview = InAppReview.instance;
-  if (await inAppReview.isAvailable()) {
-    inAppReview.openStoreListing();
+  if (Platform.isAndroid) {
+    AndroidIntent intent = AndroidIntent(
+      action: 'action_view',
+      data: 'https://play.google.com/store/apps/details?'
+          'id=com.google.android.apps.myapp',
+    );
+    await intent.launch();
   }
 }

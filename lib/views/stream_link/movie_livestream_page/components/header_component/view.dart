@@ -100,7 +100,6 @@ Widget buildView(
                   Text(
                     'Report',
                     style: TextStyle(
-                        color: Colors.black,
                         fontSize: Adapt.px(28),
                         fontWeight: FontWeight.bold),
                   ),

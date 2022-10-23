@@ -102,7 +102,7 @@ void _onSearch(Action action, Context<AllStreamLinkPageState> ctx) {
         ctx.dispatch(AllStreamLinkPageActionCreator.initMovieList(d.result));
     });
   else
-    _baseApi.searchMovie(query).then((d) {
+    _baseApi.searchTv(query).then((d) {
       if (d.success)
         ctx.dispatch(AllStreamLinkPageActionCreator.initTvShowList(d.result));
     });

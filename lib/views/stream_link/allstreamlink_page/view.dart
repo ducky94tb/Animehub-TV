@@ -25,7 +25,7 @@ Widget buildView(
         backgroundColor: _theme.backgroundColor,
         iconTheme: _theme.iconTheme,
         title: Text(
-          '${state.mediaType == MediaType.movie ? 'Movie' : 'TvShows'} Share',
+          '${state.mediaType == MediaType.movie ? 'Movie' : 'TvShows'}',
           style: _theme.textTheme.bodyText1,
         ),
         actions: <Widget>[

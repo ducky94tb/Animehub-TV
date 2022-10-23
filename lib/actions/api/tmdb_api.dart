@@ -785,6 +785,7 @@ class TMDBApi {
       String region,
       int year,
       int primaryReleaseYear}) async {
+    String query = Uri.encodeComponent(keyword);
     String param =
         '/search/movie?api_key=$_apikey&page=$page&include_adult=$_includeAdult';
     param += region == null ? '' : '&region=$region';
@@ -793,6 +794,22 @@ class TMDBApi {
         ? ''
         : '&primary_release_year=$primaryReleaseYear';
     param += '&with_keywords=$_animeKeyWord';
+    param += '&query=$query';
+    final r = _http.request<VideoListModel>(param, cached: true);
+    return r;
+  }
+
+  ///Search for tv.
+  Future<ResponseModel<VideoListModel>> searchTv(String keyword,
+      {String lan, int page = 1, int primaryReleaseYear}) async {
+    String query = Uri.encodeComponent(keyword);
+    String param =
+        '/search/tv?api_key=$_apikey&page=$page&include_adult=$_includeAdult';
+    param += primaryReleaseYear == null
+        ? ''
+        : '&primary_release_year=$primaryReleaseYear';
+    param += '&with_keywords=$_animeKeyWord';
+    param += '&query=$query';
     final r = _http.request<VideoListModel>(param, cached: true);
     return r;
   }

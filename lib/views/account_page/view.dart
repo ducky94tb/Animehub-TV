@@ -301,6 +301,8 @@ class _TabCell extends StatelessWidget {
     );
     return InkWell(
       onTap: () => onTap(index),
+      splashColor: Colors.transparent,
+      enableFeedback: false,
       child: Container(
         width: Adapt.px(160),
         height: Adapt.px(80),
