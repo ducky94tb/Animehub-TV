@@ -2,23 +2,18 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
 
-import 'action.dart';
 import 'state.dart';
 
 Widget buildView(
     DataPanelState state, Dispatch dispatch, ViewService viewService) {
   return _SecondPanel(
     state: state,
-    openDownloadManager: () =>
-        dispatch(DataPanelActionCreator.openDownloadManager()),
   );
 }
 
 class _SecondPanel extends StatelessWidget {
-  final Function onTap;
-  final Function openDownloadManager;
   final DataPanelState state;
-  const _SecondPanel({this.state, this.onTap, this.openDownloadManager});
+  const _SecondPanel({this.state});
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -37,18 +32,14 @@ class _SecondPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _DataItem(
-                onTap: openDownloadManager,
                 title: 'Download',
                 value: '${state.downloadTask?.length ?? 0}',
               ),
               _DataItem(
-                /*onTap: () async =>
-                    Navigator.of(context).pushNamed('premiumPage'),*/
                 title: 'What',
                 value: '80',
               ),
               _DataItem(
-                //onTap: () async => Navigator.of(context).pushNamed('testPage'),
                 title: 'Here?',
                 value: '100',
               ),
@@ -66,27 +57,23 @@ class _SecondPanel extends StatelessWidget {
 class _DataItem extends StatelessWidget {
   final String title;
   final String value;
-  final Function onTap;
-  const _DataItem({this.onTap, this.title, this.value});
+  const _DataItem({this.title, this.value});
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(value,
-              style: TextStyle(
-                color: const Color(0xFFFFFFFF),
-                fontWeight: FontWeight.bold,
-                fontSize: Adapt.px(22),
-              )),
-          SizedBox(height: 5),
-          Text(title,
-              style: TextStyle(
-                  color: const Color(0xFFFFFFFF), fontSize: Adapt.px(24)))
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(value,
+            style: TextStyle(
+              color: const Color(0xFFFFFFFF),
+              fontWeight: FontWeight.bold,
+              fontSize: Adapt.px(22),
+            )),
+        SizedBox(height: 5),
+        Text(title,
+            style: TextStyle(
+                color: const Color(0xFFFFFFFF), fontSize: Adapt.px(24)))
+      ],
     );
   }
 }

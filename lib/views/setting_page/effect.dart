@@ -4,13 +4,11 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:movie/actions/api/github_api.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:movie/actions/api/tmdb_api.dart';
-import 'package:movie/actions/version_comparison.dart';
 import 'package:movie/globalbasestate/action.dart';
 import 'package:movie/globalbasestate/store.dart';
 import 'package:movie/models/item.dart';
-import 'package:movie/widgets/update_info_dialog.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -112,28 +110,14 @@ Future _openPhotoPicker(Action action, Context<SettingPageState> ctx) async {
 
 Future _checkUpdate(Action action, Context<SettingPageState> ctx) async {
   if (!Platform.isAndroid) return;
-
   ctx.dispatch(SettingPageActionCreator.onLoading(true));
-  final _github = GithubApi.instance;
-  final _result = await _github.checkUpdate();
-  if (_result.success) {
-    final _shouldUpdate =
-        VersionComparison().compare(ctx.state.version, _result.result.tagName);
-    final _apk = _result.result.assets.singleWhere(
-        (e) => e.contentType == 'application/vnd.android.package-archive');
-
-    if (_apk != null && _shouldUpdate) {
-      await showDialog(
-          context: ctx.context,
-          builder: (_) => UpdateInfoDialog(
-                version: _result.result.tagName,
-                describe: _result.result.body,
-                packageSize: (_apk.size / 1048576),
-                downloadUrl: _apk.browserDownloadUrl,
-              ));
+  InAppUpdate.checkForUpdate().then((info) {
+    if (info?.updateAvailability == UpdateAvailability.updateAvailable) {
+      InAppUpdate.performImmediateUpdate();
+    } else {
+      Toast.show('Already up to date', ctx.context);
     }
-  } else
-    Toast.show(_result.message, ctx.context);
+  }).catchError((e) {});
   ctx.dispatch(SettingPageActionCreator.onLoading(false));
 }
 

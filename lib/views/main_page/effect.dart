@@ -5,15 +5,12 @@ import 'dart:ui';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action, Page;
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:movie/actions/api/github_api.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:movie/actions/downloader_callback.dart';
 import 'package:movie/actions/local_notification.dart';
-import 'package:movie/actions/version_comparison.dart';
 import 'package:movie/models/notification_model.dart';
 import 'package:movie/views/detail_page/page.dart';
 import 'package:movie/views/tvshow_detail_page/page.dart';
-import 'package:movie/widgets/update_info_dialog.dart';
-import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'action.dart';
@@ -96,31 +93,11 @@ Future _push(Map<String, dynamic> message, Context<MainPageState> ctx) async {
 
 Future _checkAppUpdate(Context<MainPageState> ctx) async {
   if (!Platform.isAndroid) return;
-
-  final _preferences = await SharedPreferences.getInstance();
-  String _ignoreVersion = _preferences.getString('IgnoreVersion') ?? '';
-
-  final _packageInfo = await PackageInfo.fromPlatform();
-  final _github = GithubApi.instance;
-  final _result = await _github.checkUpdate();
-  if (_result.success) {
-    if (_ignoreVersion == _result.result.tagName) return;
-    final _shouldUpdate = VersionComparison()
-        .compare(_packageInfo.version, _result.result.tagName);
-    final _apk = _result.result.assets.singleWhere(
-        (e) => e.contentType == 'application/vnd.android.package-archive');
-    if (_apk != null && _shouldUpdate) {
-      await showDialog(
-        context: ctx.context,
-        builder: (_) => UpdateInfoDialog(
-          version: _result.result.tagName,
-          describe: _result.result.body,
-          packageSize: (_apk.size / 1048576),
-          downloadUrl: _apk.browserDownloadUrl,
-        ),
-      );
+  InAppUpdate.checkForUpdate().then((info) {
+    if (info?.updateAvailability == UpdateAvailability.updateAvailable) {
+      InAppUpdate.performImmediateUpdate();
     }
-  }
+  }).catchError((e) {});
 }
 
 void _bindBackgroundIsolate() {

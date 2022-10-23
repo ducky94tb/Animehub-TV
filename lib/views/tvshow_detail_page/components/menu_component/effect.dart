@@ -22,8 +22,8 @@ void _setFavorite(Action action, Context<MenuState> ctx) async {
   final favoriteDao = db.favoriteDao;
   final data = ctx.state.detail;
   if (!ctx.state.liked) {
-    final item = Favorite(null, data?.type, data?.id, data?.name,
-        data?.voteAverage, data?.overview, data?.posterPath);
+    final item = Favorite(null, 'tv', data?.id, data?.name, data?.voteAverage,
+        data?.overview, data?.posterPath);
     favoriteDao.addFavorite(item);
   } else {
     final favItem =

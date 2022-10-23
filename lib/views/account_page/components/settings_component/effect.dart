@@ -1,22 +1,19 @@
-import 'dart:convert' show json;
 import 'dart:io';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/cupertino.dart' hide Action;
 import 'package:flutter/material.dart' hide Action;
-import 'package:movie/actions/api/github_api.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:movie/actions/api/tmdb_api.dart';
-import 'package:movie/actions/notification_topic.dart';
-import 'package:movie/actions/version_comparison.dart';
 import 'package:movie/generated/i18n.dart';
 import 'package:movie/globalbasestate/action.dart';
 import 'package:movie/globalbasestate/store.dart';
 import 'package:movie/models/item.dart';
-import 'package:movie/widgets/update_info_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
+import '../../../setting_page/action.dart';
 import 'action.dart';
 import 'state.dart';
 
@@ -44,37 +41,21 @@ void _adultContentTapped(Action action, Context<SettingsState> ctx) async {
 
 Future _checkUpdate(Action action, Context<SettingsState> ctx) async {
   if (!Platform.isAndroid) return;
-
-  //ctx.dispatch(SettingPageActionCreator.onLoading(true));
-  final _github = GithubApi.instance;
-  final _result = await _github.checkUpdate();
-  if (_result.success) {
-    final _shouldUpdate =
-        VersionComparison().compare(ctx.state.version, _result.result.tagName);
-    final _apk = _result.result.assets.singleWhere(
-        (e) => e.contentType == 'application/vnd.android.package-archive');
-
-    if (_apk != null && _shouldUpdate) {
-      await showDialog(
-        context: ctx.context,
-        builder: (_) => UpdateInfoDialog(
-          version: _result.result.tagName,
-          describe: _result.result.body,
-          packageSize: (_apk.size / 1048576),
-          downloadUrl: _apk.browserDownloadUrl,
-        ),
-      );
-    } else
+  ctx.dispatch(SettingPageActionCreator.onLoading(true));
+  InAppUpdate.checkForUpdate().then((info) {
+    if (info?.updateAvailability == UpdateAvailability.updateAvailable) {
+      InAppUpdate.performImmediateUpdate();
+    } else {
       Toast.show('Already up to date', ctx.context);
-  } else
-    Toast.show(_result.message, ctx.context);
-  //ctx.dispatch(SettingPageActionCreator.onLoading(false));
+    }
+  }).catchError((e) {});
+  ctx.dispatch(SettingPageActionCreator.onLoading(false));
 }
 
 void _languageTap(Action action, Context<SettingsState> ctx) async {
   final Item _language = action.payload;
   if (_language.name == ctx.state.appLanguage.name) return;
-  final Item _currentLanguage = ctx.state.appLanguage;
+  // final Item _currentLanguage = ctx.state.appLanguage;
   SharedPreferences _prefs = await SharedPreferences.getInstance();
   if (_language.name == 'System Default')
     _prefs.remove('appLanguage');
@@ -84,38 +65,38 @@ void _languageTap(Action action, Context<SettingsState> ctx) async {
   GlobalStore.store.dispatch(GlobalActionCreator.changeLocale(
       _language.value == null ? null : Locale(_language.value)));
   TMDBApi.instance.setLanguage(_language.value);
-  if (ctx.state.enableNotifications) {
-    final List<String> _topics = [];
-    final List<String> _unsubscribetopics = [];
-
-    String _movieTypeUsbcirbed = _prefs.getString('movieTypeSubscribed');
-    String _tvTypeUsbcirbed = _prefs.getString('tvTypeSubscribed');
-
-    final _movieGenres = (json.decode(_movieTypeUsbcirbed) as List)
-        .where((e) => e['value'])
-        .toList();
-    final _tvGenres = (json.decode(_tvTypeUsbcirbed) as List)
-        .where((e) => e['value'])
-        .toList();
-
-    _unsubscribetopics.addAll(_movieGenres
-        .map((e) => 'movie_genre_${e['name']}_${_currentLanguage.value}')
-        .toList());
-    _unsubscribetopics.addAll(_tvGenres
-        .map((e) => 'tvshow_genre_${e['name']}_${_currentLanguage.value}')
-        .toList());
-    _topics.addAll(_movieGenres
-        .map((e) => 'movie_genre_${e['name']}_${_language.value}')
-        .toList());
-    _topics.addAll(_tvGenres
-        .map((e) => 'tvshow_genre_${e['name']}_${_language.value}')
-        .toList());
-
-    NotificationTopic _topic = NotificationTopic();
-
-    _topic.unsubscribeFromTopic(_unsubscribetopics);
-    _topic.subscribeToTopic(_topics);
-  }
+  // if (ctx.state.enableNotifications) {
+  //   final List<String> _topics = [];
+  //   final List<String> _unsubscribetopics = [];
+  //
+  //   String _movieTypeUsbcirbed = _prefs.getString('movieTypeSubscribed');
+  //   String _tvTypeUsbcirbed = _prefs.getString('tvTypeSubscribed');
+  //
+  //   final _movieGenres = (json.decode(_movieTypeUsbcirbed) as List)
+  //       .where((e) => e['value'])
+  //       .toList();
+  //   final _tvGenres = (json.decode(_tvTypeUsbcirbed) as List)
+  //       .where((e) => e['value'])
+  //       .toList();
+  //
+  //   _unsubscribetopics.addAll(_movieGenres
+  //       .map((e) => 'movie_genre_${e['name']}_${_currentLanguage.value}')
+  //       .toList());
+  //   _unsubscribetopics.addAll(_tvGenres
+  //       .map((e) => 'tvshow_genre_${e['name']}_${_currentLanguage.value}')
+  //       .toList());
+  //   _topics.addAll(_movieGenres
+  //       .map((e) => 'movie_genre_${e['name']}_${_language.value}')
+  //       .toList());
+  //   _topics.addAll(_tvGenres
+  //       .map((e) => 'tvshow_genre_${e['name']}_${_language.value}')
+  //       .toList());
+  //
+  //   NotificationTopic _topic = NotificationTopic();
+  //
+  //   _topic.unsubscribeFromTopic(_unsubscribetopics);
+  //   _topic.subscribeToTopic(_topics);
+  // }
 }
 
 void _darkModeTap(Action action, Context<SettingsState> ctx) async {
@@ -188,8 +169,8 @@ void _openStoreListing() async {
   if (Platform.isAndroid) {
     AndroidIntent intent = AndroidIntent(
       action: 'action_view',
-      data: 'https://play.google.com/store/apps/details?'
-          'id=com.google.android.apps.myapp',
+      data:
+          'https://play.google.com/store/apps/details?id=com.ducky.moviesapp.animehub',
     );
     await intent.launch();
   }
