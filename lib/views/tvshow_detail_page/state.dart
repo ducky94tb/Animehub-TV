@@ -1,6 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:movie/models/base_api_model/account_state.dart';
 import 'package:movie/models/credits_model.dart';
 import 'package:movie/models/image_model.dart';
 import 'package:movie/models/keyword.dart';
@@ -19,7 +18,7 @@ class TvShowDetailState implements Cloneable<TvShowDetailState> {
   VideoListModel recommendations;
   KeyWordModel keywords;
   VideoModel videomodel;
-  AccountState accountState;
+  bool liked;
   @override
   TvShowDetailState clone() {
     return TvShowDetailState()
@@ -32,7 +31,7 @@ class TvShowDetailState implements Cloneable<TvShowDetailState> {
       ..recommendations = recommendations
       ..keywords = keywords
       ..videomodel = videomodel
-      ..accountState = accountState;
+      ..liked = liked;
   }
 }
 
@@ -50,11 +49,6 @@ TvShowDetailState initState(Map<String, dynamic> args) {
   state.recommendations = new VideoListModel.fromParams(results: []);
   state.keywords = new KeyWordModel.fromParams(keywords: [], results: []);
   state.videomodel = new VideoModel.fromParams(results: []);
-  state.accountState = AccountState.fromParams(
-      id: 0,
-      mediaId: state.tvid,
-      favorite: false,
-      watchlist: false,
-      mediaType: 'tv');
+  state.liked = false;
   return state;
 }

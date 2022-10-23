@@ -20,7 +20,12 @@ void _onInit(Action action, Context<UserDataState> ctx) async {
   final db = await AppDatabase.getInstance();
   final historyDao = db.historyDao;
   final histories = await historyDao.findAllWatchedList();
-  final info = AccountInfo.fromParams(watchLists: histories.length);
+  final favDao = db.favoriteDao;
+  final favorites = await favDao.findAllFavoriteList();
+  final info = AccountInfo.fromParams(
+    watchLists: histories.length,
+    favorites: favorites.length,
+  );
   ctx.dispatch(UserDataActionCreator.setInfo(info));
 }
 

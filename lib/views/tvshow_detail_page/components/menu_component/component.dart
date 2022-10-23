@@ -9,7 +9,7 @@ class MenuComponent extends Component<MenuState> {
   MenuComponent()
       : super(
           shouldUpdate: (oldState, newState) {
-            return oldState.accountState != newState.accountState ||
+            return oldState.liked != newState.liked ||
                 oldState.detail != newState.detail;
           },
           effect: buildEffect(),

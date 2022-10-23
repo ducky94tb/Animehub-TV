@@ -1,5 +1,4 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/account_state.dart';
 import 'package:movie/models/credits_model.dart';
 import 'package:movie/models/image_model.dart';
 import 'package:movie/models/keyword.dart';
@@ -69,8 +68,7 @@ TvShowDetailState _onSetRecommendations(
 }
 
 TvShowDetailState _onSetKeyWords(TvShowDetailState state, Action action) {
-  KeyWordModel c = action.payload ??
-      new KeyWordModel.fromParams(keywords: []);
+  KeyWordModel c = action.payload ?? new KeyWordModel.fromParams(keywords: []);
   final TvShowDetailState newState = state.clone();
   newState.keywords = c;
   return newState;
@@ -84,8 +82,6 @@ TvShowDetailState _onSetVideos(TvShowDetailState state, Action action) {
 }
 
 TvShowDetailState _onSetAccountState(TvShowDetailState state, Action action) {
-  AccountState c = action.payload;
   final TvShowDetailState newState = state.clone();
-  newState.accountState = c;
   return newState;
 }

@@ -52,7 +52,7 @@ Widget buildView(MenuState state, Dispatch dispatch, ViewService viewService) {
     showDialog(
         context: viewService.context,
         builder: (ctx) {
-          double rate = state.accountState.rated ?? 0;
+          double rate = 0;
           return DialogRatingBar(
             rating: rate,
             submit: (d) => dispatch(MenuActionCreator.setRating(d)),
@@ -180,27 +180,16 @@ Widget buildView(MenuState state, Dispatch dispatch, ViewService viewService) {
         Divider(
           height: Adapt.px(1),
         ),
-        _buildListTitel(
-            state.accountState.favorite
-                ? Icons.favorite
-                : Icons.favorite_border,
-            'Mark as Favorite', () {
+        _buildListTitel(state.liked ? Icons.favorite : Icons.favorite_border,
+            !state.liked ? 'Mark as Favorite' : 'Remove from Favorite', () {
           Navigator.of(viewService.context).pop();
-          dispatch(MenuActionCreator.setFavorite(!state.accountState.favorite));
-        },
-            iconColor: state.accountState.favorite
-                ? Colors.pink[400]
-                : _theme.iconTheme.color),
+          dispatch(MenuActionCreator.setFavorite(!state.liked));
+        }, iconColor: state.liked ? Colors.pink[400] : _theme.iconTheme.color),
         Divider(
           height: Adapt.px(1),
         ),
-        _buildListTitel(
-            state.accountState.rated != null ? Icons.star : Icons.star_border,
-            'Rate It',
-            _rateIt,
-            iconColor: state.accountState.rated != null
-                ? Colors.amber
-                : _theme.iconTheme.color),
+        _buildListTitel(Icons.star_border, 'Rate It', _rateIt,
+            iconColor: _theme.iconTheme.color),
         Divider(
           height: Adapt.px(1),
         ),

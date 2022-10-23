@@ -9,20 +9,21 @@ class Favorite {
   final String mediaType;
   final int animeId;
   final String tvName;
-  final int seasonId;
-  final int episodeId;
+  final String overview;
   final String imageUrl;
 
-  Favorite(this.id, this.mediaType, this.animeId, this.tvName, this.seasonId,
-      this.episodeId, this.imageUrl);
+  double rating;
+
+  Favorite(this.id, this.mediaType, this.animeId, this.tvName, this.rating,
+      this.overview, this.imageUrl);
 
   Favorite.fromMap(Map<String, dynamic> res)
       : id = res["id"],
         imageUrl = res["imageUrl"],
         animeId = res["animeId"],
-        episodeId = res["episodeId"],
+        rating = res["rating"],
         tvName = res["tvName"],
-        seasonId = res["seasonId"],
+        overview = res["overview"],
         mediaType = res['mediaType'];
 
   Map<String, Object?> toMap() {
@@ -31,8 +32,8 @@ class Favorite {
       'tvName': tvName,
       'animeId': animeId,
       'mediaType': mediaType,
-      'seasonId': seasonId,
-      'episodeId': episodeId,
+      'overview': overview,
+      'rating': rating,
       'imageUrl': imageUrl
     };
   }

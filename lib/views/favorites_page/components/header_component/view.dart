@@ -50,7 +50,7 @@ Widget buildView(
                     color: Colors.amber,
                   ),
                   unratedColor: Colors.grey,
-                  rating: 8,
+                  rating: d.rating,
                 ),
                 SizedBox(
                   width: Adapt.px(10),
@@ -63,7 +63,7 @@ Widget buildView(
               height: Adapt.px(10),
             ),
             Text(
-              d.mediaType ?? '',
+              d.overview ?? '',
               maxLines: 9,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(

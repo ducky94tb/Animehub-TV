@@ -11,6 +11,13 @@ abstract class FavoriteDao {
   @Query('SELECT * FROM Favorite WHERE mediaType = :mediaType')
   Future<List<Favorite>> findAllFavoriteListByMediaType(String mediaType);
 
+  @Query(
+      'SELECT * FROM Favorite WHERE animeId = :id AND mediaType = :mediaType')
+  Future<Favorite?> findFavoriteItemById(int id, String mediaType);
+
   @insert
   Future<void> addFavorite(Favorite item);
+
+  @delete
+  Future<void> deleteFavorite(Favorite item);
 }

@@ -77,7 +77,7 @@ class DialogRatingBarState extends State<DialogRatingBar> {
         ),
         Container(
           child: TextButton(
-            child: Text('ok',
+            child: Text('Submit',
                 style: TextStyle(
                     color: Colors.blueAccent, fontSize: Adapt.px(35))),
             onPressed: () {

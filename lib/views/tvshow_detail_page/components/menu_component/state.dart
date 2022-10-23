@@ -1,5 +1,4 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:movie/models/base_api_model/account_state.dart';
 import 'package:movie/models/tvshow_detail.dart';
 import 'package:movie/views/tvshow_detail_page/state.dart';
 
@@ -9,13 +8,13 @@ class MenuState implements Cloneable<MenuState> {
   String posterPic;
   String name;
   String overWatch;
-  AccountState accountState;
+  bool liked;
   TVDetailModel detail;
 
   @override
   MenuState clone() {
     return MenuState()
-      ..accountState = accountState
+      ..liked = liked
       ..posterPic = posterPic
       ..backdropPic = backdropPic
       ..id = id
@@ -31,7 +30,7 @@ class MenuConnector extends ConnOp<TvShowDetailState, MenuState> {
     MenuState substate = new MenuState();
     substate.posterPic = state.tvDetailModel.posterPath;
     substate.name = state.tvDetailModel.name;
-    substate.accountState = state.accountState;
+    substate.liked = state.liked;
     substate.id = state.tvid;
     substate.backdropPic = state.tvDetailModel.backdropPath;
     substate.overWatch = state.tvDetailModel.overview;
@@ -41,6 +40,6 @@ class MenuConnector extends ConnOp<TvShowDetailState, MenuState> {
 
   @override
   void set(TvShowDetailState state, MenuState subState) {
-    state.accountState = subState.accountState;
+    state.liked = subState.liked;
   }
 }
