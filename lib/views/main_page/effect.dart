@@ -1,12 +1,10 @@
 import 'dart:io';
-import 'dart:isolate';
-import 'dart:ui';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action, Page;
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:in_app_update/in_app_update.dart';
-import 'package:movie/actions/downloader_callback.dart';
 import 'package:movie/actions/local_notification.dart';
 import 'package:movie/models/notification_model.dart';
 import 'package:movie/views/detail_page/page.dart';
@@ -20,53 +18,74 @@ Effect<MainPageState> buildEffect() {
   return combineEffects(<Object, Effect<MainPageState>>{
     MainPageAction.action: _onAction,
     Lifecycle.initState: _onInit,
-    Lifecycle.dispose: _onDispose,
   });
 }
 
-ReceivePort _port = ReceivePort();
 void _onAction(Action action, Context<MainPageState> ctx) {}
 
 void _onInit(Action action, Context<MainPageState> ctx) async {
-  final _preferences = await SharedPreferences.getInstance();
-
   final _localNotification = LocalNotification.instance;
-
   await _localNotification.init();
-
-  _localNotification.didReceiveLocalNotification = (id, title, body, payload) =>
-      _didReceiveLocalNotification(id, title, body, payload, ctx);
-
-  /*FirebaseMessaging().configure(onMessage: (message) async {
-    NotificationList _list;
-    if (_preferences.containsKey('notifications')) {
-      final String _notifications = _preferences.getString('notifications');
-      _list = NotificationList(_notifications);
-    }
-    if (_list == null) _list = NotificationList.fromParams(notifications: []);
-    final _notificationMessage = NotificationModel.fromMap(message);
-    _list.notifications.add(_notificationMessage);
-    _preferences.setString('notifications', _list.toString());
-    _localNotification.sendNotification(_notificationMessage.notification.title,
-        _notificationMessage.notification?.body ?? '',
-        id: int.parse(_notificationMessage.id),
-        payload: _notificationMessage.type);
-    print(_list.toString());
-  }, onResume: (message) async {
-    _push(message, ctx);
-  }, onLaunch: (message) async {
-    _push(message, ctx);
-  });*/
-
-  if (Platform.isAndroid) _bindBackgroundIsolate();
-
-  FlutterDownloader.registerCallback(DownloaderCallBack.callback);
-
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    _handleFirebaseMessage(message, _localNotification);
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+    _push(message.toMap(), ctx);
+  });
+  FirebaseMessaging.onBackgroundMessage(_handleFirebaseBackgroundMessage);
   await _checkAppUpdate(ctx);
 }
 
-void _onDispose(Action action, Context<MainPageState> ctx) {
-  if (Platform.isAndroid) _unbindBackgroundIsolate();
+void _handleFirebaseMessage(
+    RemoteMessage message, LocalNotification localNotification) async {
+  final _preferences = await SharedPreferences.getInstance();
+  print('Got a message whilst in the foreground!');
+  print('Message data: ${message.data}');
+
+  if (message.notification != null) {
+    print('Message also contained a notification: ${message.notification}');
+  }
+  NotificationList _list;
+  if (_preferences.containsKey('notifications')) {
+    final String _notifications = _preferences.getString('notifications');
+    _list = NotificationList(_notifications);
+  }
+  if (_list == null) _list = NotificationList.fromParams(notifications: []);
+  final _notificationMessage = NotificationModel.fromMap(message.toMap());
+  _list.notifications.add(_notificationMessage);
+  _preferences.setString('notifications', _list.toString());
+  localNotification.sendNotification(_notificationMessage.notification.title,
+      _notificationMessage.notification?.body ?? '',
+      id: int.parse(_notificationMessage.id),
+      payload: _notificationMessage.type);
+  print(_list.toString());
+}
+
+Future<void> _handleFirebaseBackgroundMessage(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  final _localNotification = LocalNotification.instance;
+  await _localNotification.init();
+  final _preferences = await SharedPreferences.getInstance();
+  print('Got a message whilst in the foreground!');
+  print('Message data: ${message.data}');
+
+  if (message.notification != null) {
+    print('Message also contained a notification: ${message.notification}');
+  }
+  NotificationList _list;
+  if (_preferences.containsKey('notifications')) {
+    final String _notifications = _preferences.getString('notifications');
+    _list = NotificationList(_notifications);
+  }
+  if (_list == null) _list = NotificationList.fromParams(notifications: []);
+  final _notificationMessage = NotificationModel.fromMap(message.toMap());
+  _list.notifications.add(_notificationMessage);
+  _preferences.setString('notifications', _list.toString());
+  _localNotification.sendNotification(_notificationMessage.notification.title,
+      _notificationMessage.notification?.body ?? '',
+      id: int.parse(_notificationMessage.id),
+      payload: _notificationMessage.type);
+  print(_list.toString());
 }
 
 Future _push(Map<String, dynamic> message, Context<MainPageState> ctx) async {
@@ -98,48 +117,4 @@ Future _checkAppUpdate(Context<MainPageState> ctx) async {
       InAppUpdate.performImmediateUpdate();
     }
   }).catchError((e) {});
-}
-
-void _bindBackgroundIsolate() {
-  bool isSuccess = IsolateNameServer.registerPortWithName(
-      _port.sendPort, 'downloader_send_port');
-  if (!isSuccess) {
-    _unbindBackgroundIsolate();
-    _bindBackgroundIsolate();
-    return;
-  }
-  _port.listen((dynamic data) async {
-    String id = data[0];
-    DownloadTaskStatus status = data[1];
-    if (status == DownloadTaskStatus.complete) {
-      List<DownloadTask> _tasks = await FlutterDownloader.loadTasks();
-      final _file = _tasks.singleWhere((e) => e.taskId == id, orElse: null);
-      if (_file.filename.split('.').last == 'apk')
-        await FlutterDownloader.open(taskId: id);
-    }
-    print('UI Isolate Callback: $data');
-  });
-}
-
-void _unbindBackgroundIsolate() {
-  IsolateNameServer.removePortNameMapping('downloader_send_port');
-}
-
-Future _didReceiveLocalNotification(int id, String title, String body,
-    String payload, Context<MainPageState> ctx) async {
-  Page page = payload == 'movie' ? MovieDetailPage() : TvShowDetailPage();
-  var data = {
-    payload == 'movie' ? 'id' : 'tvid': id,
-    payload == 'movie' ? 'title' : 'name': title,
-  };
-  await Navigator.of(ctx.state.scaffoldKey.currentContext).push(
-    PageRouteBuilder(
-      pageBuilder: (context, animation, secAnimation) {
-        return FadeTransition(
-          opacity: animation,
-          child: page.buildPage(data),
-        );
-      },
-    ),
-  );
 }
