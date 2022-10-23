@@ -19,11 +19,20 @@ class SearchResultModel {
     page = jsonRes['page'];
     totalPages = jsonRes['total_pages'];
     totalResults = jsonRes['total_results'];
-    results = jsonRes['results'] == null ? null : [];
+    results = [];
+    final languages = ['zh', 'ja'];
 
-    for (var resultsItem in results == null ? [] : jsonRes['results']) {
-      results.add(
-          resultsItem == null ? null : new SearchResult.fromJson(resultsItem));
+    for (var resultsItem in jsonRes['results'] ?? []) {
+      final item =
+          resultsItem == null ? null : new SearchResult.fromJson(resultsItem);
+      // only add item animation
+      if (item != null &&
+          item.genreIds != null &&
+          item.genreIds.contains(16) &&
+          languages.contains(item.originalLanguage)) {
+        results.add(item);
+        print(item.originalLanguage);
+      }
     }
   }
 

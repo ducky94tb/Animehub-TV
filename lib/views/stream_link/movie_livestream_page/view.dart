@@ -30,8 +30,8 @@ Widget buildView(
                             SizedBox(height: Adapt.px(30) + Adapt.padTopH())),
                     viewService.buildComponent('player'),
                     viewService.buildComponent('header'),
-                    const _RecommendationTitle(),
-                    viewService.buildComponent('recommendation'),
+                    //const _RecommendationTitle(),
+                    //viewService.buildComponent('recommendation'),
                     const SliverToBoxAdapter(
                         child: const SizedBox(height: 100)),
                   ],

@@ -18,7 +18,7 @@ Widget buildView(InfoState state, Dispatch dispatch, ViewService viewService) {
       : _d.seasonId == 0
           ? "OVA"
           : _d.seasonId;
-  var date = DateTime.parse(_d != null ? _d.timeStamp : '1970-01-01');
+  var date = DateTime.tryParse(_d != null ? _d.timeStamp : '1970-01-01');
   final String _timeline = TimelineUtil.format(
     date.millisecondsSinceEpoch,
     locTimeMs: DateTime.now().millisecondsSinceEpoch,

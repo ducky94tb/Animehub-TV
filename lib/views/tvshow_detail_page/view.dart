@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
@@ -21,11 +20,11 @@ Widget buildView(
           brightness: _theme.brightness,
           title: Text(
             state?.tvDetailModel?.name ?? '',
-            style:TextStyle(color: _theme.textTheme.bodyText1.color),
+            style: TextStyle(color: _theme.textTheme.bodyText1.color),
           ),
           actions: [
             IconButton(
-                icon:const Icon(Icons.more_vert),
+                icon: const Icon(Icons.more_vert),
                 onPressed: () => dispatch(TvShowDetailActionCreator.openMenu()))
           ],
         ),
@@ -39,7 +38,7 @@ Widget buildView(
             viewService.buildComponent('season'),
             viewService.buildComponent('lastEpisode'),
             viewService.buildComponent('keyword'),
-            viewService.buildComponent('recommendation'),
+            //viewService.buildComponent('recommendation'),
           ],
         ),
       );

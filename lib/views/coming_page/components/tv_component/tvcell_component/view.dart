@@ -1,7 +1,9 @@
+import 'dart:ui' as ui;
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:movie/actions/adapt.dart';
 import 'package:movie/actions/imageurl.dart';
 import 'package:movie/models/enums/genres.dart';
@@ -25,6 +27,19 @@ class _ItemCell extends StatelessWidget {
   final VideoListResult data;
   final Function onTap;
   const _ItemCell({@required this.data, this.onTap});
+
+  String getNextAirDate(VideoListResult _d) {
+    if (_d == null) return "-";
+    var date = DateTime.tryParse(_d.nextAirDate ?? '2023-01-01');
+    if (date == null) return "-";
+    final String _timeline = TimelineUtil.format(
+      date.millisecondsSinceEpoch,
+      locTimeMs: DateTime.now().millisecondsSinceEpoch,
+      locale: ui.window.locale.languageCode,
+    );
+    return _timeline;
+  }
+
   @override
   Widget build(BuildContext context) {
     final _theme = ThemeStyle.getTheme(context);
@@ -90,11 +105,7 @@ class _ItemCell extends StatelessWidget {
                       TextSpan(
                           text: 'Next Air Date ',
                           style: TextStyle(color: const Color(0xFF9E9E9E))),
-                      TextSpan(
-                          text: data.nextAirDate != null
-                              ? DateFormat.yMMMd()
-                                  .format(DateTime.tryParse(data.nextAirDate))
-                              : '-')
+                      TextSpan(text: getNextAirDate(data) ?? '-')
                     ]),
                     style: TextStyle(fontSize: Adapt.px(20)),
                   ),

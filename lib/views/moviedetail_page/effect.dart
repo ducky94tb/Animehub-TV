@@ -2,6 +2,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/widgets.dart' hide Action;
 import 'package:movie/actions/api/tmdb_api.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -29,8 +30,7 @@ Future _onInit(Action action, Context<MovieDetailPageState> ctx) async {
       ctx.dispatch(MovieDetailPageActionCreator.onsetColor(paletteGenerator));*/
     final _tmdb = TMDBApi.instance;
     final r = await _tmdb.getMovieDetail(ctx.state.movieid,
-        appendtoresponse:
-            'keywords,recommendations,credits,external_ids,release_dates');
+        appendtoresponse: 'keywords,credits,external_ids,release_dates');
     if (r.success) {
       ctx.dispatch(MovieDetailPageActionCreator.onInit(r.result));
       ctx.state.animationController.forward();

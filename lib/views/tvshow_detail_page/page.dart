@@ -1,4 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
+
 import 'components/cast_component/component.dart';
 import 'components/cast_component/state.dart';
 import 'components/keyword_component/component.dart';
@@ -7,13 +8,10 @@ import 'components/last_episode_component/component.dart';
 import 'components/last_episode_component/state.dart';
 import 'components/menu_component/component.dart';
 import 'components/menu_component/state.dart';
-import 'components/recommendation_component/component.dart';
-import 'components/recommendation_component/state.dart';
 import 'components/season_component/component.dart';
 import 'components/season_component/state.dart';
 import 'components/swiper_component/component.dart';
 import 'components/swiper_component/state.dart';
-
 import 'components/title_component/component.dart';
 import 'components/title_component/state.dart';
 import 'effect.dart';
@@ -39,8 +37,8 @@ class TvShowDetailPage extends Page<TvShowDetailState, Map<String, dynamic>>
                 'lastEpisode': LastEpisodeConnector() + LastEpisodeComponent(),
                 'season': SeasonConnector() + SeasonComponent(),
                 'keyword': KeywordConnector() + KeywordComponent(),
-                'recommendation':
-                    RecommendationConnector() + RecommendationComponent(),
+                // 'recommendation':
+                //     RecommendationConnector() + RecommendationComponent(),
               }),
           middleware: <Middleware<TvShowDetailState>>[],
         );

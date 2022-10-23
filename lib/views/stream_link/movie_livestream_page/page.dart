@@ -6,8 +6,6 @@ import 'components/header_component/component.dart';
 import 'components/header_component/state.dart';
 import 'components/player_component/component.dart';
 import 'components/player_component/state.dart';
-import 'components/recommendation_component/component.dart';
-import 'components/recommendation_component/state.dart';
 import 'effect.dart';
 import 'reducer.dart';
 import 'state.dart';
@@ -29,8 +27,6 @@ class MovieLiveStreamPage
               slots: <String, Dependent<MovieLiveStreamState>>{
                 'player': PlayerConnector() + PlayerComponent(),
                 'header': HeaderConnector() + HeaderComponent(),
-                'recommendation':
-                    RecommendationConnector() + RecommendationComponent(),
                 'bottomPanel': BottomPanelConnector() + BottomPanelComponent(),
               }),
           middleware: <Middleware<MovieLiveStreamState>>[],

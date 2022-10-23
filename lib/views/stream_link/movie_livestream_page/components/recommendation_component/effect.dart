@@ -31,9 +31,7 @@ void _cellTap(Action action, Context<RecommendationState> ctx) async {
   ctx.dispatch(MovieLiveStreamActionCreator.setLoading(false));
 
   final _tmdb = TMDBApi.instance;
-  _tmdb
-      .getMovieDetail(_movie.id, appendtoresponse: 'recommendations,credits')
-      .then((d) {
+  _tmdb.getMovieDetail(_movie.id, appendtoresponse: 'credits').then((d) {
     if (d.success)
       ctx.dispatch(RecommendationActionCreator.setDetail(d.result));
   });

@@ -559,6 +559,7 @@ class TMDBApi {
 
   Future<ResponseModel<VideoListModel>> getRecommendationsMovie(int movieid,
       {int page = 1}) async {
+    return null;
     String param =
         '/movie/$movieid/recommendations?api_key=$_apikey&language=$_language&page=$page';
     param += '&with_keywords=$_animeKeyWord';
@@ -568,6 +569,7 @@ class TMDBApi {
 
   Future<ResponseModel<VideoListModel>> getRecommendationsTV(int tvid,
       {int page = 1}) async {
+    return null;
     String param =
         '/tv/$tvid/recommendations?api_key=$_apikey&language=$_language&page=$page';
     param += '&with_keywords=$_animeKeyWord';
@@ -601,8 +603,10 @@ class TMDBApi {
   ///Search multiple models in a single request. Multi search currently supports searching for movies, tv shows and people in a single request.
   Future<ResponseModel<SearchResultModel>> searchMulit(String query,
       {int page = 1, bool searchadult = false}) async {
-    final String param =
+    String param =
         '/search/multi?api_key=$_apikey&query=$query&page=$page&include_adult=$_includeAdult&language=$_language';
+    param += '&with_keywords=$_animeKeyWord';
+    param += '&with_genres=16';
     final r = await _http.request<SearchResultModel>(param, cached: true);
     return r;
   }

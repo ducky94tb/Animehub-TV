@@ -29,8 +29,7 @@ Future _onInit(Action action, Context<TvShowDetailState> ctx) async {
     Future.delayed(Duration(milliseconds: 300), () async {
       final _tmdb = TMDBApi.instance;
       final _tvDetail = await _tmdb.getTVDetail(ctx.state.tvid,
-          appendtoresponse:
-              'keywords,recommendations,credits,external_ids,content_ratings');
+          appendtoresponse: 'keywords,credits,external_ids,content_ratings');
       if (_tvDetail.success) {
         ctx.dispatch(TvShowDetailActionCreator.onInit(_tvDetail.result));
       }

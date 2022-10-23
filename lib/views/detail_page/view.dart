@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/style/themestyle.dart';
+
 import 'state.dart';
 
 Widget buildView(
@@ -22,7 +23,7 @@ Widget buildView(
               viewService.buildComponent('still'),
               viewService.buildComponent('keyWords'),
               viewService.buildComponent('trailer'),
-              viewService.buildComponent('recommendations'),
+              //viewService.buildComponent('recommendations'),
             ],
           ),
           viewService.buildComponent('appbar')

@@ -1,9 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:movie/actions/api/base_api.dart';
 import 'package:movie/actions/api/tmdb_api.dart';
-import 'package:movie/globalbasestate/store.dart';
 import 'package:movie/models/enums/imagesize.dart';
 import 'package:movie/widgets/gallery_photoview_wrapper.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,26 +32,17 @@ Future _onInit(Action action, Context<MovieDetailPageState> ctx) async {
   ctx.state.animationController = AnimationController(
       vsync: ticker, duration: Duration(milliseconds: 2000));
   ctx.state.scrollController = ScrollController();
-  final _baseApi = BaseApi.instance;
   Future.delayed(Duration(milliseconds: 300), () async {
     if (_id == null) return;
     final _tmdb = TMDBApi.instance;
     final r = await _tmdb.getMovieDetail(_id,
         appendtoresponse:
-            'keywords,recommendations,credits,external_ids,release_dates,images,videos');
+            'keywords,credits,external_ids,release_dates,images,videos');
     if (r.success)
       ctx.dispatch(MovieDetailPageActionCreator.updateDetail(r.result));
     final _images = await _tmdb.getMovieImages(_id);
     if (_images.success)
       ctx.dispatch(MovieDetailPageActionCreator.onSetImages(_images.result));
-    final _user = GlobalStore.store.getState().user;
-    /*if (_user != null) {
-      final _accountstate = await _baseApi.getAccountState(
-          _user?.firebaseUser?.uid, ctx.state.mediaId, MediaType.movie);
-      if (_accountstate.success)
-        ctx.dispatch(MovieDetailPageActionCreator.onSetAccountState(
-            _accountstate.result));
-    }*/
   });
 }
 
