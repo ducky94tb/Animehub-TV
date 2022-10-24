@@ -85,7 +85,6 @@ class _AppState extends State<App> {
       return Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-            fit: BoxFit.fitWidth,
             image: AssetImage("images/blue.png"),
           )),
           child: Padding(
