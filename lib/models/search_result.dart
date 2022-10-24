@@ -31,7 +31,6 @@ class SearchResultModel {
           item.genreIds.contains(16) &&
           languages.contains(item.originalLanguage)) {
         results.add(item);
-        print(item.originalLanguage);
       }
     }
   }

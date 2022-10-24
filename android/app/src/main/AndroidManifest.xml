@@ -72,48 +72,12 @@
             android:value="2" />
 
         <provider
-            android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
-            android:authorities="${applicationId}.flutter_downloader.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
-
-        <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
             tools:node="remove" />
 
-        <provider
-            android:name="vn.hunghd.flutterdownloader.FlutterDownloaderInitializer"
-            android:authorities="${applicationId}.flutter-downloader-init"
-            android:exported="false">
-            <meta-data
-                android:name="vn.hunghd.flutterdownloader.MAX_CONCURRENT_TASKS"
-                android:value="5" />
-        </provider>
-
-        <activity
-            android:name="com.braintreepayments.api.BraintreeBrowserSwitchActivity"
-            android:launchMode="singleTask"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="${applicationId}.braintree" />
-            </intent-filter>
-        </activity>
-
         <meta-data
-            android:name="com.google.android.gms.wallet.api.enabled"
-            android:value="true" />
-        <meta-data
-            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
-            android:value="barcode,face,label,ocr" />
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="high_importance_channel" />
     </application>
 </manifest>

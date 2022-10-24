@@ -265,7 +265,7 @@ class FirebaseApi {
     final db = FirebaseDatabase.instance;
     final animeHubRef = db.ref("AnimeHub/Episode");
     final ref = animeHubRef.child("${movieInfo.title}/$episodeId");
-    print("Ducky ${movieInfo.title}/$episodeId");
+    // print("Ducky ${movieInfo.title}/$episodeId");
     final snapshot = await ref.get();
     String streamLink = "";
     if (snapshot.value != null) {

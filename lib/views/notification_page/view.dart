@@ -5,7 +5,6 @@ import 'package:common_utils/common_utils.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:movie/actions/adapt.dart';
-import 'package:movie/actions/local_notification.dart';
 import 'package:movie/models/notification_model.dart';
 import 'package:movie/style/themestyle.dart';
 
@@ -32,10 +31,7 @@ Widget buildView(
           brightness: _theme.brightness,
           actions: [
             _SearchButton(
-              onTap: () async {
-                await LocalNotification.instance
-                    .sendNotification('title', 'body');
-              },
+              onTap: () async {},
             )
           ],
         ),

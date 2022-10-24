@@ -81,7 +81,7 @@ class _ItemCell extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    data.name,
+                    data?.name,
                     maxLines: 2,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: Adapt.px(30)),
@@ -90,9 +90,9 @@ class _ItemCell extends StatelessWidget {
                   data.genreIds.length > 0
                       ? Text(
                           data.genreIds
-                              .take(3)
-                              .map((e) => Genres.instance.tvList[e])
-                              .join(', '),
+                              ?.take(3)
+                              ?.map((e) => Genres.instance.tvList[e])
+                              ?.join(', '),
                           style: TextStyle(
                             color: const Color(0xFF9E9E9E),
                             fontSize: Adapt.px(20),
@@ -119,7 +119,7 @@ class _ItemCell extends StatelessWidget {
                   SizedBox(height: Adapt.px(15)),
                   //Text(data.voteAverage.toString()),
                   Text(
-                    data.overview,
+                    data.overview ?? "-",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   )
